@@ -2,14 +2,16 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import LanguageCon from "./Context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "./component/Header";
 
 function App() {
   // context value
-  const [english, setEnglish] = useState(true);
+  const [english, setEnglish] = useState("");
   const LangValue = { english, setEnglish };
-
+  useEffect(() => {
+    setEnglish(window.localStorage.getItem("lang"));
+  }, []);
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>

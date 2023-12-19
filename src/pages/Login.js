@@ -5,7 +5,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import englishuageCon from "../Context";
 import "../App.css";
 export const Login = () => {
-  // handle change englishuage
+  // handle change language
   const { english } = useContext(englishuageCon);
 
   return (
@@ -39,19 +39,19 @@ export const Login = () => {
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english ? "about " : "عن ماجنيفاي"}
+            {english === "en" ? "about " : "عن ماجنيفاي"}
           </Link>
           <Link
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english ? "privacy terms" : "شروط الخصوصية"}
+            {english === "en" ? "privacy terms" : "شروط الخصوصية"}
           </Link>
           <Link
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english ? "contact us!" : "!تواصل معنا "}
+            {english === "en" ? "contact us!" : "!تواصل معنا "}
           </Link>
         </div>
       </div>
@@ -75,7 +75,7 @@ const Form = ({ english }) => {
             !english && "text-end"
           } text-white sm:text-3xl lg:text-4xl capitalize w-full font-bold`}
         >
-          {english ? "Sign in" : "تسجيل الدخول "}
+          {english === "en" ? "Sign in" : "تسجيل الدخول "}
         </p>
         <div className="inputs flex flex-col gap-5 w-full">
           <input
@@ -84,10 +84,10 @@ const Form = ({ english }) => {
             symbole="*"
             type="text"
             className={`${
-              !english && "text-end"
+              english === "ar" && "text-end"
             } username py-2 px-3 w-full border-2 focus-visible:border-black 
         outline-none rounded-lg before:content-[attr(symbole)]before:text-xl`}
-            placeholder={english ? "Username" : "اسم المستخدم"}
+            placeholder={english === "en" ? "Username" : "اسم المستخدم"}
           />
           <div
             className="pass relative  
@@ -98,16 +98,16 @@ const Form = ({ english }) => {
               symbole="*"
               type={showPass ? "password" : "text"}
               className={`${
-                !english && "text-end"
+                english === "ar" && "text-end"
               } password py-2 px-3 w-full border-2 focus-visible:border-black outline-none rounded-lg
             `}
-              placeholder={english ? "Password" : "كلمة المرور"}
+              placeholder={english === "en" ? "Password" : "كلمة المرور"}
             />
             <button
               type="button"
               onClick={() => setShowPass(!showPass)}
               className={`absolute ${
-                english ? "right-3" : "left-3"
+                english === "en" ? "right-3" : "left-3"
               } top-[50%] translate-y-[-50%]`}
             >
               {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -119,14 +119,14 @@ const Form = ({ english }) => {
           className="text-white sm:text-xl lg:text-3xl border-2 py-2 px-4 hover:text-color1
           rounded-xl hover:bg-white"
         >
-          {english ? "sign in" : "تسجيل  "}
+          {english === "en" ? "sign in" : "تسجيل  "}
         </button>
         <Link className="text-gray-100 sm:text-base lg:text-lg capitalize">
-          {english ? "forgot your password?" : "نسيت كلمة المرور؟"}
+          {english === "en" ? "forgot your password?" : "نسيت كلمة المرور؟"}
         </Link>
       </div>
       <Link className="capitalize flex text-white sm:text-base lg:text-lg">
-        {english ? "need help?" : "تحتاج مساعدة؟"}
+        {english === "en" ? "need help?" : "تحتاج مساعدة؟"}
       </Link>
     </form>
   );
