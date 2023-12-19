@@ -13,31 +13,44 @@ export const Login = () => {
       <div className="container flex flex-col justify-between">
         <div
           className="form flex h-full justify-between items-center
-        sm:flex-col md:flex-row mb-5"
+        sm:flex-col md:flex-row mb-5 sm:gap-3"
         >
           <div
             className="img flex items-center
-          sm:w-full sm:bg-[#d9b69399] sm:justify-center sm:pt-4
+          sm:w-full  sm:justify-center sm:pt-4
           md:w-6/12 md:justify-center md:bg-inherit 
-          lg:5/12 lg:justify-center 
+          lg:5/12 lg:justify-center  
           xl:w-6/12 xl:justify-end"
           >
             <img
               src={mainlogo}
               alt=""
-              className=" sm:w-[250px] md:w-[300px] lg:w-[450px] object-contain"
+              className=" sm:w-[230px] md:w-[280px] lg:w-[370px] xl:w-[400px] object-contain"
             />
           </div>
           <Form english={english} />
         </div>
-        <div className="links flex gap-10 h-fit">
-          <Link className="capitalize text-base text-white" to={"/"}>
-            {english ? "about magnify" : "عن ماجنيفاي"}
+        <div
+          className="links flex items-center w-full h-fit
+        sm:justify-between
+        md:justify-start md:gap-10 "
+        >
+          <Link
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            to={"/"}
+          >
+            {english ? "about " : "عن ماجنيفاي"}
           </Link>
-          <Link className="capitalize text-base text-white" to={"/"}>
+          <Link
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            to={"/"}
+          >
             {english ? "privacy terms" : "شروط الخصوصية"}
           </Link>
-          <Link className="capitalize text-base text-white" to={"/"}>
+          <Link
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            to={"/"}
+          >
             {english ? "contact us!" : "!تواصل معنا "}
           </Link>
         </div>
@@ -60,7 +73,7 @@ const Form = ({ english }) => {
         <p
           className={`${
             !english && "text-end"
-          } text-white text-4xl capitalize w-full font-bold`}
+          } text-white sm:text-3xl lg:text-4xl capitalize w-full font-bold`}
         >
           {english ? "Sign in" : "تسجيل الدخول "}
         </p>
@@ -103,16 +116,16 @@ const Form = ({ english }) => {
         </div>
         <button
           type="submit"
-          className="text-white text-3xl border-2 py-2 px-4 hover:text-color1
+          className="text-white sm:text-xl lg:text-3xl border-2 py-2 px-4 hover:text-color1
           rounded-xl hover:bg-white"
         >
           {english ? "sign in" : "تسجيل  "}
         </button>
-        <Link className="text-gray-100 text-lg capitalize">
+        <Link className="text-gray-100 sm:text-base lg:text-lg capitalize">
           {english ? "forgot your password?" : "نسيت كلمة المرور؟"}
         </Link>
       </div>
-      <Link className="capitalize flex text-white text-lg">
+      <Link className="capitalize flex text-white sm:text-base lg:text-lg">
         {english ? "need help?" : "تحتاج مساعدة؟"}
       </Link>
     </form>
