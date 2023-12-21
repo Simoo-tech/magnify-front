@@ -4,6 +4,7 @@ import sublogo from "../assest/logo/logo-darkGreen.png";
 import { Link } from "react-router-dom";
 export const Header = () => {
   const { lang, setLang } = useContext(LanguageCon);
+  console.log(lang);
   return (
     <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative">
       <div className="container flex justify-between items-center w-full">
@@ -12,26 +13,21 @@ export const Header = () => {
         </Link>
         <select
           value={lang}
+          onChange={(event) => {
+            setLang(event.target.value);
+            window.localStorage.setItem("lang", event.target.value);
+          }}
           name="languages"
           className="relative capitalize p-2 rounded-xl flex flex-col bg-darkGrey text-white
         "
         >
           <option
             className="flex justify-between capitalize w-[100px]"
-            onClick={(e) => {
-              setLang("en");
-              window.localStorage.setItem("lang", "en");
-            }}
+            value={"en"}
           >
             en
           </option>
-          <option
-            className="flex justify-between capitalize"
-            onClick={(e) => {
-              setLang("ar");
-              window.localStorage.setItem("lang", "ar");
-            }}
-          >
+          <option className="flex justify-between capitalize" value={"ar"}>
             ar
           </option>
         </select>

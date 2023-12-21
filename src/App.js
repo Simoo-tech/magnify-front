@@ -5,6 +5,7 @@ import LanguageCon from "./Context";
 import { useEffect, useState } from "react";
 import { Header } from "./component/Header";
 import { CreatePass } from "./pages/CreatePass";
+import { CreateUser, Dashbaord } from "./pages/Dashbaord";
 
 function App() {
   // context value
@@ -21,6 +22,9 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/md-admin" element={<Dashbaord />}>
+              <Route path="create-user" element={<CreateUser />} />
+            </Route>
             <Route path="/create-password" element={<CreatePass />} />
           </Routes>
         </div>
