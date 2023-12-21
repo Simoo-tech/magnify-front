@@ -5,10 +5,9 @@ module.exports = {
     extend: {
       colors: {
         darkGrey: "#647d68",
-        color1: "#d9b693",
-        color2: "#cc8c3b",
-        color3: "8cccf0",
-        color4: "#4face0",
+        color1: "#cc8c3b",
+        color2: "#8cccf0",
+        color3: "#4face0",
       },
     },
     screens: {

@@ -1,15 +1,21 @@
 import React, { useContext, useState } from "react";
 import mainlogo from "../assest/logo/mainLogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import englishuageCon from "../Context";
 import "../App.css";
+import LanguageCon from "../Context";
 export const Login = () => {
+  const navigate = useNavigate();
   // handle change language
-  const { english } = useContext(englishuageCon);
+  const { lang } = useContext(LanguageCon);
 
+  // handle login submit
+  const HandleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/create-password");
+  };
   return (
-    <div className="login bg-[#647d6866] w-full flex justify-center pt-5">
+    <div className="section-h login bg-color1 w-full flex justify-center pt-5">
       <div className="container flex flex-col justify-between">
         <div
           className="form flex h-full justify-between items-center
@@ -28,7 +34,7 @@ export const Login = () => {
               className=" sm:w-[230px] md:w-[280px] lg:w-[370px] xl:w-[400px] object-contain"
             />
           </div>
-          <Form english={english} />
+          <Form lang={lang} HandleSubmit={HandleSubmit} />
         </div>
         <div
           className="links flex items-center w-full h-fit
@@ -39,19 +45,19 @@ export const Login = () => {
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english === "en" ? "about " : "عن ماجنيفاي"}
+            {lang === "en" || lang === null ? "about " : "عن ماجنيفاي"}
           </Link>
           <Link
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english === "en" ? "privacy terms" : "شروط الخصوصية"}
+            {lang === "en" || lang === null ? "privacy terms" : "شروط الخصوصية"}
           </Link>
           <Link
             className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
             to={"/"}
           >
-            {english === "en" ? "contact us!" : "!تواصل معنا "}
+            {lang === "en" || lang === null ? "contact us!" : "!تواصل معنا "}
           </Link>
         </div>
       </div>
@@ -59,11 +65,12 @@ export const Login = () => {
   );
 };
 
-const Form = ({ english }) => {
+const Form = ({ lang, HandleSubmit }) => {
   const [showPass, setShowPass] = useState(false);
   return (
     <form
-      className="form sm:w-full md:w-6/12 xl:w-[450px] h-full bg-[#d9b69399] flex flex-col
+      onSubmit={HandleSubmit}
+      className="form sm:w-full md:w-6/12 xl:w-[450px] h-full bg-darkGrey flex flex-col
     items-center justify-between py-8 px-10 shadow-lg rounded-xl border-2 border-color1 "
     >
       <div
@@ -72,22 +79,23 @@ const Form = ({ english }) => {
       >
         <p
           className={`${
-            !english && "text-end"
+            lang === "ar" && "text-end"
           } text-white sm:text-3xl lg:text-4xl capitalize w-full font-bold`}
         >
-          {english === "en" ? "Sign in" : "تسجيل الدخول "}
+          {lang === "en" || lang === null ? "Sign in" : "تسجيل الدخول "}
         </p>
         <div className="inputs flex flex-col gap-5 w-full">
           <input
             autoFocus
             autoComplete="false"
-            symbole="*"
-            type="text"
+            type="email"
             className={`${
-              english === "ar" && "text-end"
-            } username py-2 px-3 w-full border-2 focus-visible:border-black 
-        outline-none rounded-lg before:content-[attr(symbole)]before:text-xl`}
-            placeholder={english === "en" ? "Username" : "اسم المستخدم"}
+              lang === "ar" ? "text-end  border-l-4" : "border-r-4 "
+            } username py-2 px-3 w-full border-color1
+            outline-none rounded-lg `}
+            placeholder={
+              lang === "en" || lang === null ? "Email" : "البريد الالكتروني"
+            }
           />
           <div
             className="pass relative  
@@ -98,16 +106,18 @@ const Form = ({ english }) => {
               symbole="*"
               type={showPass ? "password" : "text"}
               className={`${
-                english === "ar" && "text-end"
-              } password py-2 px-3 w-full border-2 focus-visible:border-black outline-none rounded-lg
-            `}
-              placeholder={english === "en" ? "Password" : "كلمة المرور"}
+                lang === "ar" ? "text-end  border-l-4" : "border-r-4 "
+              } username py-2 px-3 w-full border-color1
+              outline-none rounded-lg `}
+              placeholder={
+                lang === "en" || lang === null ? "Password" : "كلمة المرور"
+              }
             />
             <button
               type="button"
               onClick={() => setShowPass(!showPass)}
               className={`absolute ${
-                english === "en" ? "right-3" : "left-3"
+                lang === "en" || lang === null ? "right-3" : "left-3"
               } top-[50%] translate-y-[-50%]`}
             >
               {showPass ? <FaRegEye /> : <FaRegEyeSlash />}
@@ -116,17 +126,19 @@ const Form = ({ english }) => {
         </div>
         <button
           type="submit"
-          className="text-white sm:text-xl lg:text-3xl border-2 py-2 px-4 hover:text-color1
-          rounded-xl hover:bg-white"
+          className="text-white sm:text-xl lg:text-xl capitalize border-2 py-2 px-4 hover:text-darkGrey font-semibold
+          rounded-xl hover:bg-white duration-150 ease-linear"
         >
-          {english === "en" ? "sign in" : "تسجيل  "}
+          {lang === "en" || lang === null ? "sign in" : "تسجيل  "}
         </button>
         <Link className="text-gray-100 sm:text-base lg:text-lg capitalize">
-          {english === "en" ? "forgot your password?" : "نسيت كلمة المرور؟"}
+          {lang === "en" || lang === null
+            ? "forgot your password?"
+            : "نسيت كلمة المرور؟"}
         </Link>
       </div>
       <Link className="capitalize flex text-white sm:text-base lg:text-lg">
-        {english === "en" ? "need help?" : "تحتاج مساعدة؟"}
+        {lang === "en" || lang === null ? "need help?" : "تحتاج مساعدة؟"}
       </Link>
     </form>
   );

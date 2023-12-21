@@ -1,21 +1,25 @@
 import React, { useContext } from "react";
 import LanguageCon from "../Context";
 import sublogo from "../assest/logo/logo-darkGreen.png";
+import { Link } from "react-router-dom";
 export const Header = () => {
-  const { english, setEnglish } = useContext(LanguageCon);
+  const { lang, setLang } = useContext(LanguageCon);
   return (
-    <div className="logo py-2 w-full flex justify-center h-fit bg-[#647d6866] relative">
+    <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative">
       <div className="container flex justify-between items-center w-full">
-        <img src={sublogo} alt="logo" className="w-[30px]" />
+        <Link to={"/"}>
+          <img src={sublogo} alt="logo" className="w-[30px]" />
+        </Link>
         <select
-          value={english}
+          value={lang}
           name="languages"
-          className="relative capitalize bg-white py-3 px-5 rounded-xl flex flex-col"
+          className="relative capitalize p-2 rounded-xl flex flex-col bg-darkGrey text-white
+        "
         >
           <option
-            className="flex justify-between capitalize"
+            className="flex justify-between capitalize w-[100px]"
             onClick={(e) => {
-              setEnglish("en");
+              setLang("en");
               window.localStorage.setItem("lang", "en");
             }}
           >
@@ -24,7 +28,7 @@ export const Header = () => {
           <option
             className="flex justify-between capitalize"
             onClick={(e) => {
-              setEnglish("ar");
+              setLang("ar");
               window.localStorage.setItem("lang", "ar");
             }}
           >
