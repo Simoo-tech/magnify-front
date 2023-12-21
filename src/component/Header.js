@@ -22,7 +22,7 @@ export const Header = () => {
         "
         >
           <option
-            className="flex justify-between capitalize w-[100px]"
+            className="flex justify-between capitalize w-[100px] "
             value={"en"}
           >
             en
