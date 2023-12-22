@@ -111,8 +111,7 @@ export const CreateUser = () => {
     e.preventDefault();
     setData({ ...data, projectinfo });
     await axios
-      // http://143.198.239.218:80
-      //http://localhost:8000
+
       .post(
         "https://squid-app-9u6f9.ondigitalocean.app/api/auth/createuser",
         data
