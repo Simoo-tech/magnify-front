@@ -37,7 +37,7 @@ export const Login = () => {
           <Form lang={lang} HandleSubmit={HandleSubmit} />
         </div>
         <div
-          className="links flex items-center w-full h-fit
+          className="links flex items-center w-full h-fit mb-3
         sm:justify-between
         md:justify-start md:gap-10 "
         >
@@ -66,7 +66,7 @@ export const Login = () => {
 };
 
 const Form = ({ lang, HandleSubmit }) => {
-  const [showPass, setShowPass] = useState(false);
+  const [showPass, setShowPass] = useState(true);
   return (
     <form
       onSubmit={HandleSubmit}

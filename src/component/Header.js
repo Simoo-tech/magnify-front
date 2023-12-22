@@ -4,7 +4,6 @@ import sublogo from "../assest/logo/logo-darkGreen.png";
 import { Link } from "react-router-dom";
 export const Header = () => {
   const { lang, setLang } = useContext(LanguageCon);
-  console.log(lang);
   return (
     <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative">
       <div className="container flex justify-between items-center w-full">

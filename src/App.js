@@ -4,8 +4,8 @@ import { Login } from "./pages/Login";
 import LanguageCon from "./Context";
 import { useEffect, useState } from "react";
 import { Header } from "./component/Header";
-import { CreatePass } from "./pages/CreatePass";
-import { CreateUser, Dashbaord } from "./pages/Dashbaord";
+import { CreatePass } from "./pages/Dashbiard/CreatePass";
+import { CreateUser, Dashbaord } from "./pages/Dashbiard/Dashbaord";
 
 function App() {
   // context value
@@ -14,7 +14,6 @@ function App() {
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
   }, []);
-  console.log(window.localStorage.getItem("lang"));
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>
