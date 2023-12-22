@@ -113,7 +113,7 @@ export const CreateUser = () => {
     await axios
       // http://143.198.239.218:80
       //http://localhost:8000
-      .post("http://143.198.239.218/api/auth/createuser", data)
+      .post("http://143.198.239.218:80/api/auth/createuser", data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
