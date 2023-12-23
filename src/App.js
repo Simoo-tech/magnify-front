@@ -21,10 +21,10 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="md-admin" element={<Dashbaord />}>
+            <Route path="/md-admin" element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
             </Route>
-            <Route path="create-password" element={<CreatePass />} />
+            <Route path="/create-password" element={<CreatePass />} />
           </Routes>
         </div>
       </LanguageCon.Provider>
