@@ -108,10 +108,13 @@ export const CreateUser = () => {
 
   // handle submit
   const HandleSubmit = async (e) => {
+    const axiosInstance = axios.create({
+      baseURL: process.env.REACT_APP_API_URL,
+    });
     e.preventDefault();
     setData({ ...data, projectinfo });
-    await axios
-      .post("http://localhost:8000/api/auth/createuser", data)
+    await axiosInstance
+      .post("auth/createuser", data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
