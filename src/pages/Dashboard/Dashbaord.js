@@ -153,7 +153,6 @@ export const CreateUser = () => {
           {lang === "ar" ? "انشاء مستخدم جديد" : "create a new user"}
         </p>
         <form
-          method="POST"
           className="flex flex-col sm:gap-5 lg:gap-10 w-full items-center "
           onSubmit={HandleSubmit}
         >

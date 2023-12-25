@@ -93,13 +93,8 @@ const Form = ({ lang, setCookies }) => {
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
-    // axios url instance
-    const axiosInstance = axios.create({
-      baseURL: process.env.REACT_API_URL,
-    });
-    await axiosInstance
-      .post("auth/login", authData)
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
@@ -118,7 +113,6 @@ const Form = ({ lang, setCookies }) => {
 
   return (
     <form
-      method="POST"
       autoComplete="off"
       onSubmit={HandleSubmit}
       className="form sm:w-full md:w-6/12 xl:w-[450px] h-full bg-darkGrey flex flex-col

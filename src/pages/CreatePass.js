@@ -41,12 +41,12 @@ export const CreatePass = () => {
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    // axios url instance
-    const axiosInstance = axios.create({
-      baseURL: process.env.REACT_API_URL,
-    });
-    axiosInstance
-      .put(`auth/user/${cookies.user_token._id}`, userPass)
+
+    axios
+      .put(
+        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`,
+        userPass
+      )
       .then((res) => {
         alert(res.data.message);
         setTimeout(() => {
@@ -78,7 +78,6 @@ export const CreatePass = () => {
           {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
         </h2>
         <form
-          method="PUT"
           onSubmit={HandleSubmit}
           className={`flex flex-wrap justify-center items-center w-11/12 mt-4
           sm:flex-col sm:h-fit sm:gap-8
