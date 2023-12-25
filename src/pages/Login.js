@@ -177,7 +177,7 @@ const Form = ({ lang, setCookies }) => {
             gap-2 py-2 ${lang === "ar" && "flex-row-reverse "}`}
           >
             <label
-              htmlFor="newpassword"
+              htmlFor="password"
               className={`${
                 lang === "ar" && "text-end"
               } capitalize text-white w-full text-lg font-semibold`}
@@ -190,8 +190,8 @@ const Form = ({ lang, setCookies }) => {
               minLength={8}
               maxLength={16}
               onChange={HandleChange}
-              name="newpassword"
-              id="newpassword"
+              name="password"
+              id="password"
               value={authData.password}
               type={"password"}
               className={`bg-transparent text-white placeholder:text-white placeholder:text-sm
