@@ -8,25 +8,36 @@ import "react-phone-input-2/lib/bootstrap.css";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
 import axios from "axios";
-import LanguageCon from "../../Context";
+import { LanguageCon } from "../../Context";
+import { useCookies } from "react-cookie";
+
 export const Dashbaord = () => {
   const navigate = useNavigate();
+  // user cookies
+  const [cookies] = useCookies(["user_token"]);
+  // check if admin
+  useEffect(() => {
+    if (!cookies.user_token.isAdmin) {
+      navigate("/");
+    }
+  });
+
   // context
   const { lang } = useContext(LanguageCon);
 
   return (
-    <div className="relative">
-      <section className="dashboard bg-color1 w-full flex justify-center py-10 relative overflow-scroll">
+    <div className="admin-dashboard relative">
+      <section className="dashboard  w-full flex justify-center py-10 relative overflow-scroll">
         <div className="container flex justify-evenly flex-col items-center h-fit ">
           <div className="admin-info flex flex-col items-center gap-4 ">
             <img src={image} alt="admin-img" className="rounded-lg w-[120px]" />
-            <p className="sm:text-lg lg:text-2xl text-white capitalize">name</p>
+            <p className="sm:text-lg lg:text-xl capitalize">name</p>
           </div>
           <div className="btns flex sm:flex-col sm:mt-10 lg:flex-row gap-10 w-full items-center justify-center">
             <div className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
               <label
                 htmlFor="create-user"
-                className="text-2xl text-white font-bold capitalize"
+                className="text-2xl font-bold capitalize"
               >
                 {lang === "ar" ? "انشاء مستخدم" : "create user"}
               </label>
@@ -35,7 +46,7 @@ export const Dashbaord = () => {
                 name="create-user"
                 id="create-user"
                 className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group "
+                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
               >
                 <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
               </button>
@@ -43,7 +54,7 @@ export const Dashbaord = () => {
             <div className="edit-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
               <label
                 htmlFor="edit-user"
-                className="text-2xl text-white font-bold capitalize"
+                className="text-2xl  font-bold capitalize"
               >
                 {lang === "ar" ? "تعديل حساب مستخدم " : "  edit user"}
               </label>
@@ -51,7 +62,7 @@ export const Dashbaord = () => {
                 name="edit-user"
                 id="edit-user"
                 className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group"
+                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
               >
                 <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
               </button>
@@ -59,7 +70,7 @@ export const Dashbaord = () => {
             <div className="settings-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
               <label
                 htmlFor="edit-user"
-                className="text-2xl text-white font-bold capitalize"
+                className="text-2xl font-bold capitalize"
               >
                 {lang === "ar" ? "اعدادات الحساب" : "  settings"}
               </label>
@@ -67,7 +78,7 @@ export const Dashbaord = () => {
                 name="edit-user"
                 id="edit-user"
                 className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group"
+                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
               >
                 <IoSettingsSharp className="group-hover:rotate-90 duration-200 ease-in-out" />
               </button>
@@ -108,11 +119,11 @@ export const CreateUser = () => {
 
   // handle submit
   const HandleSubmit = async (e) => {
-    const axiosInstance = axios.create({
-      baseURL: process.env.REACT_APP_API_URL,
-    });
     e.preventDefault();
     setData({ ...data, projectinfo });
+    const axiosInstance = axios.create({
+      baseURL: process.env.REACT_API_URL,
+    });
     await axiosInstance
       .post("auth/createuser", data)
       .then((res) => console.log(res))

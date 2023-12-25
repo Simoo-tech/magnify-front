@@ -1,32 +1,102 @@
-import React, { useContext, useState } from "react";
-import "../../App.css";
-import LanguageCon from "../../Context";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../App.css";
+import { LanguageCon } from "../Context";
 import { FaInfoCircle } from "react-icons/fa";
+import { useCookies } from "react-cookie";
+import cookie from "react-cookies";
+import axios from "axios";
 export const CreatePass = () => {
+  // use navigation
+  const navigate = useNavigate();
+  // get cookie
+  const [cookies] = useCookies(["user_token"]);
+
+  const getUser = async () => {
+    // axios url instance
+    const axiosInstance = axios.create({
+      baseURL: process.env.REACT_API_URL,
+    });
+    await axiosInstance
+      .get(`auth/user/${cookies.user_token._id}`)
+      .then()
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    // redirect to login in case didnt login
+    if (!cookies.user_token) {
+      navigate("/");
+    } else if (cookies.user_token.passChanged) {
+      navigate(`/magnify/${cookies.user_token._id}/projects`);
+    } else {
+      getUser();
+    }
+  }, []);
+
   const [show, setShow] = useState(false);
   const { lang } = useContext(LanguageCon);
+  const [userPass, setUserPass] = useState({});
+
+  // handle submit
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    // axios url instance
+    const axiosInstance = axios.create({
+      baseURL: process.env.REACT_API_URL,
+    });
+    axiosInstance
+      .put(`auth/user/${cookies.user_token._id}`, userPass)
+      .then((res) => {
+        alert(res.data.message);
+        setTimeout(() => {
+          cookie.remove("user_token", {
+            path: "/",
+            expires: new Date(Date.now() + 3600000),
+            secure: false, // set to true if your using https
+          });
+          window.location.reload();
+        }, 1000);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // handle on change
+  const HandleChange = (e) => {
+    setUserPass({ ...userPass, [e.target.name]: e.target.value });
+  };
   return (
-    <div className="section-h create-password bg-color1 flex justify-center items-center">
+    <div
+      className="section-h create-password bg-color1 flex justify-center items-center"
+      id="create-new-password"
+    >
       <div
         className="container bg-darkGrey sm:9/12 xl:w-8/12 h-5/6 rounded-lg  flex
       flex-col items-center justify-evenly "
       >
-        <p className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">
+        <h2 className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">
           {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
-        </p>
+        </h2>
         <form
+          onSubmit={HandleSubmit}
           className={`flex flex-wrap justify-center items-center w-11/12 mt-4
           sm:flex-col sm:h-fit sm:gap-8
           md:flex-row-reverse md:h-3/6 
           lg:mt-30`}
         >
           <div
+            id="inputs-container"
             className="inputs-form flex flex-col items-center gap-5
           sm:w-full md:w-6/12 order-2"
           >
-            <div className="input w-full">
+            <div id="input-group" className="input w-full">
               <input
+                onChange={HandleChange}
+                required
+                minLength={8}
+                maxLength={16}
                 type={show ? "text" : "password"}
+                value={userPass.password}
                 name="password"
                 id="password"
                 placeholder={lang === "ar" ? "كلمة مرور" : "Password"}
@@ -38,11 +108,16 @@ export const CreatePass = () => {
                 }`}
               />
             </div>
-            <div className="input w-full">
+            <div id="input-group" className="input w-full">
               <input
+                onChange={HandleChange}
+                required
+                minLength={8}
+                maxLength={16}
                 type={show ? "text" : "password"}
-                name="password-con"
-                id="password-con"
+                value={userPass.passwordcon}
+                name="passwordcon"
+                id="passwordcon"
                 placeholder={
                   lang === "ar" ? "أعد إدخال كلمة السر" : "Retype Password"
                 }
@@ -55,6 +130,7 @@ export const CreatePass = () => {
               />
             </div>
             <label
+              id="show-password"
               onChange={() => setShow(!show)}
               htmlFor="show"
               className={`gap-1 flex sm:base md:text-lg w-full justify-start text-white ${
