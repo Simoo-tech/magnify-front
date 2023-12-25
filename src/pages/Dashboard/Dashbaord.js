@@ -123,11 +123,8 @@ export const CreateUser = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setData({ ...data, projectinfo });
-    const axiosInstance = axios.create({
-      baseURL: process.env.REACT_API_URL,
-    });
-    await axiosInstance
-      .post("auth/createuser", data)
+    await axios
+      .post(`${process.env.REACT_API_URL}auth/createuser`, data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
