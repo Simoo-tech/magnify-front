@@ -124,7 +124,7 @@ export const CreateUser = () => {
     e.preventDefault();
     setData({ ...data, projectinfo });
     await axios
-      .post(`${process.env.REACT_API_URL}auth/createuser`, data)
+      .post(`${process.env.REACT_APP_API_URL}auth/createuser`, data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
