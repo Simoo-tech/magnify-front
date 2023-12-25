@@ -99,12 +99,12 @@ const Form = ({ lang, setCookies }) => {
       baseURL: process.env.REACT_API_URL,
     });
     await axiosInstance
-      .post(`auth/login`, authData)
+      .post("auth/login", authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
           expires: new Date(Date.now() + 3600000),
-          secure: false, // set to true if your using https
+          secure: true, // set to true if your using https
         });
         // redirect to path
         if (res.data.isAdmin) {

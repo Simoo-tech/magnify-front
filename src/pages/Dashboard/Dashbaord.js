@@ -17,7 +17,9 @@ export const Dashbaord = () => {
   const [cookies] = useCookies(["user_token"]);
   // check if admin
   useEffect(() => {
-    if (!cookies.user_token.isAdmin) {
+    if (!cookies.user_token) {
+      navigate("/");
+    } else if (!cookies.user_token.isAdmin) {
       navigate("/");
     }
   });
