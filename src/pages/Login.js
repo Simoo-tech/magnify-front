@@ -81,8 +81,7 @@ export const Login = () => {
 };
 const Form = ({ lang, setCookies }) => {
   const [authData, setAuthData] = useState({});
-  // see if user is admin
-  const [isAdmin, setIsAdmin] = useState();
+
   // error msg
   const [error, setError] = useState();
 
@@ -94,7 +93,7 @@ const Form = ({ lang, setCookies }) => {
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // axios url instance
     const axiosInstance = axios.create({
       baseURL: process.env.REACT_API_URL,
@@ -115,11 +114,11 @@ const Form = ({ lang, setCookies }) => {
         }
       })
       .catch((err) => setError(err.response.data.message));
-    console.log(isAdmin);
   };
 
   return (
     <form
+      method="POST"
       autoComplete="off"
       onSubmit={HandleSubmit}
       className="form sm:w-full md:w-6/12 xl:w-[450px] h-full bg-darkGrey flex flex-col

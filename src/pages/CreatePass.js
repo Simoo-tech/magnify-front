@@ -78,6 +78,7 @@ export const CreatePass = () => {
           {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
         </h2>
         <form
+          method="PUT"
           onSubmit={HandleSubmit}
           className={`flex flex-wrap justify-center items-center w-11/12 mt-4
           sm:flex-col sm:h-fit sm:gap-8
