@@ -138,6 +138,9 @@ export const CreateUser = () => {
         setTimeout(() => {
           setMsg({});
         }, 3000);
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       })
       .catch((err) =>
         setMsg({
@@ -146,11 +149,7 @@ export const CreateUser = () => {
           type: "failed",
         })
       )
-      .finally(() => {
-        setTimeout(() => {
-          window.location.reload();
-        }, 4000);
-      });
+    
   };
   console.log(data);
   return (
