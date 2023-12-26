@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../../App.css";
 import image from "../../assest/ava1.webp";
 import { FaPlus, FaUserEdit } from "react-icons/fa";
 import { Outlet, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
-import { IoIosArrowBack } from "react-icons/io";
 import { IoSettingsSharp } from "react-icons/io5";
 import axios from "axios";
 import { LanguageCon } from "../../Context";
 import { useCookies } from "react-cookie";
+import conimage from "../../assest/building.jpg";
+import { MdOutlineError } from "react-icons/md";
 
 export const Dashbaord = () => {
   const navigate = useNavigate();
   // user cookies
   const [cookies] = useCookies(["user_token"]);
+
   // check if admin
   useEffect(() => {
     if (!cookies.user_token) {
@@ -44,7 +45,7 @@ export const Dashbaord = () => {
                 {lang === "ar" ? "انشاء مستخدم" : "create user"}
               </label>
               <button
-                onClick={() => navigate("/md-admin/create-user")}
+                onClick={() => navigate("create-user")}
                 name="create-user"
                 id="create-user"
                 className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
@@ -96,8 +97,13 @@ export const Dashbaord = () => {
 export const CreateUser = () => {
   const [animation, setAnimation] = useState(false);
   const [data, setData] = useState({});
-  const [projectinfo, setProjectinfo] = useState({});
   const [phone, setPhone] = useState();
+
+  // handle message from api
+  const [msg, setMsg] = useState({});
+
+  // user cookies
+  const [cookies] = useCookies(["user_token"]);
 
   // context
   const { lang } = useContext(LanguageCon);
@@ -111,31 +117,52 @@ export const CreateUser = () => {
   // handle change user info
   const HandleChangeUser = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  // handle change project info
-  const HandleChangeProject = (e) => {
-    setProjectinfo({ ...projectinfo, [e.target.name]: e.target.value });
-    setData({ ...data, projectinfo });
+    setMsg({ active: false });
   };
 
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    setData({ ...data, projectinfo });
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/createuser`, data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      //${process.env.REACT_APP_API_URL}auth/createuser}`
+      // http://localhost:8000/api/auth/createuser
+      .post(
+        `${process.env.REACT_APP_API_URL}auth/createuser}`,
+        { ...data },
+        {
+          headers: { token: `${cookies.user_token.token}` },
+        }
+      )
+      .then((res) => {
+        setMsg({ active: true, text: res.data.message, type: "success" });
+        setTimeout(() => {
+          setMsg({});
+        }, 3000);
+      })
+      .catch((err) =>
+        setMsg({
+          active: true,
+          text: err.response.data.message,
+          type: "failed",
+        })
+      )
+      .finally(() => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
+      });
   };
+  console.log(data);
   return (
     <div
       className={`create-user w-full bg-color1 absolute flex justify-center items-center pt-5 
-      sm:flex-col h-full ${
+      sm:flex-col h-full   ${
         animation ? "top-0" : "top-96"
-      } left-0 duration-200 ease-linear`}
+      } left-0 duration-200 ease-linear bg-cover before:bg-color1 bg-center
+      before:w-full before:h-full before:absolute before:top-0 before:opacity-[87%]`}
+      style={{ backgroundImage: `url('${conimage}')` }}
     >
-      <button
+      {/* <button
         onClick={() => navigate(-1)}
         className="back-btn lg:absolute left-0 w-[150px] capitalize flex items-center text-white text-xl h-full before:duration-200 ease-in
         before:absolute before:bg-black before:h-screen -top-[33px] before:w-full hover:before:opacity-90 before:z-0 before:opacity-0
@@ -147,16 +174,26 @@ export const CreateUser = () => {
             {lang === "ar" ? "لوحة القيادة" : "dashboard"}
           </p>
         </div>
-      </button>
-      <div className="container flex flex-col gap-10 items-center overflow-scroll h-full py-5">
+      </button> */}
+      {msg.active && (
+        <span
+          className={`fixed top-16 ${
+            msg.type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white text-xl z-40 py-3 px-7 flex items-center justify-center gap-5 `}
+        >
+          <MdOutlineError /> {msg.text}
+        </span>
+      )}
+      <div className="container flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
         <p className="sm:text-2xl lg:text-3xl capitalize text-center font-bold text-white">
           {lang === "ar" ? "انشاء مستخدم جديد" : "create a new user"}
         </p>
         <form
           className="flex flex-col sm:gap-5 lg:gap-10 w-full items-center "
           onSubmit={HandleSubmit}
+          autoComplete="off"
         >
-          <div className="user-info sm:w-full lg:w-6/12 flex flex-col gap-3 h-fit ">
+          <div className="user-info sm:w-full lg:w-10/12 flex flex-col gap-3 h-fit ">
             <p
               className={`w-full ${
                 lang === "ar" ? "text-end" : "text-start"
@@ -171,13 +208,14 @@ export const CreateUser = () => {
               } input-group-name w-full flex gap-2 `}
             >
               <input
+                id="first-name"
                 name="fname"
                 type="text"
                 placeholder={lang === "ar" ? "الاسم الاول" : "first name"}
-                className={`${
+                className={` rounded-lg ${
                   lang === "ar" ? "text-end" : "text-start"
-                }  rounded-lg w-full sm:text-base lg:text-lg outline-none
-                focus-visible:border-black border-2 h-fit p-2 `}
+                }  sm:text-base lg:text-lg w-full p-2 outline-none focus-visible:border-black border-2
+                `}
                 value={data.fname}
                 onChange={HandleChangeUser}
               />
@@ -231,6 +269,9 @@ export const CreateUser = () => {
               />
               <input
                 type="url"
+                name="projecturl"
+                value={data.projecturl}
+                onChange={HandleChangeUser}
                 placeholder={lang === "ar" ? "رابط المشروع " : "project url"}
                 className={`${
                   lang === "ar" ? "text-end" : "text-start"
@@ -239,7 +280,7 @@ export const CreateUser = () => {
               />
             </div>
           </div>
-          <div className="project-info sm:w-full lg:w-6/12 flex flex-col gap-3">
+          <div className="project-info sm:w-full lg:w-10/12 flex flex-col gap-3">
             <p
               className={`w-full ${
                 lang === "ar" ? "text-end" : "text-start"
@@ -251,9 +292,9 @@ export const CreateUser = () => {
             <div className="input-group w-full flex gap-2">
               <input
                 name="projectNo"
-                value={projectinfo.projectNo}
+                value={data.projectNo}
                 type="number"
-                onChange={HandleChangeProject}
+                onChange={HandleChangeUser}
                 placeholder={lang === "ar" ? "رقم المشروع" : "project number"}
                 className={`${
                   lang === "ar" ? "text-end" : "text-start"
@@ -261,8 +302,8 @@ export const CreateUser = () => {
                 focus-visible:border-black border-2 h-fit p-2`}
               />
               <input
-                value={projectinfo.projectName}
-                onChange={HandleChangeProject}
+                value={data.projectName}
+                onChange={HandleChangeUser}
                 name="projectName"
                 type="text"
                 placeholder={lang === "ar" ? "اسم المشروع " : "project name"}
@@ -274,8 +315,8 @@ export const CreateUser = () => {
             </div>
             <div className="input-group w-full">
               <input
-                value={projectinfo.projectLoc}
-                onChange={HandleChangeProject}
+                value={data.projectLoc}
+                onChange={HandleChangeUser}
                 name="projectLoc"
                 type="text"
                 placeholder={
@@ -290,8 +331,8 @@ export const CreateUser = () => {
             </div>
             <div className="input-group w-full flex gap-2">
               <input
-                value={projectinfo.projectArea}
-                onChange={HandleChangeProject}
+                value={data.projectArea}
+                onChange={HandleChangeUser}
                 name="projectArea"
                 type="text"
                 placeholder={lang === "ar" ? "منطقة المشروع" : "project area"}
@@ -301,8 +342,8 @@ export const CreateUser = () => {
                 focus-visible:border-black border-2 h-fit p-2`}
               />
               <input
-                value={projectinfo.projectHei}
-                onChange={HandleChangeProject}
+                value={data.projectHei}
+                onChange={HandleChangeUser}
                 name="projectHei"
                 type="number"
                 placeholder={
@@ -316,8 +357,8 @@ export const CreateUser = () => {
             </div>
             <div className="input-group w-full flex gap-2">
               <input
-                onChange={HandleChangeProject}
-                value={projectinfo.consultant}
+                onChange={HandleChangeUser}
+                value={data.consultant}
                 name="consultant"
                 type="text"
                 placeholder={lang === "ar" ? "مستشار" : "Consultant"}
@@ -327,8 +368,8 @@ export const CreateUser = () => {
                 focus-visible:border-black border-2 h-fit p-2`}
               />
               <input
-                value={projectinfo.projectDura}
-                onChange={HandleChangeProject}
+                value={data.projectDura}
+                onChange={HandleChangeUser}
                 name="projectDura"
                 type="number"
                 placeholder={lang === "ar" ? "مدة المشروع" : "project duration"}
@@ -336,19 +377,17 @@ export const CreateUser = () => {
                   lang === "ar" ? "text-end" : "text-start"
                 } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                s
               />
             </div>
             <div className="input-group w-full flex gap-2">
               <select
-                value={projectinfo.projectType}
+                value={data.projectType}
                 name="projectType"
                 onChange={(e) => {
-                  setProjectinfo({
-                    ...projectinfo,
+                  setData({
+                    ...data,
                     projectType: e.target.value,
                   });
-                  setData({ ...data, projectinfo });
                 }}
                 placeholder={lang === "ar" ? "نوع المشروع" : "project type"}
                 className={`${

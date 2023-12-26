@@ -3,11 +3,10 @@ import mainlogo from "../assest/logo/mainLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
-import "../App.css";
 import { LanguageCon } from "../Context";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-
+import { v4 as uuidv4 } from "uuid";
 export const Login = () => {
   // handle change language
   const { lang } = useContext(LanguageCon);
@@ -94,7 +93,9 @@ const Form = ({ lang, setCookies }) => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
+      // ${process.env.REACT_APP_API_URL}auth/login}
+      // http://localhost:8000/api/auth/login
+      .post(`${process.env.REACT_APP_API_URL}auth/login}`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
@@ -103,7 +104,8 @@ const Form = ({ lang, setCookies }) => {
         });
         // redirect to path
         if (res.data.isAdmin) {
-          window.location.assign("/md-admin");
+          const userID = uuidv4(res.data._id);
+          window.location.assign(`/${userID}/dashboard`);
         } else {
           window.location.assign("/create-password");
         }
@@ -144,7 +146,7 @@ const Form = ({ lang, setCookies }) => {
             gap-2 py-2 ${lang === "ar" && "flex-row-reverse "}`}
           >
             <label
-              htmlFor="emal"
+              htmlFor="email"
               className={` ${
                 lang === "ar" && "text-end"
               } capitalize text-white w-full text-lg font-semibold`}

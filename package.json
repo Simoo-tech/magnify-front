@@ -18,7 +18,7 @@
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
     "save-svg-as-png": "^1.4.17",
-    "universal-cookie": "^6.1.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

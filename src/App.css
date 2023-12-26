@@ -1,5 +1,6 @@
 .section-h,
 .dashboard,
-.create-user {
+.create-user,
+.not-found {
   height: calc(100vh - 65px);
 }

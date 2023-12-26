@@ -7,6 +7,7 @@ import { Header } from "./component/Header";
 import { CreatePass } from "./pages/CreatePass";
 import { CreateUser, Dashbaord } from "./pages/Dashboard/Dashbaord";
 import { UserProjects } from "./pages/UserProjects";
+import { NotFound } from "./component/NotFound";
 function App() {
   // context value
   const [lang, setLang] = useState("");
@@ -22,11 +23,12 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/md-admin" element={<Dashbaord />}>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/:id/dashboard" element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
             </Route>
             <Route path="/create-password" element={<CreatePass />} />
-            <Route path="/magnify/:id/projects" element={<UserProjects />} />
+            <Route path="/:id/tour-projects" element={<UserProjects />} />
           </Routes>
         </div>
       </LanguageCon.Provider>

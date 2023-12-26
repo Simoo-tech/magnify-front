@@ -54,8 +54,11 @@ export const Header = () => {
             </option>
           </select>
           {cookies.user_token ? (
-            <button onClick={Logout} className="relative duration-150 ">
-              <FiLogOut size={25} color="red" />
+            <button
+              onClick={Logout}
+              className="relative duration-150 bg-white py-2 px-2 rounded-lg "
+            >
+              <FiLogOut size={20} color="red" />
             </button>
           ) : null}
         </div>

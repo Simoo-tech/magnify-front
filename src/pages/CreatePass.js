@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
 import { LanguageCon } from "../Context";
 import { FaInfoCircle } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import cookie from "react-cookies";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+
 export const CreatePass = () => {
   // use navigation
   const navigate = useNavigate();
@@ -23,12 +24,13 @@ export const CreatePass = () => {
       .catch((err) => console.log(err));
   };
 
+  const userID = uuidv4(cookies.user_token._id);
   useEffect(() => {
     // redirect to login in case didnt login
     if (!cookies.user_token) {
       navigate("/");
     } else if (cookies.user_token.passChanged) {
-      navigate(`/magnify/${cookies.user_token._id}/projects`);
+      navigate(`/${userID}/tour-projects`);
     } else {
       getUser();
     }
@@ -43,10 +45,7 @@ export const CreatePass = () => {
     e.preventDefault();
 
     axios
-      .put(
-        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`,
-        userPass
-      )
+      .put(`${process.env.REACT_APP_API_URL}auth/user/${userID}`, userPass)
       .then((res) => {
         alert(res.data.message);
         setTimeout(() => {
