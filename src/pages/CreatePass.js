@@ -14,12 +14,10 @@ export const CreatePass = () => {
   const [cookies] = useCookies(["user_token"]);
 
   const getUser = async () => {
-    // axios url instance
-    const axiosInstance = axios.create({
-      baseURL: process.env.REACT_API_URL,
-    });
-    await axiosInstance
-      .get(`auth/user/${cookies.user_token._id}`)
+    await axios
+      .get(
+        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`
+      )
       .then()
       .catch((err) => console.log(err));
   };

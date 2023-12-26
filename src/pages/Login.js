@@ -95,7 +95,7 @@ const Form = ({ lang, setCookies }) => {
     await axios
       // ${process.env.REACT_APP_API_URL}auth/login}
       // http://localhost:8000/api/auth/login
-      .post(`${process.env.REACT_APP_API_URL}auth/login}`, authData)
+      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",

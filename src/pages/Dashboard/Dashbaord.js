@@ -127,7 +127,7 @@ export const CreateUser = () => {
       //${process.env.REACT_APP_API_URL}auth/createuser}`
       // http://localhost:8000/api/auth/createuser
       .post(
-        `${process.env.REACT_APP_API_URL}auth/createuser}`,
+        `${process.env.REACT_APP_API_URL}auth/createuser`,
         { ...data },
         {
           headers: { token: `${cookies.user_token.token}` },
