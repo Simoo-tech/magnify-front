@@ -10,6 +10,7 @@ import { LanguageCon } from "../../Context";
 import { useCookies } from "react-cookie";
 import conimage from "../../assest/building.jpg";
 import { MdOutlineError } from "react-icons/md";
+import { Oval } from "react-loader-spinner";
 
 export const Dashbaord = () => {
   const navigate = useNavigate();
@@ -118,15 +119,15 @@ export const CreateUser = () => {
     setData({ ...data, [e.target.name]: e.target.value });
     setMsg({ active: false });
   };
-
+  // loading spinner
+  const [loading, setLoading] = useState(false);
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await axios
-      // ${process.env.REACT_APP_API_URL}auth/createuser}
-      // http://localhost:8000/api/auth/createuser
       .post(
-        `${process.env.REACT_APP_API_URL}auth/createuser}`,
+        `${process.env.REACT_APP_API_URL}auth/createuser`,
         { ...data },
         {
           headers: { token: `${cookies.user_token.token}` },
@@ -147,7 +148,10 @@ export const CreateUser = () => {
           text: err.response.data.message,
           type: "failed",
         })
-      );
+      )
+      .then(() => {
+        setLoading(false);
+      });
   };
   return (
     <div
@@ -401,11 +405,18 @@ export const CreateUser = () => {
             </div>
           </div>
           <button
+            id="create-user"
             type="submit"
-            className="text-2xl text-white border-2 py-2 px-10 rounded-lg capitalize 
-            hover:bg-white hover:text-color1 duration-200 ease-in-out"
+            className="text-white sm:text-lg lg:text-xl capitalize border-2 py-2 px-6 hover:text-darkGrey font-semibold
+          rounded-xl hover:bg-white duration-150 ease-linear w-[200px] flex justify-center"
           >
-            {lang === "ar" ? "انشاء" : "create"}
+            {loading ? (
+              <Oval width={50} height={"28px"} color="white" />
+            ) : lang === "en" || lang === null ? (
+              "create user"
+            ) : (
+              "انشاء مستخدم  "
+            )}
           </button>
         </form>
       </div>

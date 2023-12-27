@@ -7,6 +7,7 @@ import { LanguageCon } from "../Context";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
+import { Oval } from "react-loader-spinner";
 export const Login = () => {
   // handle change language
   const { lang } = useContext(LanguageCon);
@@ -83,7 +84,8 @@ const Form = ({ lang, setCookies }) => {
 
   // error msg
   const [error, setError] = useState();
-
+  // loading spinner
+  const [loading, setLoading] = useState(false);
   // handle change
   const HandleChange = (e) => {
     setAuthData({ ...authData, [e.target.name]: e.target.value });
@@ -92,10 +94,9 @@ const Form = ({ lang, setCookies }) => {
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    // ${process.env.REACT_APP_API_URL}auth/login}
-    // http://localhost:8000/api/auth/login
+    setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login}`, authData)
+      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
@@ -111,7 +112,10 @@ const Form = ({ lang, setCookies }) => {
           window.location.assign("/create-password");
         }
       })
-      .catch((err) => setError(err.response.data.message));
+      .catch((err) => {
+        setError(err.response.data.message);
+      })
+      .finally(() => setLoading(false));
   };
   return (
     <form
@@ -212,13 +216,20 @@ const Form = ({ lang, setCookies }) => {
             />
           </div>
         </div>
+        {/* sign in btn */}
         <button
           id="sign-in"
           type="submit"
           className="text-white sm:text-lg lg:text-xl capitalize border-2 py-2 px-6 hover:text-darkGrey font-semibold
-          rounded-xl hover:bg-white duration-150 ease-linear"
+          rounded-xl hover:bg-white duration-150 ease-linear w-[150px] flex justify-center"
         >
-          {lang === "en" || lang === null ? "sign in" : "تسجيل  "}
+          {loading ? (
+            <Oval width={50} height={"28px"} color="white" />
+          ) : lang === "en" || lang === null ? (
+            "sign in"
+          ) : (
+            "تسجيل  "
+          )}
         </button>
         {/* forgot pass */}
         <Link
