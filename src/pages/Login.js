@@ -92,10 +92,10 @@ const Form = ({ lang, setCookies }) => {
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    // ${process.env.REACT_APP_API_URL}auth/login}
+    // http://localhost:8000/api/auth/login
     await axios
-      // ${process.env.REACT_APP_API_URL}auth/login}
-      // http://localhost:8000/api/auth/login
-      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
+      .post(`${process.env.REACT_APP_API_URL}auth/login}`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
@@ -103,16 +103,16 @@ const Form = ({ lang, setCookies }) => {
           secure: true, // set to true if your using https
         });
         // redirect to path
+        const userID = uuidv4(res.data._id);
         if (res.data.isAdmin) {
-          const userID = uuidv4(res.data._id);
           window.location.assign(`/${userID}/dashboard`);
         } else {
+          window.localStorage.setItem("userID", userID);
           window.location.assign("/create-password");
         }
       })
       .catch((err) => setError(err.response.data.message));
   };
-
   return (
     <form
       autoComplete="off"
@@ -131,7 +131,9 @@ const Form = ({ lang, setCookies }) => {
         >
           {lang === "en" || lang === null ? "Sign in" : "تسجيل الدخول "}
         </h2>
+        {/* inputs container */}
         <div className="inputs-group flex flex-col gap-5 w-full">
+          {/* error messaage */}
           {error && (
             <span
               className="text-center text-white flex items-center gap-3 justify-center bg-red-500 
@@ -141,6 +143,7 @@ const Form = ({ lang, setCookies }) => {
               {error}
             </span>
           )}
+          {/* email input */}
           <div
             className={`input-group-email relative flex flex-wrap items-center border-color1 border-b-2 
             gap-2 py-2 ${lang === "ar" && "flex-row-reverse "}`}
@@ -173,6 +176,7 @@ const Form = ({ lang, setCookies }) => {
               }
             />
           </div>
+          {/* password input */}
           <div
             id="input-group-password "
             className={`input-group-email relative flex flex-wrap items-center border-color1 border-b-2 
@@ -216,6 +220,7 @@ const Form = ({ lang, setCookies }) => {
         >
           {lang === "en" || lang === null ? "sign in" : "تسجيل  "}
         </button>
+        {/* forgot pass */}
         <Link
           id="forgot-password"
           className="text-gray-100 sm:text-base lg:text-lg capitalize"
@@ -225,6 +230,7 @@ const Form = ({ lang, setCookies }) => {
             : "نسيت كلمة المرور؟"}
         </Link>
       </div>
+      {/* need help */}
       <Link
         id="need-help"
         className="capitalize flex text-white sm:text-base lg:text-lg"

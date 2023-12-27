@@ -109,7 +109,6 @@ export const CreateUser = () => {
   const { lang } = useContext(LanguageCon);
 
   // animation
-  const navigate = useNavigate();
   useEffect(() => {
     setAnimation(true);
   }, []);
@@ -124,10 +123,10 @@ export const CreateUser = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     await axios
-      //${process.env.REACT_APP_API_URL}auth/createuser}`
+      // ${process.env.REACT_APP_API_URL}auth/createuser}
       // http://localhost:8000/api/auth/createuser
       .post(
-        `${process.env.REACT_APP_API_URL}auth/createuser`,
+        `${process.env.REACT_APP_API_URL}auth/createuser}`,
         { ...data },
         {
           headers: { token: `${cookies.user_token.token}` },
@@ -148,10 +147,8 @@ export const CreateUser = () => {
           text: err.response.data.message,
           type: "failed",
         })
-      )
-    
+      );
   };
-  console.log(data);
   return (
     <div
       className={`create-user w-full bg-color1 absolute flex justify-center items-center pt-5 
@@ -161,19 +158,6 @@ export const CreateUser = () => {
       before:w-full before:h-full before:absolute before:top-0 before:opacity-[87%]`}
       style={{ backgroundImage: `url('${conimage}')` }}
     >
-      {/* <button
-        onClick={() => navigate(-1)}
-        className="back-btn lg:absolute left-0 w-[150px] capitalize flex items-center text-white text-xl h-full before:duration-200 ease-in
-        before:absolute before:bg-black before:h-screen -top-[33px] before:w-full hover:before:opacity-90 before:z-0 before:opacity-0
-        sm:hidden lg:flex"
-      >
-        <div className=" relative z-20 flex items-center w-full justify-center">
-          <IoIosArrowBack />
-          <p className="text-base">
-            {lang === "ar" ? "لوحة القيادة" : "dashboard"}
-          </p>
-        </div>
-      </button> */}
       {msg.active && (
         <span
           className={`fixed top-16 ${
@@ -192,6 +176,7 @@ export const CreateUser = () => {
           onSubmit={HandleSubmit}
           autoComplete="off"
         >
+          {/* user info */}
           <div className="user-info sm:w-full lg:w-10/12 flex flex-col gap-3 h-fit ">
             <p
               className={`w-full ${
@@ -201,6 +186,7 @@ export const CreateUser = () => {
             >
               {lang === "ar" ? "معلومات المستخدم" : "user information"}
             </p>
+            {/* inputs container */}
             <div
               className={`${
                 lang === "ar" ? "flex-row-reverse" : "flex-row"
@@ -279,6 +265,7 @@ export const CreateUser = () => {
               />
             </div>
           </div>
+          {/* project info */}
           <div className="project-info sm:w-full lg:w-10/12 flex flex-col gap-3">
             <p
               className={`w-full ${
@@ -288,6 +275,7 @@ export const CreateUser = () => {
             >
               {lang === "ar" ? "معلومات المشروع" : "project information"}
             </p>
+            {/* inputs containers */}
             <div className="input-group w-full flex gap-2">
               <input
                 name="projectNo"

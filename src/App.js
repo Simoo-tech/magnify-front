@@ -8,6 +8,7 @@ import { CreatePass } from "./pages/CreatePass";
 import { CreateUser, Dashbaord } from "./pages/Dashboard/Dashbaord";
 import { UserProjects } from "./pages/UserProjects";
 import { NotFound } from "./component/NotFound";
+import { Verify } from "./pages/Verify";
 function App() {
   // context value
   const [lang, setLang] = useState("");
@@ -27,6 +28,7 @@ function App() {
             <Route path="/:id/dashboard" element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
             </Route>
+            <Route path="/verify-email" element={<Verify />} />
             <Route path="/create-password" element={<CreatePass />} />
             <Route path="/:id/tour-projects" element={<UserProjects />} />
           </Routes>

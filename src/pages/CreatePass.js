@@ -5,32 +5,22 @@ import { FaInfoCircle } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import cookie from "react-cookies";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
+import { MdErrorOutline } from "react-icons/md";
 
 export const CreatePass = () => {
+  // get user id
+  const userID = window.localStorage.getItem("userID");
   // use navigation
   const navigate = useNavigate();
   // get cookie
   const [cookies] = useCookies(["user_token"]);
 
-  const getUser = async () => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`
-      )
-      .then()
-      .catch((err) => console.log(err));
-  };
-
-  const userID = uuidv4(cookies.user_token._id);
+  // redirect to login in case didnt login
   useEffect(() => {
-    // redirect to login in case didnt login
     if (!cookies.user_token) {
       navigate("/");
     } else if (cookies.user_token.passChanged) {
       navigate(`/${userID}/tour-projects`);
-    } else {
-      getUser();
     }
   }, []);
 
@@ -39,11 +29,16 @@ export const CreatePass = () => {
   const [userPass, setUserPass] = useState({});
 
   // handle submit
+  const [error, setError] = useState("");
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
     axios
-      .put(`${process.env.REACT_APP_API_URL}auth/user/${userID}`, userPass)
+      // ${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}
+      // http://localhost:8000/api/auth/user/${cookies.user_token._id}
+      .put(
+        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`,
+        userPass
+      )
       .then((res) => {
         alert(res.data.message);
         setTimeout(() => {
@@ -52,15 +47,16 @@ export const CreatePass = () => {
             expires: new Date(Date.now() + 3600000),
             secure: false, // set to true if your using https
           });
-          window.location.reload();
+          window.location.assign("/");
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err.response.data.message));
   };
 
   // handle on change
   const HandleChange = (e) => {
     setUserPass({ ...userPass, [e.target.name]: e.target.value });
+    setError(null);
   };
   return (
     <div
@@ -74,6 +70,16 @@ export const CreatePass = () => {
         <h2 className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">
           {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
         </h2>
+        {/* error message */}
+        {error && (
+          <span
+            className="text-center text-white flex items-center gap-3 justify-center bg-red-500 
+              py-2 px-4 rounded-lg sm:text-sm lg:text-base "
+          >
+            <MdErrorOutline size={20} />
+            {error}
+          </span>
+        )}
         <form
           onSubmit={HandleSubmit}
           className={`flex flex-wrap justify-center items-center w-11/12 mt-4
@@ -81,6 +87,7 @@ export const CreatePass = () => {
           md:flex-row-reverse md:h-3/6 
           lg:mt-30`}
         >
+          {/* input container */}
           <div
             id="inputs-container"
             className="inputs-form flex flex-col items-center gap-5
@@ -90,8 +97,6 @@ export const CreatePass = () => {
               <input
                 onChange={HandleChange}
                 required
-                minLength={8}
-                maxLength={16}
                 type={show ? "text" : "password"}
                 value={userPass.password}
                 name="password"
@@ -109,8 +114,6 @@ export const CreatePass = () => {
               <input
                 onChange={HandleChange}
                 required
-                minLength={8}
-                maxLength={16}
                 type={show ? "text" : "password"}
                 value={userPass.passwordcon}
                 name="passwordcon"
@@ -138,6 +141,7 @@ export const CreatePass = () => {
               {lang === "ar" ? "اظهار كلمة المرور" : "show password"}
             </label>
           </div>
+          {/* instruction container */}
           <div
             className={`instruction sm:w-full md:w-5/12 lg:w-5/12 text-white justify-center flex 
           border-2 border-color3 py-4 px-3 flex-col order-1
