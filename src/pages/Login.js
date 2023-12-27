@@ -105,10 +105,10 @@ const Form = ({ lang, setCookies }) => {
         });
         // redirect to path
         const userID = uuidv4(res.data._id);
+        window.localStorage.setItem("userID", userID);
         if (res.data.isAdmin) {
           window.location.assign(`/${userID}/dashboard`);
         } else {
-          window.localStorage.setItem("userID", userID);
           window.location.assign("/create-password");
         }
       })

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import image from "../../assest/ava1.webp";
 import { FaPlus, FaUserEdit } from "react-icons/fa";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -11,12 +11,17 @@ import { useCookies } from "react-cookie";
 import conimage from "../../assest/building.jpg";
 import { MdOutlineError } from "react-icons/md";
 import { Oval } from "react-loader-spinner";
+import { NotFound } from "../../component/NotFound";
 
 export const Dashbaord = () => {
   const navigate = useNavigate();
+  // get url
+  const { id } = useParams();
   // user cookies
   const [cookies] = useCookies(["user_token"]);
-
+  // get and check user id
+  const userID = window.localStorage.getItem("userID");
+  const UserIdChecker = id === userID;
   // check if admin
   useEffect(() => {
     if (!cookies.user_token) {
@@ -29,7 +34,7 @@ export const Dashbaord = () => {
   // context
   const { lang } = useContext(LanguageCon);
 
-  return (
+  return UserIdChecker ? (
     <div className="admin-dashboard relative">
       <section className="dashboard  w-full flex justify-center py-10 relative overflow-scroll">
         <div className="container flex justify-evenly flex-col items-center h-fit ">
@@ -92,6 +97,8 @@ export const Dashbaord = () => {
       </section>
       <Outlet />
     </div>
+  ) : (
+    <NotFound />
   );
 };
 
