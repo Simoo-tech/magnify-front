@@ -15,11 +15,13 @@ import { Projects } from "./pages/Projects";
 function App() {
   // context value
   const [lang, setLang] = useState("");
-
+  const [cookies] = useCookies(["user_token"]);
   const LangValue = { lang, setLang };
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
   }, []);
+  // user
+  const user = cookies.user_token.userName;
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>
@@ -35,7 +37,10 @@ function App() {
             <Route path="/verify-email" element={<Verify />} />
             <Route path="/create-password" element={<CreatePass />} />
             <Route path="/:id/tour-projects" element={<UserProjects />} />
-            <Route path="/projects/:id/:id" element={<Projects />}></Route>
+            <Route
+              path={`/projects/${user}/:id`}
+              element={<Projects />}
+            ></Route>
           </Routes>
         </div>
       </LanguageCon.Provider>
