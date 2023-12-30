@@ -17,11 +17,14 @@ function App() {
   const [lang, setLang] = useState("");
   const [cookies] = useCookies(["user_token"]);
   const LangValue = { lang, setLang };
+  let user;
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
   }, []);
+  if (cookies.user_token) {
+    user = cookies.user_token.userName;
+  }
   // user
-  const user = cookies.user_token.userName;
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>
