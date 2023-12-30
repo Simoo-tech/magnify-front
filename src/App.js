@@ -5,10 +5,13 @@ import { LanguageCon } from "./Context";
 import { useEffect, useState } from "react";
 import { Header } from "./component/Header";
 import { CreatePass } from "./pages/CreatePass";
-import { CreateUser, Dashbaord } from "./pages/Dashboard/Dashbaord";
+import { CreateUser, Dashbaord, EditUser } from "./pages/Dashboard/Dashbaord";
 import { UserProjects } from "./pages/UserProjects";
 import { NotFound } from "./component/NotFound";
 import { Verify } from "./pages/Verify";
+import { useCookies } from "react-cookie";
+import { Projects } from "./pages/Projects";
+
 function App() {
   // context value
   const [lang, setLang] = useState("");
@@ -27,10 +30,12 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/:id/dashboard" element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
+              <Route path="edit-user" element={<EditUser />} />
             </Route>
             <Route path="/verify-email" element={<Verify />} />
             <Route path="/create-password" element={<CreatePass />} />
             <Route path="/:id/tour-projects" element={<UserProjects />} />
+            <Route path="/projects/:id/:id" element={<Projects />}></Route>
           </Routes>
         </div>
       </LanguageCon.Provider>

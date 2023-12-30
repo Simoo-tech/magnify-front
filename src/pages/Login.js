@@ -16,11 +16,16 @@ export const Login = () => {
   const [cookie, setCookies] = useCookies(["user_token"]);
   const navigate = useNavigate();
   useEffect(() => {
+    const userid = window.localStorage.getItem("userID");
+    // see if user is admin
     if (cookie.user_token) {
-      navigate("/create-password");
+      if (cookie.user_token.isAdmin) {
+        navigate(`/${userid}/dashboard`);
+      } else {
+        navigate("/create-password");
+      }
     }
   }, []);
-
   return (
     <section
       id="login-page"

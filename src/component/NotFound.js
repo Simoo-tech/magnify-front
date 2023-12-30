@@ -5,7 +5,7 @@ export const NotFound = () => {
   return (
     <div
       id="page-not-found"
-      className="not-found h-full w-full bg-color1 flex justify-center items-center"
+      className="section-h w-full bg-color1 flex justify-center items-center"
     >
       <div
         className="container sm:w-full lg:w-4/6 h-5/6 bg-darkGrey rounded-lg py-10 px-5 flex flex-col

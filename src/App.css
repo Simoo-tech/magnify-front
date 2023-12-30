@@ -1,6 +1,16 @@
 .section-h,
-.dashboard,
-.create-user,
+.admin-dashboard,
 .not-found {
   height: calc(100vh - 65px);
+}
+
+.react-tel-input .selected-flag::before {
+  left: 5px !important;
+}
+
+.react-tel-input .selected-flag:focus::before,
+.react-tel-input .selected-flag.open::before {
+  border: 2px solid !important;
+  border-color: #cc8c3b !important;
+  box-shadow: none !important;
 }

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import cookie from "react-cookies";
 import { FiLogOut } from "react-icons/fi";
 import { useCookies } from "react-cookie";
-
+import mainLogo from "../assest/logo/mainLogo.png";
 export const Header = () => {
   const { lang, setLang } = useContext(LanguageCon);
   // handle logout

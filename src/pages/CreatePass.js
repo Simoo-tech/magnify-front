@@ -15,13 +15,25 @@ export const CreatePass = () => {
   const navigate = useNavigate();
   // get cookie
   const [cookies] = useCookies(["user_token"]);
-
+  const user = cookies.user_token;
   // redirect to login in case didnt login
   useEffect(() => {
-    if (!cookies.user_token) {
+    if (!user) {
       navigate("/");
-    } else if (cookies.user_token.passChanged) {
+      // if user not admin and have many projects
+    } else if (
+      !user.isAdmin &&
+      user.passChanged &&
+      user.projectInfo.length > 1
+    ) {
       navigate(`/${userID}/tour-projects`);
+    } else if (
+      // if user not admin and have one project
+      !user.isAdmin &&
+      user.passChanged &&
+      user.projectInfo.length === 1
+    ) {
+      navigate(`/projects/${user.userName}/${user.projectInfo[0].folderName}`);
     }
   }, []);
 
@@ -32,6 +44,7 @@ export const CreatePass = () => {
   const [loading, setLoading] = useState(false);
   // handle submit
   const [error, setError] = useState("");
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
