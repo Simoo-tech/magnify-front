@@ -27,13 +27,6 @@ export const CreatePass = () => {
       user.projectInfo.length > 1
     ) {
       navigate(`/${userID}/tour-projects`);
-    } else if (
-      // if user not admin and have one project
-      !user.isAdmin &&
-      user.passChanged &&
-      user.projectInfo.length === 1
-    ) {
-      navigate(`/projects/${user.userName}/${user.projectInfo[0].folderName}`);
     }
   }, []);
 
