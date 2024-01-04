@@ -22,13 +22,11 @@ export const UserProjects = () => {
     <iframe
       src={`${process.env.REACT_APP_FOLDER}${user.userName}/index.htm`}
       name={user.userName}
-      scrolling="no"
-      frameborder="1"
       marginheight="0px"
       marginwidth="0px"
       width="100%"
-      allowfullscreen
-      className="section-h"
+      allowFullScreen
+      height="100%"
     />
   ) : (
     <div className="section-h flex justify-center relative py-10 overflow-scroll ">

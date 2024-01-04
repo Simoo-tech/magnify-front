@@ -24,10 +24,10 @@ export const Projects = () => {
 
   const checkID = folder.includes(id);
   return (
-    <div className="section-h w-full absolute top-0">
+    <div className="h-full w-full absolute top-0">
       {checkID ? (
         <iframe
-          src={`${process.env.REACT_APP_FOLDER}${user.userName}/index.htm`}
+          src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
           name="myiFrame"
           scrolling="no"
           frameborder="1"
@@ -36,7 +36,7 @@ export const Projects = () => {
           height="100%"
           width="100%"
           allowfullscreen
-        ></iframe>
+        />
       ) : (
         <NotFound />
       )}
