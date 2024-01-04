@@ -27,7 +27,7 @@ export const Projects = () => {
     <div className="section-h w-full absolute top-0">
       {checkID ? (
         <iframe
-          src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
+          src={`${process.env.REACT_APP_FOLDER}${user.userName}/index.htm`}
           name="myiFrame"
           scrolling="no"
           frameborder="1"
