@@ -23,23 +23,20 @@ export const Projects = () => {
   console.log(user);
 
   const checkID = folder.includes(id);
-  return (
-    <div className="h-full w-full absolute -top-[65px]">
-      {checkID ? (
-        <iframe
-          src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
-          name="myiFrame"
-          scrolling="no"
-          frameborder="1"
-          marginheight="0px"
-          marginwidth="0px"
-          height="100%"
-          width="100%"
-          allowfullscreen
-        />
-      ) : (
-        <NotFound />
-      )}
-    </div>
+  return checkID ? (
+    <iframe
+      src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
+      name="myiFrame"
+      scrolling="no"
+      frameborder="1"
+      marginheight="0px"
+      marginwidth="0px"
+      height="100%"
+      width="100%"
+      allowfullscreen
+      className="section-h w-full absolute top-0"
+    />
+  ) : (
+    <NotFound />
   );
 };
