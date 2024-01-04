@@ -24,7 +24,7 @@ export const Projects = () => {
 
   const checkID = folder.includes(id);
   return (
-    <div className="h-full w-full absolute top-0">
+    <div className="h-full w-full absolute -top-[65px]">
       {checkID ? (
         <iframe
           src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
