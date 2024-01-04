@@ -11,24 +11,28 @@ import { Oval } from "react-loader-spinner";
 export const CreatePass = () => {
   // get user id
   const userID = window.localStorage.getItem("userID");
+
   // use navigation
   const navigate = useNavigate();
+
   // get cookie
   const [cookies] = useCookies(["user_token"]);
   const user = cookies.user_token;
+
   // redirect to login in case didnt login
   useEffect(() => {
     if (!user) {
       navigate("/");
-      // if user not admin and have many projects
+      // if user not admin and have  project
     } else if (!user.isAdmin && user.passChanged) {
       navigate(`/${userID}/tour-projects`);
     }
   }, []);
 
-  const [show, setShow] = useState(false);
   const { lang } = useContext(LanguageCon);
   const [userPass, setUserPass] = useState({});
+  // show password
+  const [show, setShow] = useState(false);
   // loading spinner
   const [loading, setLoading] = useState(false);
   // handle submit
@@ -39,7 +43,7 @@ export const CreatePass = () => {
     setLoading(true);
     axios
       .put(
-        `${process.env.REACT_APP_API_URL}auth/user/${cookies.user_token._id}`,
+        `${process.env.REACT_APP_API_URL}user/update-password/${cookies.user_token._id}`,
         userPass
       )
       .then((res) => {
@@ -48,7 +52,7 @@ export const CreatePass = () => {
           cookie.remove("user_token", {
             path: "/",
             expires: new Date(Date.now() + 3600000),
-            secure: false, // set to true if your using https
+            secure: true,
           });
           window.location.assign("/");
         }, 1000);

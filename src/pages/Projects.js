@@ -1,5 +1,5 @@
 import "../App.css";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { NotFound } from "../component/NotFound";
 import { useEffect } from "react";
@@ -13,6 +13,7 @@ export const Projects = () => {
   const folder = projects.map((project) => {
     return project.folderName;
   });
+
   useEffect(() => {
     if (!user) {
       navigate("/");
@@ -22,5 +23,23 @@ export const Projects = () => {
   console.log(user);
 
   const checkID = folder.includes(id);
-  return checkID ? <Outlet /> : <NotFound />;
+  return (
+    <div className="section-h w-full absolute top-0">
+      {checkID ? (
+        <iframe
+          src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
+          name="myiFrame"
+          scrolling="no"
+          frameborder="1"
+          marginheight="0px"
+          marginwidth="0px"
+          height="100%"
+          width="100%"
+          allowfullscreen
+        ></iframe>
+      ) : (
+        <NotFound />
+      )}
+    </div>
+  );
 };

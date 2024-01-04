@@ -1,26 +1,36 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { NotFound } from "../component/NotFound";
 import { FaBuildingFlag } from "react-icons/fa6";
 export const UserProjects = () => {
   const navigate = useNavigate();
-  // id checker
-  const { id } = useParams();
-  // get user id
-  const userID = window.localStorage.getItem("userID");
+
   // user cookies
   const [cookies] = useCookies(["user_token"]);
   const user = cookies.user_token;
   const project = user.projectInfo;
-  const UserIdChecker = id === userID;
+
   useEffect(() => {
     if (!user) {
       navigate("/");
     }
+    // else {
+    //   navigate(`/user/verified-email/${userID}`);
+    // }
   });
-
-  return UserIdChecker ? (
+  return project.length === 1 ? (
+    <iframe
+      src={`${process.env.REACT_APP_FOLDER}${user.userName}/index.htm`}
+      name={user.userName}
+      scrolling="no"
+      frameborder="1"
+      marginheight="0px"
+      marginwidth="0px"
+      width="100%"
+      allowfullscreen
+      className="section-h"
+    />
+  ) : (
     <div className="section-h flex justify-center relative py-10 overflow-scroll ">
       <div className="container flex justify-center items-center flex-col h-fit w-full">
         <div className="user-info ">
@@ -38,8 +48,8 @@ export const UserProjects = () => {
           </p>
         </div>
         <div className="user-project-data w-full flex gap-5 mt-10 justify-center flex-wrap">
-          {project.map((project) => (
-            <div className="project flex flex-col w-5/12 ">
+          {project.map((project, i) => (
+            <div key={i} className="project flex flex-col w-5/12 ">
               <div className="top flex w-full bg-darkGrey py-2 justify-between items-center px-4 text-white capitalize rounded-t-xl">
                 <h4 className="text-lg font-semibold">
                   name: {project.projectName}
@@ -84,10 +94,9 @@ export const UserProjects = () => {
                 </p>
               </div>
               <Link
-                to={`/projects/${user.userName}/${project.folderName}`}
-                target="_blank"
+                to={`${project.folderName}`}
                 className="bottom text-lg capitalize bg-darkGrey py-2 flex self-end gap-2 
-                items-center justify-center w-fit px-4 text-white rounded-b-xl hover:bg-color1"
+            items-center justify-center w-fit px-4 text-white rounded-b-xl hover:bg-color1"
               >
                 view project
                 <FaBuildingFlag />
@@ -96,8 +105,7 @@ export const UserProjects = () => {
           ))}
         </div>
       </div>
+      <Outlet />
     </div>
-  ) : (
-    <NotFound />
   );
 };

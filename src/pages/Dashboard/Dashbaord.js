@@ -24,13 +24,17 @@ export const Dashbaord = () => {
   // get and check user id
   const userID = window.localStorage.getItem("userID");
   const UserIdChecker = id === userID;
+  const user = cookies.user_token;
   // check if admin
   useEffect(() => {
-    if (!cookies.user_token) {
+    if (!user) {
       navigate("/");
-    } else if (!cookies.user_token.isAdmin) {
+    } else if (!user.isAdmin) {
       navigate("/");
     }
+    // else {
+    //   navigate(`/user/verified-email/${userID}`);
+    // }
   });
 
   // context
@@ -234,7 +238,7 @@ export const CreateUser = ({ userData, setUserData }) => {
     delete userNewData.updatedAt;
     await axios
       .put(
-        `${process.env.REACT_APP_API_URL}auth/update-data/${userData._id}`,
+        `${process.env.REACT_APP_API_URL}user/update-data/${userData._id}`,
         { ...userNewData },
         {
           headers: { token: `${cookies.user_token.token}` },
@@ -631,11 +635,7 @@ export const EditUser = () => {
   const OnSearch = async () => {
     const header = { headers: { token: `${cookies.user_token.token}` } };
     await axios
-      .post(
-        `${process.env.REACT_APP_API_URL}auth/getusers`,
-        { email: email },
-        header
-      )
+      .post(`${process.env.REACT_APP_API_URL}user`, { email: email }, header)
       .then((res) => setUserData(res.data))
       .catch((err) => setError(err.response.data.message));
   };

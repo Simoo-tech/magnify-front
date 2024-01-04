@@ -15,6 +15,7 @@ export const Login = () => {
   // user cookies
   const [cookie, setCookies] = useCookies(["user_token"]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const userid = window.localStorage.getItem("userID");
     // see if user is admin
@@ -26,6 +27,7 @@ export const Login = () => {
       }
     }
   }, []);
+
   return (
     <section
       id="login-page"
@@ -106,16 +108,19 @@ const Form = ({ lang, setCookies }) => {
         setCookies("user_token", res.data, {
           path: "/",
           expires: new Date(Date.now() + 3600000),
-          secure: true, // set to true if your using https
+          secure: true,
         });
         // redirect to path
         const userID = uuidv4(res.data._id);
         window.localStorage.setItem("userID", userID);
         if (res.data.isAdmin) {
           window.location.assign(`/${userID}/dashboard`);
-        } else {
+        } else if (!res.data.isAdmin) {
           window.location.assign("/create-password");
         }
+        // else {
+        //   window.location.assign(`/user/verify-email/${userID}`);
+        // }
       })
       .catch((err) => {
         setError(err.response.data.message);

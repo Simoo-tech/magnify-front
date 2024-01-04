@@ -18,13 +18,16 @@ function App() {
   const [cookies] = useCookies(["user_token"]);
   const LangValue = { lang, setLang };
   let user;
+
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
   }, []);
+
   if (cookies.user_token) {
     user = cookies.user_token.userName;
   }
-  // user
+  // user ID
+  const userID = window.localStorage.getItem("userID");
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>
@@ -37,13 +40,11 @@ function App() {
               <Route path="create-user" element={<CreateUser />} />
               <Route path="edit-user" element={<EditUser />} />
             </Route>
-            <Route path="/verify-email" element={<Verify />} />
             <Route path="/create-password" element={<CreatePass />} />
-            <Route path="/:id/tour-projects" element={<UserProjects />} />
-            <Route
-              path={`/projects/${user}/:id`}
-              element={<Projects />}
-            ></Route>
+            <Route path={`/${userID}/tour-projects`} element={<UserProjects />}>
+              <Route path=":id" element={<Projects />} />
+            </Route>
+            <Route path={`/user/verify-email/${userID}`} element={<Verify />} />
           </Routes>
         </div>
       </LanguageCon.Provider>
