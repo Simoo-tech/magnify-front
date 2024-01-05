@@ -98,13 +98,13 @@ export const UploadFiles = () => {
         {images && images.length > 0 && (
           <ul
             id="files"
-            className="flex flex-col sm:w-full lg:w-9/12 xl:w-6/12 bg-[#ddd] gap-2 py-2 px-3 sm:h-fit lg:h-[250px] overflow-scroll "
+            className="flex flex-col sm:w-full lg:h-[250px] lg:w-9/12 xl:w-6/12 bg-[#ddd] gap-2 py-2 px-3 overflow-y-scroll "
           >
             {images.map((file, i) => (
               <li
                 key={i}
                 id="file"
-                className="w-full bg-white py-2 px-3 flex justify-between items-center truncate"
+                className="w-full bg-white py-4 px-3 flex justify-between items-center truncate h-fit"
               >
                 <span className="w-11/12 truncate">{file.name}</span>
                 <button
