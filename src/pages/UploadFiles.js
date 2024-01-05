@@ -21,7 +21,6 @@ export const UploadFiles = () => {
       setImages(imgFile);
     }
   };
-
   // handle delete file
   const HandleDelete = (i) => {
     setErr(false);
@@ -39,7 +38,7 @@ export const UploadFiles = () => {
     }
     await axios
       .post(
-        `${process.env.REACT_APP_API_URL}upload
+        `http://localhost:8000/api/upload
       `,
         formData,
         {
@@ -63,7 +62,6 @@ export const UploadFiles = () => {
       .catch((err) => setErr(true))
       .finally(() => setUploading(false));
   };
-
   return (
     <div
       id="upload-files"
@@ -81,10 +79,12 @@ export const UploadFiles = () => {
           <MdCloudUpload size={60} />
           <input
             accept="image/* ,video/* "
-            onChange={HandleChange}
+            onChange={uploading ? null : HandleChange}
             type="file"
             multiple
-            className="absolute w-full h-full opacity-0  cursor-pointer"
+            className={`absolute w-full h-full opacity-0 ${
+              uploading && "cursor-not-allowed"
+            } cursor-pointer`}
           />
           <span className="capitalize bg-black text-white  py-2 px-6 ">
             browse files
@@ -112,7 +112,18 @@ export const UploadFiles = () => {
                 className="w-full bg-white py-2 px-3 flex justify-between items-center truncate"
               >
                 <span className="w-11/12 truncate">{file.name}</span>
-                <button onClick={() => HandleDelete(i)}>
+                <button
+                  className={`${
+                    uploading && "cursor-not-allowed"
+                  } cursor-pointer`}
+                  onClick={
+                    uploading
+                      ? null
+                      : () => {
+                          HandleDelete(i);
+                        }
+                  }
+                >
                   <FaTrash color="red" />
                 </button>
               </li>
