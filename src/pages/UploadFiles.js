@@ -78,8 +78,8 @@ export const UploadFiles = () => {
             type="file"
             multiple
             className={`absolute w-full h-full opacity-0 ${
-              uploading && "cursor-not-allowed"
-            } cursor-pointer`}
+              uploading ? "cursor-not-allowed" : " cursor-pointer"
+            }`}
           />
           <span className="capitalize bg-black text-white  py-2 px-6 ">
             browse files
@@ -109,8 +109,8 @@ export const UploadFiles = () => {
                 <span className="w-11/12 truncate">{file.name}</span>
                 <button
                   className={`${
-                    uploading && "cursor-not-allowed"
-                  } cursor-pointer`}
+                    uploading ? "cursor-not-allowed" : "cursor-pointer"
+                  } `}
                   onClick={
                     uploading
                       ? null
