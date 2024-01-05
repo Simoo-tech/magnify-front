@@ -182,7 +182,7 @@ const Form = ({ lang, setCookies }) => {
               autoFocus
               type="email"
               className={`bg-transparent text-white placeholder:text-white placeholder:text-sm
-              outline-none sm:w-[90%] lg:w-[93%] relative ${
+              outline-none sm:w-[90%] lg:w-[93%] relative lowercase ${
                 lang === "ar" && "text-end"
               }`}
               placeholder={

@@ -3,10 +3,11 @@ import { MdCloudUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
 import axios from "axios";
 import { Message } from "../component/Message";
-
+import PulseLoader from "react-spinners/PulseLoader";
 export const UploadFiles = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
+  const [uploading, setUploading] = useState(false);
   // handle upload
   const HandleChange = (e, i) => {
     const imgFile = Array.from(e.target.files);
@@ -24,16 +25,16 @@ export const UploadFiles = () => {
     onDelete.splice(i, 1);
     setImages(onDelete);
   };
-  console.log(images);
   // handle submit
   const UploadFiles = async (e) => {
     e.preventDefault();
+    setUploading(true);
     const formData = new FormData();
     for (const file of images) {
       formData.append("file", file);
     }
     await axios
-      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
+      .post(`http://localhost:8000/api/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -50,8 +51,10 @@ export const UploadFiles = () => {
           window.location.reload();
         }, 2000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setUploading(false));
   };
+
   return (
     <div
       id="upload-files"
@@ -108,9 +111,16 @@ export const UploadFiles = () => {
             </span>
             <button
               onClick={UploadFiles}
-              className="bg-black text-lg text-white py-2 px-3"
+              className="bg-black text-lg text-white py-2 px-3 capitalize"
             >
-              upload files
+              {uploading ? (
+                <div className="flex items-center gap-2">
+                  <p>please wait</p>
+                  {<PulseLoader color="white" size={7} />}
+                </div>
+              ) : (
+                "upload files"
+              )}
             </button>
           </div>
         )}
