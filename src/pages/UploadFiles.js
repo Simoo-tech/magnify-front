@@ -95,7 +95,8 @@ export const UploadFiles = () => {
             } sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 sm:px-2 md:px-0 `}
           >
             {err && <MdOutlineError className="sm:hidden md:block" />}
-            Only ( .png .jpeg .jpg .mp4 ) format are allowed and max size 100MB
+            Only ( .png .jpeg .jpg .mp4 .webp ) format are allowed and max size
+            100MB
           </span>
         </div>
         {/* show files chosen */}
