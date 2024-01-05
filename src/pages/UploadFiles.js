@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { MdCloudUpload } from "react-icons/md";
+import { MdCloudUpload, MdOutlineError } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
 import axios from "axios";
 import { Message } from "../component/Message";
 import PulseLoader from "react-spinners/PulseLoader";
+
 export const UploadFiles = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
+  const [err, setErr] = useState(false);
   const [uploading, setUploading] = useState(false);
   // handle upload
   const HandleChange = (e, i) => {
+    setErr(false);
     const imgFile = Array.from(e.target.files);
     if (images.length > 0) {
       const newImg = [...images, ...imgFile];
@@ -21,6 +24,7 @@ export const UploadFiles = () => {
 
   // handle delete file
   const HandleDelete = (i) => {
+    setErr(false);
     const onDelete = [...images];
     onDelete.splice(i, 1);
     setImages(onDelete);
@@ -34,7 +38,7 @@ export const UploadFiles = () => {
       formData.append("file", file);
     }
     await axios
-      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
+      .post(`http://localhost:8000/api/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -51,7 +55,7 @@ export const UploadFiles = () => {
           window.location.reload();
         }, 2000);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErr(true))
       .finally(() => setUploading(false));
   };
 
@@ -66,7 +70,8 @@ export const UploadFiles = () => {
         {/* choose files area */}
         <div
           id="upload-area"
-          className="sm:w-full lg:w-6/12 h-2/6 flex flex-col items-center justify-center gap-4 bg-[#ddd] relative"
+          className="sm:w-full lg:w-9/12 xl:w-6/12 h-2/6 flex flex-col items-center 
+          justify-center gap-4 bg-[#ddd] relative"
         >
           <MdCloudUpload size={60} />
           <input
@@ -79,12 +84,20 @@ export const UploadFiles = () => {
           <span className="capitalize bg-black text-white  py-2 px-6 ">
             browse files
           </span>
+          <span
+            className={`${
+              err && "text-red-600 "
+            } sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 sm:px-2 md:px-0 `}
+          >
+            {err && <MdOutlineError className="sm:hidden md:block" />}
+            Only ( .png .jpeg .jpg .mp4 ) format are allowed and max size 100MB
+          </span>
         </div>
         {/* show files chosen */}
         {images && images.length > 0 && (
           <ul
             id="files"
-            className="flex flex-col sm:w-full lg:w-6/12 bg-[#ddd] gap-2 py-2 px-3 sm:h-fit lg:h-[250px] overflow-scroll "
+            className="flex flex-col sm:w-full lg:w-9/12 xl:w-6/12 bg-[#ddd] gap-2 py-2 px-3 sm:h-fit lg:h-[250px] overflow-scroll "
           >
             {images.map((file, i) => (
               <li
