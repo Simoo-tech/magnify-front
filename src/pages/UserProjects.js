@@ -27,6 +27,7 @@ export const UserProjects = () => {
       width="100%"
       allowFullScreen
       height="100%"
+      className="section-h w-full "
     />
   ) : (
     <div className="section-h flex justify-center relative py-10 overflow-scroll ">
