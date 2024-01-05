@@ -11,6 +11,7 @@ import { NotFound } from "./component/NotFound";
 import { Verify } from "./pages/Verify";
 import { useCookies } from "react-cookie";
 import { Projects } from "./pages/Projects";
+import { UploadFiles } from "./pages/UploadFiles";
 
 function App() {
   // context value
@@ -31,11 +32,12 @@ function App() {
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>
-        <div className="App h-screen overflow-hidden">
+        <div className="App h-screen overflow-hidden relative">
           <Header />
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/upload-files" element={<UploadFiles />} />
             <Route path="/:id/dashboard" element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
               <Route path="edit-user" element={<EditUser />} />

@@ -206,10 +206,10 @@ export const CreateUser = ({ userData, setUserData }) => {
         });
         setTimeout(() => {
           setMsg({});
-        }, 3000);
+        }, 2000);
         setTimeout(() => {
           window.location.reload();
-        }, 4000);
+        }, 2000);
       })
       .catch((err) =>
         setMsg({

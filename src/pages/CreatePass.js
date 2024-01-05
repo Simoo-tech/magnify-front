@@ -43,7 +43,8 @@ export const CreatePass = () => {
     setLoading(true);
     axios
       .put(
-        `${process.env.REACT_APP_API_URL}user/update-password/${cookies.user_token._id}`,
+        `${process.env.REACT_APP_API_URL}user/update-password/${cookies.user_token._id}
+        `,
         userPass
       )
       .then((res) => {

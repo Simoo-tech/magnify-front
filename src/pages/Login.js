@@ -113,9 +113,11 @@ const Form = ({ lang, setCookies }) => {
         // redirect to path
         const userID = uuidv4(res.data._id);
         window.localStorage.setItem("userID", userID);
-        if (res.data.isAdmin) {
+        if (res.data.isAdmin && res.data.passChanged) {
           window.location.assign(`/${userID}/dashboard`);
-        } else if (!res.data.isAdmin) {
+        } else if (!res.data.isAdmin && res.data.passChanged) {
+          window.location.assign(`/${userID}/tour-projects`);
+        } else if (!res.data.passChanged) {
           window.location.assign("/create-password");
         }
         // else {
