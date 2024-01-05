@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "cross-env NODE_ENV=production OTHERFLAG=myValue webpack --config build/webpack.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "tailwind": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "tailwindcss": "^3.3.6"
   }
 }
