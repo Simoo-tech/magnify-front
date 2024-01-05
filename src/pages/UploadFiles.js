@@ -34,7 +34,7 @@ export const UploadFiles = () => {
       formData.append("file", file);
     }
     await axios
-      .post(`http://localhost:8000/api/upload`, formData, {
+      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
