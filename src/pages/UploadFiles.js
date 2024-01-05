@@ -90,9 +90,9 @@ export const UploadFiles = () => {
               <li
                 key={i}
                 id="file"
-                className="w-full bg-white py-2 px-3 flex justify-between items-center"
+                className="w-full bg-white py-2 px-3 flex justify-between items-center truncate"
               >
-                {file.name}
+                <span className="w-11/12 truncate">{file.name}</span>
                 <button onClick={() => HandleDelete(i)}>
                   <FaTrash color="red" />
                 </button>
@@ -110,8 +110,10 @@ export const UploadFiles = () => {
               {images.length} files chosen
             </span>
             <button
-              onClick={UploadFiles}
-              className="bg-black text-lg text-white py-2 px-3 capitalize"
+              onClick={uploading ? null : UploadFiles}
+              className={`bg-black text-lg text-white py-2 px-3 capitalize ${
+                uploading ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
               {uploading ? (
                 <div className="flex items-center gap-2">
