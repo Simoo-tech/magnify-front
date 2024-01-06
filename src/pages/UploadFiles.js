@@ -38,9 +38,9 @@ export const UploadFiles = () => {
       formData.append("file", file);
     }
     await axios
-      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
+      .post(`http://localhost:8000/api/upload`, formData, {
         onUploadProgress: (e) => {
-          setUploaded(Math.round(e.loaded / e.total) * 100);
+          setUploaded(parseInt((e.loaded / e.total) * 100));
         },
         headers: {
           "Content-Type": "multipart/form-data",
@@ -55,7 +55,7 @@ export const UploadFiles = () => {
             text: res.data.message,
             success: true,
           });
-          // window.location.reload();
+          window.location.reload();
         }, 2000);
       })
       .catch((err) => setErr(true))
@@ -137,16 +137,18 @@ export const UploadFiles = () => {
             className="flex gap-5 items-center w-full justify-center flex-wrap sm:w-full
             lg:w-9/12 xl:w-5/12"
           >
-            <span
-              perc={`${uploaded}%`}
-              className={`w-full h-3 bg-gray-200 relative rounded-xl 
-              before:content-[attr(perc)] before:absolute before:-right-11 before:-top-[5px]`}
-            >
+            {uploaded > 1 && (
               <span
-                style={{ width: `${uploaded}%` }}
-                className={`h-full absolute bg-color1 rounded-xl `}
-              ></span>
-            </span>
+                perc={`${uploaded}%`}
+                className={`w-full h-3 bg-gray-200 relative rounded-xl 
+              before:content-[attr(perc)] before:absolute before:-right-11 before:-top-[5px]`}
+              >
+                <span
+                  style={{ width: `${uploaded}%` }}
+                  className={`h-full absolute bg-green-600 rounded-xl duration-200 ease-linear `}
+                ></span>
+              </span>
+            )}
             <span id="uploaded-files" className="capitalize text-gray-500">
               {images.length} files chosen
             </span>
