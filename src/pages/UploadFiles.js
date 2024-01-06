@@ -38,7 +38,7 @@ export const UploadFiles = () => {
       formData.append("file", file);
     }
     await axios
-      .post(`http://localhost:8000/api/upload`, formData, {
+      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
         onUploadProgress: (e) => {
           setUploaded(parseInt((e.loaded / e.total) * 100));
         },
@@ -73,7 +73,7 @@ export const UploadFiles = () => {
         {/* choose files area */}
         <div
           id="upload-area"
-          className="sm:w-full lg:w-9/12 xl:w-6/12 h-2/6 flex flex-col items-center 
+          className="sm:w-full lg:w-9/12 xl:w-6/12 h-2/6 flex flex-col items-center py-4
           justify-center gap-4 bg-[#ddd] relative"
         >
           <MdCloudUpload size={60} />
@@ -109,9 +109,9 @@ export const UploadFiles = () => {
               <li
                 key={i}
                 id="file"
-                className="w-full bg-white py-4 px-3 flex justify-between items-center truncate h-fit"
+                className="w-full bg-gray-900 text-white py-4 px-3 flex justify-between items-center truncate h-fit rounded-lg"
               >
-                <span className="w-11/12 truncate">{file.name}</span>
+                <span className="w-10/12 truncate">{file.name}</span>
                 <button
                   className={`${
                     uploading ? "cursor-not-allowed" : "cursor-pointer"
@@ -134,13 +134,13 @@ export const UploadFiles = () => {
         {images && images.length > 0 && (
           <div
             id="upload-files"
-            className="flex gap-5 items-center w-full justify-center flex-wrap sm:w-full
+            className="flex gap-5 items-center w-full justify-center flex-wrap sm:w-11/12
             lg:w-9/12 xl:w-5/12"
           >
             {uploaded > 1 && (
               <span
                 perc={`${uploaded}%`}
-                className={`w-full h-3 bg-gray-200 relative rounded-xl 
+                className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
               before:content-[attr(perc)] before:absolute before:-right-11 before:-top-[5px]`}
               >
                 <span
