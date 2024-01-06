@@ -38,14 +38,19 @@ export const UploadFiles = () => {
       formData.append("file", file);
     }
     await axios
-      .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
-        onUploadProgress: (e) => {
-          setUploaded(parseInt((e.loaded / e.total) * 100));
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        `${process.env.REACT_APP_API_URL}upload
+      `,
+        formData,
+        {
+          onUploadProgress: (e) => {
+            setUploaded(parseInt((e.loaded / e.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((res) => {
         setMsg({ ...msg, active: true, text: res.data.message, success: true });
         setTimeout(() => {
@@ -69,7 +74,7 @@ export const UploadFiles = () => {
     >
       <Message active={msg.active} text={msg.text} success={msg.success} />
       <div className="container flex flex-col items-center py-5 h-full gap-5">
-        <h2 className="text-5xl font-semibold ">Upload Files</h2>
+        <h2 className="sm:text-3xl lg:text-5xl font-semibold ">Upload Files</h2>
         {/* choose files area */}
         <div
           id="upload-area"
@@ -139,12 +144,12 @@ export const UploadFiles = () => {
           >
             {uploaded > 1 && (
               <span
-                perc={`${uploaded}%`}
+                perc={`${uploaded - 1}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
               before:content-[attr(perc)] before:absolute before:-right-11 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded}%` }}
+                  style={{ width: `${uploaded - 1}%` }}
                   className={`h-full absolute bg-green-600 rounded-xl duration-200 ease-linear `}
                 ></span>
               </span>
