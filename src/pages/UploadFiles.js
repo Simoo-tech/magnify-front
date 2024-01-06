@@ -10,6 +10,7 @@ export const UploadFiles = () => {
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
   const [err, setErr] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState();
   // handle upload
   const HandleChange = (e, i) => {
     setErr(false);
@@ -38,6 +39,9 @@ export const UploadFiles = () => {
     }
     await axios
       .post(`${process.env.REACT_APP_API_URL}upload`, formData, {
+        onUploadProgress: (e) => {
+          setUploaded(Math.round(e.loaded / e.total) * 100);
+        },
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -51,12 +55,13 @@ export const UploadFiles = () => {
             text: res.data.message,
             success: true,
           });
-          window.location.reload();
+          // window.location.reload();
         }, 2000);
       })
       .catch((err) => setErr(true))
       .finally(() => setUploading(false));
   };
+  console.log(uploaded);
   return (
     <div
       id="upload-files"
@@ -129,8 +134,19 @@ export const UploadFiles = () => {
         {images && images.length > 0 && (
           <div
             id="upload-files"
-            className="flex gap-5 items-center w-full justify-center"
+            className="flex gap-5 items-center w-full justify-center flex-wrap sm:w-full
+            lg:w-9/12 xl:w-5/12"
           >
+            <span
+              perc={`${uploaded}%`}
+              className={`w-full h-3 bg-gray-200 relative rounded-xl 
+              before:content-[attr(perc)] before:absolute before:-right-11 before:-top-[5px]`}
+            >
+              <span
+                style={{ width: `${uploaded}%` }}
+                className={`h-full absolute bg-color1 rounded-xl `}
+              ></span>
+            </span>
             <span id="uploaded-files" className="capitalize text-gray-500">
               {images.length} files chosen
             </span>
