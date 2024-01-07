@@ -322,7 +322,10 @@ export const CreateUser = ({ userData, setUserData }) => {
               <input
                 name="email"
                 value={data.email}
-                onChange={HandleChangeUser}
+                onChange={(e) => {
+                  const email = e.target.value.toLocaleLowerCase();
+                  setData({ ...data, email });
+                }}
                 type="email"
                 placeholder={lang === "ar" ? "الايميل " : "email"}
                 className={`${

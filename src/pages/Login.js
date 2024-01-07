@@ -106,11 +106,7 @@ const Form = ({ lang, setCookies }) => {
     e.preventDefault();
     setLoading(true);
     await axios
-      .post(
-        `  ${process.env.REACT_APP_API_URL}auth/login
-      `,
-        authData
-      )
+      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
@@ -140,6 +136,7 @@ const Form = ({ lang, setCookies }) => {
       })
       .finally(() => setLoading(false));
   };
+
   return (
     <form
       autoComplete="off"
@@ -186,14 +183,17 @@ const Form = ({ lang, setCookies }) => {
             <FaRegUser className="text-color1" />
             <input
               name="email"
-              onChange={HandleChange}
+              onChange={(e) => {
+                const email = e.target.value.toLocaleLowerCase();
+                setAuthData({ ...authData, email });
+              }}
               value={authData.email}
               required
               id="email"
               autoFocus
               type="email"
               className={`bg-transparent text-white placeholder:text-white placeholder:text-sm
-              outline-none sm:w-[90%] lg:w-[93%] relative lowercase ${
+              outline-none sm:w-[90%] lg:w-[93%] relative  ${
                 lang === "ar" && "text-end"
               }`}
               placeholder={
