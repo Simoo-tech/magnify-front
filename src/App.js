@@ -25,7 +25,7 @@ function App() {
   const userID = window.localStorage.getItem("userID");
   const verify_email = window.localStorage.getItem("verify-email");
   const resetToken = window.localStorage.getItem("resetToken");
-  console.log(verify_email);
+
   return (
     <Router>
       <LanguageCon.Provider value={LangValue}>

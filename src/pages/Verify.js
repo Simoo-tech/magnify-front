@@ -161,13 +161,12 @@ export const ResetPass = () => {
     setSending(true);
     await axios
       .post(
-        `${process.env.REACT_APP_API_URL}user/reset-password
+        `http://localhost:8000/api/user/reset-password
       `,
         { email }
       )
       .then((res) => {
         setVerified(true);
-        console.log(res.data);
         window.localStorage.setItem("resetToken", res.data.PassToken);
         window.localStorage.setItem("resetUserID", res.data.userID);
       })
