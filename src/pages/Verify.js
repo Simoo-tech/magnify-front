@@ -161,7 +161,7 @@ export const ResetPass = () => {
     setSending(true);
     await axios
       .post(
-        `http://localhost:8000/api/user/reset-password
+        `${process.env.REACT_APP_API_URL}user/reset-password
       `,
         { email }
       )
