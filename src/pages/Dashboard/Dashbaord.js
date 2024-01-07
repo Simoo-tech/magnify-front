@@ -86,6 +86,8 @@ export const Dashbaord = () => {
 
 // create new user
 export const CreateUser = ({ userData, setUserData }) => {
+  const [data, setData] = useState({});
+  const [projectInfo, setProjectInfo] = useState([]);
   // animation
   const [animation, setAnimation] = useState(false);
   useEffect(() => {
@@ -95,9 +97,6 @@ export const CreateUser = ({ userData, setUserData }) => {
     }
     setAnimation(true);
   }, []);
-
-  const [data, setData] = useState({});
-  const [projectInfo, setProjectInfo] = useState([]);
 
   // handle message from api
   const [msg, setMsg] = useState({});
@@ -286,7 +285,7 @@ export const CreateUser = ({ userData, setUserData }) => {
                 lang === "ar" ? "text-end" : "text-start"
               }  sm:text-base lg:text-lg w-full p-2 outline-none focus-visible:border-black border-2
                 `}
-              value={data.userName}
+              value={userData ? userData.userNewData : data.userName}
               onChange={HandleChangeUser}
             />
             <div
@@ -321,7 +320,7 @@ export const CreateUser = ({ userData, setUserData }) => {
             <div className="input-group-email flex sm:flex-wrap md:flex-nowrap w-full items-center gap-2">
               <input
                 name="email"
-                value={data.email}
+                value={userData ? userData.email : data.email}
                 onChange={(e) => {
                   const email = e.target.value.toLocaleLowerCase();
                   setData({ ...data, email });
