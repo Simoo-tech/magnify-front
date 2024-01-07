@@ -1,7 +1,6 @@
 import "../App.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { NotFound } from "../component/NotFound";
 import { useEffect } from "react";
 
 export const Projects = () => {
@@ -37,6 +36,6 @@ export const Projects = () => {
       className="section-h w-full absolute top-0"
     />
   ) : (
-    <NotFound />
+    navigate(-1)
   );
 };

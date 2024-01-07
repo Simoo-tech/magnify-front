@@ -17,13 +17,16 @@ export const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userid = window.localStorage.getItem("userID");
+    const userID = window.localStorage.getItem("userID");
+    const user = cookie.user_token;
     // see if user is admin
-    if (cookie.user_token) {
-      if (cookie.user_token.isAdmin) {
-        navigate(`/${userid}/dashboard`);
-      } else {
-        navigate("/create-password");
+    if (user && !user.verified && !user.passChanged) {
+      window.location.assign(`/verify-email/${userID}`);
+    } else if (user && user.verified && user.passChanged) {
+      if (user.isAdmin && user.verified && user.passChanged) {
+        navigate(`/${userID}/dashboard`);
+      } else if (!user.isAdmin && user.verified && user.passChanged) {
+        navigate(`/${userID}/tour-projects`);
       }
     }
   }, []);
@@ -88,7 +91,7 @@ export const Login = () => {
 };
 const Form = ({ lang, setCookies }) => {
   const [authData, setAuthData] = useState({});
-
+  const verify_email = window.localStorage.getItem("verify-email");
   // error msg
   const [error, setError] = useState();
   // loading spinner
@@ -103,26 +106,34 @@ const Form = ({ lang, setCookies }) => {
     e.preventDefault();
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
+      .post(
+        `  ${process.env.REACT_APP_API_URL}auth/login
+      `,
+        authData
+      )
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
           expires: new Date(Date.now() + 3600000),
           secure: true,
+          sameSite: "none",
         });
         // redirect to path
         const userID = uuidv4(res.data._id);
         window.localStorage.setItem("userID", userID);
-        if (res.data.isAdmin && res.data.passChanged) {
+        if (res.data.isAdmin && res.data.verified && res.data.passChanged) {
           window.location.assign(`/${userID}/dashboard`);
-        } else if (!res.data.isAdmin && res.data.passChanged) {
+        } else if (
+          !res.data.isAdmin &&
+          res.data.verified &&
+          res.data.passChanged
+        ) {
           window.location.assign(`/${userID}/tour-projects`);
-        } else if (!res.data.passChanged) {
-          window.location.assign("/create-password");
+        } else if (!res.data.verified && !res.data.passChanged) {
+          window.location.assign(`/verify-email/${userID}`);
+        } else if (res.data.verified && !res.data.passChanged) {
+          window.location.assign(`/create-password/${verify_email}`);
         }
-        // else {
-        //   window.location.assign(`/user/verify-email/${userID}`);
-        // }
       })
       .catch((err) => {
         setError(err.response.data.message);
@@ -245,6 +256,7 @@ const Form = ({ lang, setCookies }) => {
         </button>
         {/* forgot pass */}
         <Link
+          to={"/reset-password"}
           id="forgot-password"
           className="text-gray-100 sm:text-base lg:text-lg capitalize"
         >

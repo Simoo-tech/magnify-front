@@ -66,7 +66,6 @@ export const UploadFiles = () => {
       .catch((err) => setErr(true))
       .finally(() => setUploading(false));
   };
-  console.log(uploaded);
   return (
     <div
       id="upload-files"

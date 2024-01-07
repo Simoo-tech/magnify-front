@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import image from "../../assest/ava1.webp";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 import axios from "axios";
@@ -8,8 +8,6 @@ import { LanguageCon } from "../../Context";
 import { useCookies } from "react-cookie";
 import conimage from "../../assest/building.jpg";
 import { Oval } from "react-loader-spinner";
-import { NotFound } from "../../component/NotFound";
-import { IoSettingsSharp } from "react-icons/io5";
 import { FaPlus, FaUserEdit, FaCheck } from "react-icons/fa";
 import { MdOutlinePersonSearch, MdAdd, MdOutlineError } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
@@ -17,30 +15,25 @@ import "../../App.css";
 
 export const Dashbaord = () => {
   const navigate = useNavigate();
-  // get url
-  const { id } = useParams();
+
   // user cookies
   const [cookies] = useCookies(["user_token"]);
   // get and check user id
   const userID = window.localStorage.getItem("userID");
-  const UserIdChecker = id === userID;
   const user = cookies.user_token;
   // check if admin
   useEffect(() => {
-    if (!user) {
+    if (!user || !user.isAdmin) {
       navigate("/");
-    } else if (!user.isAdmin) {
-      navigate("/");
+    } else if (!user.verified) {
+      navigate(`/verify-email/${userID}`);
     }
-    // else {
-    //   navigate(`/user/verified-email/${userID}`);
-    // }
-  });
+  }, []);
 
   // context
   const { lang } = useContext(LanguageCon);
 
-  return UserIdChecker ? (
+  return (
     <div className="admin-dashboard relative overflow-hidden">
       <section className="dashboard w-full flex justify-center py-10 relative overflow-scroll">
         <div className="container flex justify-evenly flex-col items-center h-fit ">
@@ -49,7 +42,7 @@ export const Dashbaord = () => {
             <p className="sm:text-lg lg:text-xl capitalize">name</p>
           </div>
           <div className="btns flex sm:flex-col sm:mt-10 lg:flex-row gap-10 w-full items-center justify-center">
-            <div className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
+            <div className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
               <label
                 htmlFor="create-user"
                 className="text-2xl font-bold capitalize"
@@ -60,13 +53,13 @@ export const Dashbaord = () => {
                 onClick={() => navigate("create-user")}
                 name="create-user"
                 id="create-user"
-                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
+                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
               >
                 <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
               </button>
             </div>
-            <div className="edit-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
+            <div className="edit-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
               <label
                 htmlFor="edit-user"
                 className="text-2xl  font-bold capitalize"
@@ -77,27 +70,10 @@ export const Dashbaord = () => {
                 onClick={() => navigate("edit-user")}
                 name="edit-user"
                 id="edit-user"
-                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
+                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
               >
                 <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
-              </button>
-            </div>
-            <div className="settings-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-2/12 flex flex-col gap-3 items-center">
-              <label
-                htmlFor="edit-user"
-                className="text-2xl font-bold capitalize"
-              >
-                {lang === "ar" ? "اعدادات الحساب" : "  settings"}
-              </label>
-              <button
-                onClick={() => navigate("/create-password")}
-                name="edit-user"
-                id="edit-user"
-                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[200px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
-              >
-                <IoSettingsSharp className="group-hover:rotate-90 duration-200 ease-in-out" />
               </button>
             </div>
           </div>
@@ -105,28 +81,23 @@ export const Dashbaord = () => {
       </section>
       <Outlet />
     </div>
-  ) : (
-    <NotFound />
   );
 };
 
 // create new user
 export const CreateUser = ({ userData, setUserData }) => {
+  // animation
   const [animation, setAnimation] = useState(false);
+  useEffect(() => {
+    if (userData) {
+      setData(userData);
+      setProjectInfo(userData.projectInfo);
+    }
+    setAnimation(true);
+  }, []);
+
   const [data, setData] = useState({});
-  const [projectInfo, setProjectInfo] = useState([
-    {
-      folderName: "",
-      projectNo: "",
-      projectName: "",
-      projectLoc: "",
-      projectArea: "",
-      projectHei: "",
-      consultant: "",
-      projectDura: "",
-      projectType: "",
-    },
-  ]);
+  const [projectInfo, setProjectInfo] = useState([]);
 
   // handle message from api
   const [msg, setMsg] = useState({});
@@ -136,54 +107,6 @@ export const CreateUser = ({ userData, setUserData }) => {
 
   // context
   const { lang } = useContext(LanguageCon);
-
-  // animation
-  useEffect(() => {
-    if (userData) {
-      setData(userData);
-      setProjectInfo(userData.projectInfo);
-    }
-    setAnimation(true);
-  }, []);
-
-  // handle change user data
-  const HandleChangeUser = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-  // handle change project
-  const HandleChangeProject = (e, i) => {
-    const { name, value } = e.target;
-    const onChange = [...projectInfo];
-    onChange[i][name] = value;
-    setProjectInfo(onChange);
-    setMsg({ active: false });
-  };
-  // handle add new project
-  const AddProject = () => {
-    setProjectInfo([
-      ...projectInfo,
-      {
-        folderName: ``,
-        projectNo: "",
-        projectName: "",
-        projectLoc: "",
-        projectArea: "",
-        projectHei: "",
-        consultant: "",
-        projectDura: "",
-        projectType: "",
-      },
-    ]);
-  };
-
-  // handle remove project
-  const ProjectRem = (i) => {
-    const onRemove = [...projectInfo];
-    onRemove.splice(i, 1);
-    setProjectInfo(onRemove);
-  };
-  // loading spinner
-  const [loading, setLoading] = useState(false);
 
   // handle submit create new user
   const HandleSubmitCreate = async (e) => {
@@ -270,6 +193,45 @@ export const CreateUser = ({ userData, setUserData }) => {
         setLoading(false);
       });
   };
+
+  // handle change user data
+  const HandleChangeUser = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+  // handle change project
+  const HandleChangeProject = (e, i) => {
+    const { name, value } = e.target;
+    const onChange = [...projectInfo];
+    onChange[i][name] = value;
+    setProjectInfo(onChange);
+    setMsg({ active: false });
+  };
+  // handle add new project
+  const AddProject = () => {
+    setProjectInfo([
+      ...projectInfo,
+      {
+        folderName: ``,
+        projectNo: "",
+        projectName: "",
+        projectLoc: "",
+        projectArea: "",
+        projectHei: "",
+        consultant: "",
+        projectDura: "",
+        projectType: "",
+      },
+    ]);
+  };
+
+  // handle remove project
+  const ProjectRem = (i) => {
+    const onRemove = [...projectInfo];
+    onRemove.splice(i, 1);
+    setProjectInfo(onRemove);
+  };
+  // loading spinner
+  const [loading, setLoading] = useState(false);
 
   return (
     <div
@@ -366,7 +328,7 @@ export const CreateUser = ({ userData, setUserData }) => {
                 className={`${
                   lang === "ar" ? "text-end" : "text-start"
                 } rounded-lg w-full sm:text-base lg:text-lg outline-none
-                focus-visible:border-black border-2 h-fit p-2 `}
+                focus-visible:border-black border-2 h-fit p-2 lowercase`}
               />
               <div className="w-full">
                 <PhoneInput
@@ -645,7 +607,7 @@ export const EditUser = () => {
       className={`w-full bg-color1 absolute flex pt-5 justify-center items-center left-0 bg-cover sm:flex-col h-full top-0`}
     >
       <div
-        className="container w-11/12 h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
+        className="container sm:w-full lg:w-11/12 h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
       "
       >
         {userData ? (
@@ -655,23 +617,31 @@ export const EditUser = () => {
             setError={setError}
           />
         ) : (
-          <div className="search-user flex flex-col gap-6 sm:w-full lg:w-7/12 xl:w-5/12  ">
+          <div className="search-user flex flex-col gap-6 sm:w-full lg:w-7/12 xl:w-5/12 items-center ">
             {error && (
-              <span className="text-xl capitalize bg-red-500 py-2 px-6 rounded-xl flex gap-3 items-center">
+              <span className=" sm:text-base lg:text-lg w-9/12 capitalize bg-red-500 py-2 px-6 rounded-xl flex gap-3 items-center">
                 <MdOutlineError size={24} />
                 {error}
               </span>
             )}
-            <h3 className="text-center sm:text-2xl lg:text-3xl font-semibold ">
-              Edit user by email
+            <h3 className="text-center sm:text-xl lg:text-3xl font-semibold ">
+              {lang === "ar"
+                ? "تعديل علي مستخدم من خلال الايميل"
+                : "Edit user by email"}
             </h3>
             <div className="flex sm:w-11/12 lg:w-full justify-center relative">
               <input
                 autoFocus
                 type="email"
-                placeholder="Type user email here"
-                className=" rounded-lg w-full py-3 px-4 h-full outline-none border-2
-              text-black focus-visible:border-color1 "
+                placeholder={
+                  lang === "ar"
+                    ? "ادخل البريد الالكتروني"
+                    : "Type user email here"
+                }
+                className={`${
+                  lang === "ar" && "text-right"
+                } rounded-lg w-full py-2 px-4 h-full outline-none border-2
+              text-black focus-visible:border-color1 `}
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
@@ -681,8 +651,12 @@ export const EditUser = () => {
               <button
                 type="button"
                 onClick={OnSearch}
-                className="absolute  text-darkGrey right-0 
-            px-3 border-l-2 border-color1 hover:bg-color1 rounded-r-lg hover:text-white h-full"
+                className={`absolute  text-darkGrey ${
+                  lang === "ar"
+                    ? "left-0 border-r-2 rounded-l-lg"
+                    : "right-0 border-l-2 rounded-r-lg"
+                }
+                px-3 border-color1 hover:bg-color1 hover:text-white h-full`}
               >
                 <MdOutlinePersonSearch size={30} />
               </button>

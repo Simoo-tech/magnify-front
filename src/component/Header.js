@@ -16,6 +16,7 @@ export const Header = () => {
       expires: new Date(Date.now() + 3600000),
       secure: false, // set to true if your using https
     });
+    window.localStorage.removeItem("userID");
     window.location.assign("/");
   };
   // user cookies

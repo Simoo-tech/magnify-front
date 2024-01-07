@@ -1,16 +1,7 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export const NotFound = () => {
-  const navigate = useNavigate();
-  const [cookies] = useCookies(["user_token"]);
-  const user = cookies.user_token;
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  });
   return (
     <div
       id="page-not-found"

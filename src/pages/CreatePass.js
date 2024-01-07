@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { LanguageCon } from "../Context";
 import { FaInfoCircle } from "react-icons/fa";
 import { useCookies } from "react-cookie";
@@ -7,25 +6,46 @@ import cookie from "react-cookies";
 import axios from "axios";
 import { MdErrorOutline } from "react-icons/md";
 import { Oval } from "react-loader-spinner";
-
+import { NotFound } from "../component/NotFound";
 export const CreatePass = () => {
   // get user id
   const userID = window.localStorage.getItem("userID");
-
-  // use navigation
-  const navigate = useNavigate();
+  const resetUserID = window.localStorage.getItem("resetUserID");
+  const resetToken = window.localStorage.getItem("resetToken");
 
   // get cookie
   const [cookies] = useCookies(["user_token"]);
   const user = cookies.user_token;
 
-  // redirect to login in case didnt login
+  // make user verified
+  const Verified = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}user/verify-email/${user._id}`)
+      .then()
+      .catch((err) => console.log(err));
+  };
+
+  // check if reset password token is valid
+  const [validateLink, setValidateLink] = useState(true);
+  const ResetLinkToken = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}user/reset-password-token`, {
+        token: resetToken,
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => {
+        setValidateLink(false);
+        window.localStorage.removeItem("resetUserID");
+        window.localStorage.removeItem("resetToken");
+      });
+  };
+
   useEffect(() => {
-    if (!user) {
-      navigate("/");
-      // if user not admin and have  project
-    } else if (!user.isAdmin && user.passChanged) {
-      window.location.assign(`/${userID}/tour-projects`);
+    if (userID) {
+      Verified();
+    }
+    if (resetToken) {
+      ResetLinkToken();
     }
   }, []);
 
@@ -41,25 +61,47 @@ export const CreatePass = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    axios
-      .put(
-        `${process.env.REACT_APP_API_URL}user/update-password/${cookies.user_token._id}
-        `,
-        userPass
-      )
-      .then((res) => {
-        alert(res.data.message);
-        setTimeout(() => {
-          cookie.remove("user_token", {
-            path: "/",
-            expires: new Date(Date.now() + 3600000),
-            secure: true,
-          });
+    // if user want to reset password
+    if (resetUserID) {
+      axios
+        .put(
+          `${process.env.REACT_APP_API_URL}user/update-password/${resetUserID}
+      `,
+          userPass
+        )
+        .then((res) => {
+          alert(res.data.message);
           window.location.assign("/");
-        }, 1000);
-      })
-      .catch((err) => setError(err.response.data.message))
-      .finally(() => setLoading(false));
+          window.localStorage.removeItem("resetUserID");
+          window.localStorage.removeItem("resetToken");
+          window.localStorage.removeItem("userID");
+        })
+        .catch((err) => setError(err.response.data.message))
+        .finally(() => setLoading(false));
+    } // new password
+    else {
+      axios
+        .put(
+          `${process.env.REACT_APP_API_URL}user/update-password/${user._id}
+        `,
+          userPass
+        )
+        .then((res) => {
+          alert(res.data.message);
+          setTimeout(() => {
+            cookie.remove("user_token", {
+              path: "/",
+              expires: new Date(Date.now() + 3600000),
+              secure: true,
+            });
+            window.location.assign("/");
+          }, 1000);
+          window.localStorage.removeItem("verify-email");
+          window.localStorage.removeItem("userID");
+        })
+        .catch((err) => setError(err.response.data.message))
+        .finally(() => setLoading(false));
+    }
   };
 
   // handle on change
@@ -67,7 +109,7 @@ export const CreatePass = () => {
     setUserPass({ ...userPass, [e.target.name]: e.target.value });
     setError(null);
   };
-  return (
+  return validateLink ? (
     <div
       className="section-h create-password bg-color1 flex justify-center items-center"
       id="create-new-password"
@@ -234,5 +276,7 @@ export const CreatePass = () => {
         </form>
       </div>
     </div>
+  ) : (
+    <NotFound />
   );
 };
