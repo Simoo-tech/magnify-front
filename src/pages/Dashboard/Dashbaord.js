@@ -285,7 +285,7 @@ export const CreateUser = ({ userData, setUserData }) => {
                 lang === "ar" ? "text-end" : "text-start"
               }  sm:text-base lg:text-lg w-full p-2 outline-none focus-visible:border-black border-2
                 `}
-              value={userData ? userData.userNewData : data.userName}
+              value={userData ? userData.userName : data.userName}
               onChange={HandleChangeUser}
             />
             <div
