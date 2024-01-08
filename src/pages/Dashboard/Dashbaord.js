@@ -12,6 +12,7 @@ import { FaPlus, FaUserEdit, FaCheck } from "react-icons/fa";
 import { MdOutlinePersonSearch, MdAdd, MdOutlineError } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
 import "../../App.css";
+import { QR } from "../../component/Qr";
 
 export const Dashbaord = () => {
   const navigate = useNavigate();
@@ -34,18 +35,35 @@ export const Dashbaord = () => {
   const { lang } = useContext(LanguageCon);
 
   return (
-    <div className="admin-dashboard relative overflow-hidden">
-      <section className="dashboard w-full flex justify-center py-10 relative overflow-scroll">
+    <div className="admin-dashboard relative overflow-hidden bg-[#ccc] ">
+      <section
+        className="dashboard w-full flex justify-center items-center
+      h-full py-10 relative overflow-scroll"
+      >
         <div className="container flex justify-evenly flex-col items-center h-fit ">
           <div className="admin-info flex flex-col items-center gap-4 ">
-            <img src={image} alt="admin-img" className="rounded-lg w-[120px]" />
-            <p className="sm:text-lg lg:text-xl capitalize">name</p>
+            <h3
+              className={`${
+                lang === "ar" && "flex-row-reverse"
+              } flex text-3xl text-white mb-20 capitalize gap-2`}
+            >
+              {lang === "ar" ? " ,مرحبا" : "Hello, "}
+              <span>{user.fname}</span>
+            </h3>
+            <p className="text-2xl text-white ">
+              {lang === "ar"
+                ? "ماذا تريد أن تفعل الآن؟"
+                : "What would you like to do now? "}
+            </p>
           </div>
           <div className="btns flex sm:flex-col sm:mt-10 lg:flex-row gap-10 w-full items-center justify-center">
-            <div className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
+            <div
+              className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col 
+            gap-3 items-center"
+            >
               <label
                 htmlFor="create-user"
-                className="text-2xl font-bold capitalize"
+                className="text-2xl font-bold capitalize text-white"
               >
                 {lang === "ar" ? "انشاء مستخدم" : "create user"}
               </label>
@@ -53,16 +71,19 @@ export const Dashbaord = () => {
                 onClick={() => navigate("create-user")}
                 name="create-user"
                 id="create-user"
-                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
+                className="text-black text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
+                flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl  bg-white"
               >
                 <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
               </button>
             </div>
+            <span className="text-2xl text-white">
+              {lang === "ar" ? "او" : "or "}
+            </span>
             <div className="edit-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
               <label
                 htmlFor="edit-user"
-                className="text-2xl  font-bold capitalize"
+                className="text-2xl text-white font-bold capitalize"
               >
                 {lang === "ar" ? "تعديل حساب مستخدم " : "  edit user"}
               </label>
@@ -70,8 +91,8 @@ export const Dashbaord = () => {
                 onClick={() => navigate("edit-user")}
                 name="edit-user"
                 id="edit-user"
-                className="text-white text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
-                flex justify-center items-center py-5 px-10 rounded-2xl group bg-color1"
+                className="text-black text-6xl w-full sm:h-[150px] lg:h-[170px]
+                flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl bg-white"
               >
                 <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
               </button>
@@ -80,6 +101,7 @@ export const Dashbaord = () => {
         </div>
       </section>
       <Outlet />
+      {user && <QR />}
     </div>
   );
 };

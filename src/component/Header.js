@@ -13,14 +13,16 @@ export const Header = () => {
     e.preventDefault();
     cookie.remove("user_token", {
       path: "/",
-      expires: new Date(Date.now() + 3600000),
-      secure: false, // set to true if your using https
+      secure: true,
     });
     window.localStorage.removeItem("userID");
     window.location.assign("/");
   };
   // user cookies
   const [cookies] = useCookies(["user_token"]);
+
+  // download qr code
+
   return (
     <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative">
       <div className="container flex justify-between items-center w-full">
@@ -55,12 +57,14 @@ export const Header = () => {
             </option>
           </select>
           {cookies.user_token ? (
-            <button
-              onClick={Logout}
-              className="relative duration-150 bg-white py-2 px-2 rounded-lg "
-            >
-              <FiLogOut size={20} color="red" />
-            </button>
+            <div className="flex items-center gap-6">
+              <button
+                onClick={Logout}
+                className="relative duration-150 bg-white py-2 px-2 rounded-lg "
+              >
+                <FiLogOut size={20} color="red" />
+              </button>
+            </div>
           ) : null}
         </div>
       </div>

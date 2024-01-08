@@ -13,10 +13,9 @@ import { Projects } from "./pages/Projects";
 import { UploadFiles } from "./pages/UploadFiles";
 
 function App() {
-  // context value
   const [lang, setLang] = useState("");
   const LangValue = { lang, setLang };
-
+  
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
   }, []);
@@ -32,7 +31,8 @@ function App() {
         <div className="App h-screen overflow-hidden relative">
           <Header />
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path={"/" || "/:id"} element={<Login />} />
+            <Route path={"/:id"} element={<Login />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/upload-files" element={<UploadFiles />} />
             <Route path={`/${userID}/dashboard`} element={<Dashbaord />}>

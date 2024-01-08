@@ -3,6 +3,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { FaBuildingFlag } from "react-icons/fa6";
 import { LanguageCon } from "../Context";
+import { QR } from "../component/Qr";
 
 export const UserProjects = () => {
   const navigate = useNavigate();
@@ -25,16 +26,16 @@ export const UserProjects = () => {
   });
 
   return project.length === 1 ? (
-    <iframe
-      src={`${process.env.REACT_APP_FOLDER}${user.userName}/${project[0].folderName}/index.htm`}
-      name={user.userName}
-      marginheight="0px"
-      marginwidth="0px"
-      width="100%"
-      allowFullScreen
-      height="100%"
-      className="section-h w-full "
-    />
+    <>
+      <iframe
+        title="3dvista-user"
+        src={`${process.env.REACT_APP_FOLDER}${user.userName}/${project[0].folderName}/index.htm`}
+        name={user.userName}
+        allowFullScreen
+        className="section-h w-full "
+      />
+      {user && <QR />}
+    </>
   ) : (
     <div className="section-h flex justify-center relative py-10 overflow-scroll ">
       <div className="container flex justify-center items-center flex-col h-fit w-full">
@@ -130,6 +131,7 @@ export const UserProjects = () => {
           ))}
         </div>
       </div>
+      {user && <QR />}
       <Outlet />
     </div>
   );

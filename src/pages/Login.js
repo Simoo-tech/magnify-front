@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect,  useState } from "react";
 import mainlogo from "../assest/logo/mainLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
@@ -9,6 +9,18 @@ import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
 import { Oval } from "react-loader-spinner";
 export const Login = () => {
+  // login user with qr code
+  const url = window.location.href.split("/");
+  const id = url[3];
+
+  const [QREmail, setQREmail] = useState(null);
+  const LoginWithQR = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}user`, { _id: id })
+      .then((res) => setQREmail(res.data.email))
+      .catch((err) => console.log(err));
+  };
+
   // handle change language
   const { lang } = useContext(LanguageCon);
 
@@ -28,6 +40,10 @@ export const Login = () => {
       } else if (!user.isAdmin && user.verified && user.passChanged) {
         navigate(`/${userID}/tour-projects`);
       }
+    }
+
+    if (id) {
+      LoginWithQR();
     }
   }, []);
 
@@ -55,7 +71,7 @@ export const Login = () => {
               className=" sm:w-[230px] md:w-[280px] lg:w-[370px] xl:w-[400px] object-contain"
             />
           </div>
-          <Form lang={lang} setCookies={setCookies} />
+          <Form lang={lang} setCookies={setCookies} QREmail={QREmail} />
         </div>
         <div
           id="buttom-links"
@@ -89,8 +105,9 @@ export const Login = () => {
     </section>
   );
 };
-const Form = ({ lang, setCookies }) => {
-  const [authData, setAuthData] = useState({});
+const Form = ({ lang, setCookies, QREmail }) => {
+  const [authData, setAuthData] = useState(QREmail ? { email: QREmail } : {});
+  //
   const verify_email = window.localStorage.getItem("verify-email");
   // error msg
   const [error, setError] = useState();
@@ -98,19 +115,28 @@ const Form = ({ lang, setCookies }) => {
   const [loading, setLoading] = useState(false);
   // handle change
   const HandleChange = (e) => {
-    setAuthData({ ...authData, [e.target.name]: e.target.value });
+    if (QREmail) {
+      setAuthData({
+        ...authData,
+        email: `${QREmail}`,
+        password: e.target.value,
+      });
+    } else {
+      setAuthData({ ...authData, [e.target.name]: e.target.value });
+    }
     setError(null);
   };
+
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     await axios
       .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",
-          expires: new Date(Date.now() + 3600000),
           secure: true,
           sameSite: "none",
         });
@@ -187,7 +213,7 @@ const Form = ({ lang, setCookies }) => {
                 const email = e.target.value.toLocaleLowerCase();
                 setAuthData({ ...authData, email });
               }}
-              value={authData.email}
+              value={QREmail ? QREmail : authData.email}
               required
               id="email"
               autoFocus
