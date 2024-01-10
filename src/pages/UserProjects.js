@@ -37,11 +37,14 @@ export const UserProjects = () => {
       {user && <QR />}
     </>
   ) : (
-    <div className="section-h flex justify-center relative py-10 overflow-scroll ">
+    <div className="section-h flex justify-center relative py-10 overflow-scroll bg-color1 ">
       <div className="container flex justify-center items-center flex-col h-fit w-full">
         <div className="user-project-data w-full flex gap-5 mt-10 justify-center flex-wrap">
           {project.map((project, i) => (
-            <div key={i} className="project flex flex-col w-5/12 ">
+            <div
+              key={i}
+              className="project flex flex-col flex-wrap sm:w-full  lg:w-5/12 "
+            >
               <div className="top flex w-full bg-darkGrey py-2 justify-between items-center px-4 text-white capitalize rounded-t-xl">
                 <h4
                   className={`flex gap-2 ${
@@ -67,7 +70,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":موقع" : `location:`}
                   <span className="font-normal ml-1">{project.projectLoc}</span>
@@ -75,7 +78,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":نوع المشروع" : `type:`}
                   <span className="font-normal ml-1">
@@ -85,7 +88,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":مستشار" : `consultant:`}
                   <span className="font-normal ml-1">{project.consultant}</span>
@@ -93,7 +96,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":الموقع" : `  area:`}
                   <span className="font-normal ml-1">
@@ -103,7 +106,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":ارتفاع" : ` height:`}
                   <span className="font-normal ml-1">{project.projectHei}</span>
@@ -111,7 +114,7 @@ export const UserProjects = () => {
                 <p
                   className={`gap-1 ${
                     lang === "ar" && "flex-row-reverse"
-                  } flex w-6/12 font-semibold text-base capitalize text-center mb-5`}
+                  } flex sm:w-full md:w-6/12 font-semibold text-base capitalize text-center mb-5`}
                 >
                   {lang === "ar" ? ":المدة" : `duration:`}
                   <span className="font-normal ml-1">

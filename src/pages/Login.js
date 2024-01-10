@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,  useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import mainlogo from "../assest/logo/mainLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
@@ -18,7 +18,7 @@ export const Login = () => {
     await axios
       .post(`${process.env.REACT_APP_API_URL}user`, { _id: id })
       .then((res) => setQREmail(res.data.email))
-      .catch((err) => console.log(err));
+      .catch("");
   };
 
   // handle change language
@@ -54,7 +54,7 @@ export const Login = () => {
     >
       <div className="container flex flex-col justify-between">
         <div
-          className="form-background-image flex h-full justify-between items-center
+          className="form-background-image flex sm:h-5/6 lg:h-full justify-between items-center
         sm:flex-col md:flex-row mb-5 sm:gap-3"
         >
           <div
@@ -105,6 +105,7 @@ export const Login = () => {
     </section>
   );
 };
+
 const Form = ({ lang, setCookies, QREmail }) => {
   const [authData, setAuthData] = useState(QREmail ? { email: QREmail } : {});
   //
@@ -167,7 +168,7 @@ const Form = ({ lang, setCookies, QREmail }) => {
     <form
       autoComplete="off"
       onSubmit={HandleSubmit}
-      className="form sm:w-full md:w-6/12 xl:w-[450px] h-full bg-darkGrey flex flex-col
+      className="form sm:w-full md:w-6/12 xl:w-[450px] sm:h-full bg-darkGrey flex flex-col
     items-center justify-between py-8 px-10 shadow-lg rounded-xl border-2 border-color1 "
     >
       <div

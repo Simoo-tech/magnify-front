@@ -24,16 +24,11 @@ export const Projects = () => {
   const checkID = folder.includes(id);
   return checkID ? (
     <iframe
+      title="3dvista-user"
       src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
-      name="myiFrame"
-      scrolling="no"
-      frameborder="1"
-      marginheight="0px"
-      marginwidth="0px"
-      height="100%"
-      width="100%"
-      allowfullscreen
-      className="section-h w-full absolute top-0"
+      name={user.userName}
+      allowFullScreen
+      className="section-h w-full "
     />
   ) : (
     navigate(-1)

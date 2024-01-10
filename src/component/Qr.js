@@ -22,7 +22,7 @@ export const QR = () => {
   };
 
   return (
-    <div className={`absolute bottom-5 sm:right-5 z-50 `}>
+    <div className={`fixed bottom-5 right-5 z-50 `}>
       <div className="bg-white rounded-full text-black relative">
         <MdQrCodeScanner
           size={35}

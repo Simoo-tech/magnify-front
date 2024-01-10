@@ -11,13 +11,38 @@ import { NotFound } from "./component/NotFound";
 import { ResetPass, Verify } from "./pages/Verify";
 import { Projects } from "./pages/Projects";
 import { UploadFiles } from "./pages/UploadFiles";
+import { useCookies } from "react-cookie";
+import cookie from "react-cookies";
+
+import axios from "axios";
 
 function App() {
   const [lang, setLang] = useState("");
   const LangValue = { lang, setLang };
-  
+  // Session expired
+  const [cookies] = useCookies(["user_token"]);
+
+  const Session = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}auth/login-token-expire`, {
+        token: cookies.user_token.token,
+      })
+      .then()
+      .catch((err) => {
+        cookie.remove("user_token", {
+          path: "/",
+          secure: true,
+        });
+        window.localStorage.removeItem("userID");
+        window.location.assign("/");
+      });
+  };
+
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
+    if (cookies.user_token) {
+      Session();
+    }
   }, []);
 
   // user ID

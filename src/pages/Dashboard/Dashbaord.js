@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import image from "../../assest/ava1.webp";
 import { Outlet, useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
@@ -35,35 +34,35 @@ export const Dashbaord = () => {
   const { lang } = useContext(LanguageCon);
 
   return (
-    <div className="admin-dashboard relative overflow-hidden bg-[#ccc] ">
+    <div className="admin-dashboard relative overflow-hidden bg-color1 ">
       <section
         className="dashboard w-full flex justify-center items-center
       h-full py-10 relative overflow-scroll"
       >
         <div className="container flex justify-evenly flex-col items-center h-fit ">
-          <div className="admin-info flex flex-col items-center gap-4 ">
+          <div className="welcome flex flex-col items-center gap-4 ">
             <h3
               className={`${
                 lang === "ar" && "flex-row-reverse"
-              } flex text-3xl text-white mb-20 capitalize gap-2`}
+              } flex sm:text-3xl md:text-4xl text-white mb-20 capitalize gap-2`}
             >
               {lang === "ar" ? " ,مرحبا" : "Hello, "}
               <span>{user.fname}</span>
             </h3>
-            <p className="text-2xl text-white ">
+            <p className="sm:text-xl lg:text-2xl text-center text-white ">
               {lang === "ar"
                 ? "ماذا تريد أن تفعل الآن؟"
                 : "What would you like to do now? "}
             </p>
           </div>
-          <div className="btns flex sm:flex-col sm:mt-10 lg:flex-row gap-10 w-full items-center justify-center">
+          <div className="btns flex sm:mt-10 gap-10 w-full items-center justify-center">
             <div
-              className="create-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col 
+              className="create-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col 
             gap-3 items-center"
             >
               <label
                 htmlFor="create-user"
-                className="text-2xl font-bold capitalize text-white"
+                className="sm:text-lg md:text-xl lg:text-2xl font-bold capitalize text-white"
               >
                 {lang === "ar" ? "انشاء مستخدم" : "create user"}
               </label>
@@ -71,7 +70,7 @@ export const Dashbaord = () => {
                 onClick={() => navigate("create-user")}
                 name="create-user"
                 id="create-user"
-                className="text-black text-6xl border-2 border-white w-full sm:h-[150px] lg:h-[170px]
+                className="text-black text-6xl border-2 border-white w-full sm:h-[130px] md:h-[150px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl  bg-white"
               >
                 <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
@@ -80,10 +79,10 @@ export const Dashbaord = () => {
             <span className="text-2xl text-white">
               {lang === "ar" ? "او" : "or "}
             </span>
-            <div className="edit-btn sm:w-8/12 md:w-7/12 lg:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
+            <div className="edit-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
               <label
                 htmlFor="edit-user"
-                className="text-2xl text-white font-bold capitalize"
+                className="sm:text-lg md:text-xl lg:text-2xl text-white font-bold capitalize"
               >
                 {lang === "ar" ? "تعديل حساب مستخدم " : "  edit user"}
               </label>
@@ -91,7 +90,7 @@ export const Dashbaord = () => {
                 onClick={() => navigate("edit-user")}
                 name="edit-user"
                 id="edit-user"
-                className="text-black text-6xl w-full sm:h-[150px] lg:h-[170px]
+                className="text-black text-6xl w-full sm:h-[130px] md:h-[150px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl bg-white"
               >
                 <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
@@ -128,7 +127,6 @@ export const CreateUser = ({ userData, setUserData }) => {
 
   // context
   const { lang } = useContext(LanguageCon);
-
   // handle submit create new user
   const HandleSubmitCreate = async (e) => {
     e.preventDefault();
@@ -180,6 +178,7 @@ export const CreateUser = ({ userData, setUserData }) => {
     delete userNewData.createdAt;
     delete userNewData.__v;
     delete userNewData.updatedAt;
+
     await axios
       .put(
         `${process.env.REACT_APP_API_URL}user/update-data/${userData._id}`,
@@ -253,7 +252,6 @@ export const CreateUser = ({ userData, setUserData }) => {
   };
   // loading spinner
   const [loading, setLoading] = useState(false);
-
   return (
     <div
       className={`create-user w-full bg-color1 absolute flex justify-center items-center pt-5 

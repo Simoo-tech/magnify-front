@@ -65,8 +65,7 @@ export const CreatePass = () => {
     if (resetUserID) {
       axios
         .put(
-          `${process.env.REACT_APP_API_URL}user/update-password/${resetUserID}
-      `,
+          `${process.env.REACT_APP_API_URL}user/update-password/${user._id}`,
           userPass
         )
         .then((res) => {
@@ -82,8 +81,7 @@ export const CreatePass = () => {
     else {
       axios
         .put(
-          `${process.env.REACT_APP_API_URL}user/update-password/${user._id}
-        `,
+          `${process.env.REACT_APP_API_URL}user/update-password/${user._id}`,
           userPass
         )
         .then((res) => {
@@ -109,6 +107,8 @@ export const CreatePass = () => {
     setUserPass({ ...userPass, [e.target.name]: e.target.value });
     setError(null);
   };
+
+  
   return validateLink ? (
     <div
       className="section-h create-password bg-color1 flex justify-center items-center"
@@ -138,7 +138,7 @@ export const CreatePass = () => {
           md:flex-row-reverse md:h-3/6 
           lg:mt-30`}
         >
-          <div className="flex w-full flex-row-reverse gap-5 items-center ">
+          <div className="flex w-full md:flex-row-reverse sm:flex-col gap-5 items-center ">
             {/* input container */}
             <div
               id="inputs-container"
