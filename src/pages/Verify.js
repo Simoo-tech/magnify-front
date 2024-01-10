@@ -153,7 +153,7 @@ export const Verify = () => {
 ////////////////  Reset Password ///////////////////
 export const ResetPass = () => {
   const [sending, setSending] = useState(false);
-  const [verified, setVerified] = useState(true);
+  const [verified, setVerified] = useState(false);
   const navigate = useNavigate();
   const [err, setErr] = useState(null);
   const [email, setEmail] = useState("");
