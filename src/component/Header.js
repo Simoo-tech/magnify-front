@@ -8,6 +8,9 @@ import { useCookies } from "react-cookie";
 
 export const Header = () => {
   const { lang, setLang } = useContext(LanguageCon);
+
+  // user cookies
+  const [cookies] = useCookies(["user_token"]);
   // handle logout
   const Logout = (e) => {
     e.preventDefault();
@@ -15,11 +18,12 @@ export const Header = () => {
       path: "/",
       secure: true,
     });
+    if (cookies.user_token.verified) {
+      window.localStorage.removeItem("verify-email");
+    }
     window.localStorage.removeItem("userID");
     window.location.assign("/");
   };
-  // user cookies
-  const [cookies] = useCookies(["user_token"]);
 
   // download qr code
 

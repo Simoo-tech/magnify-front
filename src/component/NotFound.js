@@ -1,11 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export const NotFound = () => {
   return (
     <div
       id="page-not-found"
-      className="section-h w-full bg-color1 flex justify-center items-center"
+      className="h-full absolute top-0 w-full bg-color1 flex justify-center items-center"
     >
       <div
         className="container sm:w-full lg:w-4/6 h-5/6 bg-darkGrey rounded-lg py-10 px-5 flex flex-col
@@ -18,18 +17,11 @@ export const NotFound = () => {
           oops!
         </h1>
         <p className="sm:text-lg lg:text-xl font-semibold">
-          That page can't be found.
+          That page can't be found or it will be Soon .
         </p>
         <span className="sm:text-sm lg:text-lg text-center">
           it looks like nothing was found at this location
         </span>
-        <Link
-          to={"/"}
-          className="border-2 border-color1 text-lg py-2 px-6 rounded-xl capitalize 
-          hover:bg-color1 hover:text-white duration-200 text-color1 font-semibold"
-        >
-          back to home page
-        </Link>
       </div>
     </div>
   );
