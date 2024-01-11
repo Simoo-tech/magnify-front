@@ -35,71 +35,73 @@ export const Dashbaord = () => {
 
   return (
     <div className="admin-dashboard relative overflow-hidden bg-color1 ">
-      <section
-        className="dashboard w-full flex justify-center items-center
+      <div className="container">
+        <section
+          className="dashboard w-full flex justify-center items-center
       h-full py-10 relative overflow-scroll"
-      >
-        <div className="container flex justify-evenly flex-col items-center h-fit ">
-          <div className="welcome flex flex-col items-center gap-4 ">
-            <h3
-              className={`${
-                lang === "ar" && "flex-row-reverse"
-              } flex sm:text-3xl md:text-4xl text-white mb-20 capitalize gap-2`}
-            >
-              {lang === "ar" ? " ,مرحبا" : "Hello, "}
-              <span>{user.fname}</span>
-            </h3>
-            <p className="sm:text-xl lg:text-2xl text-center text-white ">
-              {lang === "ar"
-                ? "ماذا تريد أن تفعل الآن؟"
-                : "What would you like to do now? "}
-            </p>
-          </div>
-          <div className="btns flex sm:mt-10 gap-10 w-full items-center justify-center">
-            <div
-              className="create-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col 
+        >
+          <div className="flex justify-evenly flex-col items-center h-fit ">
+            <div className="welcome flex flex-col items-center gap-4 ">
+              <h3
+                className={`${
+                  lang === "ar" && "flex-row-reverse"
+                } flex sm:text-3xl md:text-4xl text-white mb-20 capitalize gap-2`}
+              >
+                {lang === "ar" ? " ,مرحبا" : "Hello, "}
+                <span>{user.fname}</span>
+              </h3>
+              <p className="sm:text-xl lg:text-2xl text-center text-white ">
+                {lang === "ar"
+                  ? "ماذا تريد أن تفعل الآن؟"
+                  : "What would you like to do now? "}
+              </p>
+            </div>
+            <div className="btns flex sm:mt-10 gap-10 w-full items-center justify-center">
+              <div
+                className="create-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col 
             gap-3 items-center"
-            >
-              <label
-                htmlFor="create-user"
-                className="sm:text-lg md:text-xl lg:text-2xl font-bold capitalize text-white"
               >
-                {lang === "ar" ? "انشاء مستخدم" : "create user"}
-              </label>
-              <button
-                onClick={() => navigate("create-user")}
-                name="create-user"
-                id="create-user"
-                className="text-black text-6xl border-2 border-white w-full sm:h-[130px] md:h-[150px]
+                <label
+                  htmlFor="create-user"
+                  className="sm:text-lg md:text-xl lg:text-2xl font-bold capitalize text-white"
+                >
+                  {lang === "ar" ? "انشاء مستخدم" : "create user"}
+                </label>
+                <button
+                  onClick={() => navigate("create-user")}
+                  name="create-user"
+                  id="create-user"
+                  className="text-black text-6xl border-2 border-white w-full sm:h-[130px] md:h-[150px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl  bg-white"
-              >
-                <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
-              </button>
-            </div>
-            <span className="text-2xl text-white">
-              {lang === "ar" ? "او" : "or "}
-            </span>
-            <div className="edit-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
-              <label
-                htmlFor="edit-user"
-                className="sm:text-lg md:text-xl lg:text-2xl text-white font-bold capitalize"
-              >
-                {lang === "ar" ? "تعديل حساب مستخدم " : "  edit user"}
-              </label>
-              <button
-                onClick={() => navigate("edit-user")}
-                name="edit-user"
-                id="edit-user"
-                className="text-black text-6xl w-full sm:h-[130px] md:h-[150px]
+                >
+                  <FaPlus className="group-hover:scale-125 duration-200 ease-in-out" />
+                </button>
+              </div>
+              <span className="text-2xl text-white">
+                {lang === "ar" ? "او" : "or "}
+              </span>
+              <div className="edit-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
+                <label
+                  htmlFor="edit-user"
+                  className="sm:text-lg md:text-xl lg:text-2xl text-white font-bold capitalize"
+                >
+                  {lang === "ar" ? "تعديل حساب مستخدم " : "  edit user"}
+                </label>
+                <button
+                  onClick={() => navigate("edit-user")}
+                  name="edit-user"
+                  id="edit-user"
+                  className="text-black text-6xl w-full sm:h-[130px] md:h-[150px]
                 flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl bg-white"
-              >
-                <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
-              </button>
+                >
+                  <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      <Outlet />
+        </section>
+        <Outlet />
+      </div>
       {user && <QR />}
     </div>
   );
@@ -270,7 +272,7 @@ export const CreateUser = ({ userData, setUserData }) => {
           <msg.icon /> {msg.text}
         </span>
       )}
-      <div className="container flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
+      <div className="flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
         <p className="sm:text-2xl lg:text-3xl capitalize text-center font-bold text-white">
           {userData
             ? lang === "ar"
@@ -629,7 +631,7 @@ export const EditUser = () => {
       className={`w-full bg-color1 absolute flex pt-5 justify-center items-center left-0 bg-cover sm:flex-col h-full top-0`}
     >
       <div
-        className="container sm:w-full lg:w-11/12 h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
+        className="sm:w-full lg:w-11/12 h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
       "
       >
         {userData ? (
