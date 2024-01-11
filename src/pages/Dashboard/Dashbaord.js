@@ -40,7 +40,7 @@ export const Dashbaord = () => {
           className="dashboard w-full flex justify-center items-center
       h-full py-10 relative overflow-scroll"
         >
-          <div className="flex justify-evenly flex-col items-center h-fit ">
+          <div className="flex justify-evenly flex-col items-center h-fit w-full">
             <div className="welcome flex flex-col items-center gap-4 ">
               <h3
                 className={`${
@@ -56,9 +56,9 @@ export const Dashbaord = () => {
                   : "What would you like to do now? "}
               </p>
             </div>
-            <div className="btns flex sm:mt-10 gap-10 w-full items-center justify-center">
+            <div className="btns flex sm:mt-10 sm:w-full md:w-7/12 lg:w-6/12 xl:w-5/12 items-center justify-between">
               <div
-                className="create-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col 
+                className="create-btn sm:w-5/12 flex flex-col 
             gap-3 items-center"
               >
                 <label
@@ -80,7 +80,7 @@ export const Dashbaord = () => {
               <span className="text-2xl text-white">
                 {lang === "ar" ? "او" : "or "}
               </span>
-              <div className="edit-btn sm:w-6/12 md:w-3/12 xl:w-[180px] flex flex-col gap-3 items-center">
+              <div className="edit-btn sm:w-5/12 flex flex-col gap-3 items-center">
                 <label
                   htmlFor="edit-user"
                   className="sm:text-lg md:text-xl lg:text-2xl text-white font-bold capitalize"
@@ -91,7 +91,7 @@ export const Dashbaord = () => {
                   onClick={() => navigate("edit-user")}
                   name="edit-user"
                   id="edit-user"
-                  className="text-black text-6xl w-full sm:h-[130px] md:h-[150px]
+                  className="text-black text-6xl w-full sm:h-[130px] md:h-[140px] lg:h-[150px] 
                 flex justify-center items-center py-5 px-10 rounded-2xl group shadow-xl bg-white"
                 >
                   <FaUserEdit className="group-hover:scale-125 duration-200 ease-in-out" />
@@ -272,7 +272,7 @@ export const CreateUser = ({ userData, setUserData }) => {
           <msg.icon /> {msg.text}
         </span>
       )}
-      <div className="flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
+      <div className="container flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
         <p className="sm:text-2xl lg:text-3xl capitalize text-center font-bold text-white">
           {userData
             ? lang === "ar"
@@ -631,7 +631,7 @@ export const EditUser = () => {
       className={`w-full bg-color1 absolute flex pt-5 justify-center items-center left-0 bg-cover sm:flex-col h-full top-0`}
     >
       <div
-        className="sm:w-full lg:w-11/12 h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
+        className="container sm:h-4/6 lg:h-5/6 rounded-xl bg-darkGrey text-white py-3 flex justify-center items-center
       "
       >
         {userData ? (
