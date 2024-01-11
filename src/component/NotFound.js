@@ -8,20 +8,20 @@ export const NotFound = () => {
     >
       <div
         className="container sm:w-full lg:w-4/6 h-5/6 bg-darkGrey rounded-lg py-10 px-5 flex flex-col
-      gap-5 justify-center items-center text-white "
+      sm:gap-10 justify-center items-center text-white "
       >
         <h1
           id="page-not-found-title"
-          className="sm:text-5xl md:text-6xl lg:text-7xl uppercase font-bold text-center"
+          className="sm:text-4xl md:text-5xl lg:text-7xl uppercase font-bold text-center"
         >
           oops!
         </h1>
-        <p className="sm:text-lg lg:text-xl font-semibold">
+        <p className="sm:text-lg lg:text-xl font-thin text-center flex flex-col gap-5 ">
           That page can't be found or it will be Soon .
+          <span className="sm:text-sm lg:text-lg font-thin  text-center">
+            It looks like nothing was found at this location
+          </span>
         </p>
-        <span className="sm:text-sm lg:text-lg text-center">
-          it looks like nothing was found at this location
-        </span>
       </div>
     </div>
   );

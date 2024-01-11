@@ -37,9 +37,9 @@ export const UserProjects = () => {
       {user && <QR />}
     </>
   ) : (
-    <div className="section-h flex justify-center relative py-10 overflow-scroll bg-color1 ">
-      <div className="container flex justify-center items-center flex-col h-fit w-full">
-        <div className="user-project-data w-full flex gap-5 mt-10 justify-center flex-wrap">
+    <div className="section-h flex justify-center relative  bg-color1 overflow-hidden ">
+      <div className="container flex justify-center items-center flex-col h-full w-full ">
+        <div className="user-project-data w-full h-fit py-6 overflow-scroll flex gap-5 justify-center flex-wrap">
           {project.map((project, i) => (
             <div
               key={i}

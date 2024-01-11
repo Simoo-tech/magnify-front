@@ -134,7 +134,11 @@ const Form = ({ lang, setCookies, QREmail }) => {
     setLoading(true);
 
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
+      .post(
+        `  http://localhost:8000/api/auth/login
+      `,
+        authData
+      )
       .then((res) => {
         setCookies("user_token", res.data, {
           path: "/",

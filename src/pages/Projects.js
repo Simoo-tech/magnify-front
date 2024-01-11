@@ -26,7 +26,7 @@ export const Projects = () => {
       src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
       name={user.userName}
       allowFullScreen
-      className="section-h w-full absolute top-0"
+      className="h-full w-full absolute top-0"
     />
   ) : (
     navigate(-1)

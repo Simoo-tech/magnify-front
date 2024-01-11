@@ -24,7 +24,7 @@ function App() {
 
   const Session = async () => {
     await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login-token-expire`, {
+      .post(`http://localhost:8000/api/auth/login-token-expire`, {
         token: cookies.user_token.token,
       })
       .then()
