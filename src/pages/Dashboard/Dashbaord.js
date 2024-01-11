@@ -34,7 +34,7 @@ export const Dashbaord = () => {
   const { lang } = useContext(LanguageCon);
 
   return (
-    <div className="admin-dashboard relative overflow-hidden bg-color1 ">
+    <div className="admin-dashboard relative overflow-hidden flex justify-center items-center bg-color1 ">
       <div className="container">
         <section
           className="dashboard w-full flex justify-center items-center
