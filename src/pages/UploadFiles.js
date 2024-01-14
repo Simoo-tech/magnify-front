@@ -14,8 +14,9 @@ export const UploadFiles = () => {
         id="choose-upload-Type"
         className={`${
           uploadType && "hidden"
-        } absolute top-0 w-full h-full flex  bg-white z-50 bg-no-repeat bg-cover 
-        before:absolute before:top-0 before:left-0 before:bg-black before:w-full before:h-full before:opacity-70`}
+        } absolute top-0 w-full h-full flex  bg-white z-50 bg-no-repeat bg-cover bg-center
+        before:absolute before:top-0 before:left-0 before:bg-black before:w-full 
+        before:h-full before:opacity-70`}
         style={{ backgroundImage: `url(${imgae})` }}
       >
         <div className="sm:text-xl lg:text-3xl w-full h-full sm:flex-col md:flex-row flex justify-between items-center z-20">
@@ -83,31 +84,46 @@ const SessionData = () => {
     setUploading(true);
     const formData = new FormData();
     for (const file of images) {
-      formData.append("file", file);
+      if (
+        file.type === "video/mp4" ||
+        file.type === "video/3gp" ||
+        file.type === "video/webm" ||
+        file.type === "video/mkv"
+      ) {
+        formData.append("file", file);
+        await axios
+          .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
+            onUploadProgress: (e) => {
+              setUploaded(parseInt((e.loaded / e.total) * 100));
+            },
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            setMsg({
+              ...msg,
+              active: true,
+              text: res.data.message,
+              success: true,
+            });
+            setTimeout(() => {
+              setMsg({
+                ...msg,
+                active: false,
+                text: res.data.message,
+                success: true,
+              });
+              window.location.reload();
+            }, 2000);
+          })
+          .catch((err) => setErr(true))
+          .finally(() => setUploading(false));
+      } else {
+        setErr(true);
+        setUploading(false);
+      }
     }
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
-        onUploadProgress: (e) => {
-          setUploaded(parseInt((e.loaded / e.total) * 100));
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        setMsg({ ...msg, active: true, text: res.data.message, success: true });
-        setTimeout(() => {
-          setMsg({
-            ...msg,
-            active: false,
-            text: res.data.message,
-            success: true,
-          });
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => setErr(true))
-      .finally(() => setUploading(false));
   };
   return (
     <>
@@ -258,31 +274,50 @@ const MissingPhoto = () => {
     setUploading(true);
     const formData = new FormData();
     for (const file of images) {
-      formData.append("file", file);
+      if (
+        file.type === "video/mp4" ||
+        file.type === "video/3gp" ||
+        file.type === "video/webm" ||
+        file.type === "video/mkv" ||
+        file.type === "image/jpg" ||
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/webp"
+      ) {
+        formData.append("file", file);
+        await axios
+          .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
+            onUploadProgress: (e) => {
+              setUploaded(parseInt((e.loaded / e.total) * 100));
+            },
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            setMsg({
+              ...msg,
+              active: true,
+              text: res.data.message,
+              success: true,
+            });
+            setTimeout(() => {
+              setMsg({
+                ...msg,
+                active: false,
+                text: res.data.message,
+                success: true,
+              });
+              window.location.reload();
+            }, 2000);
+          })
+          .catch((err) => setErr(true))
+          .finally(() => setUploading(false));
+      } else {
+        setErr(true);
+        setUploading(false);
+      }
     }
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}missing-upload`, formData, {
-        onUploadProgress: (e) => {
-          setUploaded(parseInt((e.loaded / e.total) * 100));
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        setMsg({ ...msg, active: true, text: res.data.message, success: true });
-        setTimeout(() => {
-          setMsg({
-            ...msg,
-            active: false,
-            text: res.data.message,
-            success: true,
-          });
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => setErr(true))
-      .finally(() => setUploading(false));
   };
   return (
     <>
