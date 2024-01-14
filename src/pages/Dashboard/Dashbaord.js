@@ -5,7 +5,7 @@ import "react-phone-input-2/lib/bootstrap.css";
 import axios from "axios";
 import { LanguageCon } from "../../Context";
 import { useCookies } from "react-cookie";
-import conimage from "../../assest/building.jpg";
+import conimage from "../../assest/building.webp";
 import { Oval } from "react-loader-spinner";
 import { FaPlus, FaUserEdit, FaCheck } from "react-icons/fa";
 import { MdOutlinePersonSearch, MdAdd, MdOutlineError } from "react-icons/md";
