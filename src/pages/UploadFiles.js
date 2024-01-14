@@ -286,7 +286,7 @@ const MissingPhoto = () => {
       ) {
         formData.append("file", file);
         await axios
-          .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
+          .post(`${process.env.REACT_APP_API_URL}missing-upload`, formData, {
             onUploadProgress: (e) => {
               setUploaded(parseInt((e.loaded / e.total) * 100));
             },
