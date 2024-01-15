@@ -225,12 +225,12 @@ const SessionData = () => {
             )}
             {uploading && (
               <span
-                perc={`${uploaded}%`}
+                perc={`${uploaded > 1 && uploaded}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded > 1 && uploaded}%` }}
+                  style={{ width: `${uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
@@ -297,7 +297,6 @@ const MissingPhoto = () => {
           if (maxSize > img.size) {
             Newimg = [...Newimg, img];
             setImages([...images, ...Newimg]);
-          
           } else {
             setError(
               `${img.name} is ${parseInt(
@@ -443,13 +442,13 @@ const MissingPhoto = () => {
             )}
             {uploading && (
               <span
-                perc={`${uploaded}%`}
+                perc={`${uploaded > 1 && uploaded}%`}
                 done={<FaCheckCircle />}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded > 1 && uploaded}%` }}
+                  style={{ width: `${uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
