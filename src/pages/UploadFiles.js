@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
-import axios from "axios";
+import axios, { all } from "axios";
 import { Message } from "../component/Message";
 import PulseLoader from "react-spinners/PulseLoader";
 import imgae from "../assest/sessionData.webp";
@@ -57,21 +57,45 @@ const SessionData = () => {
   const [err, setErr] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState();
+  const [fileName, setFileName] = useState();
+  let Newimg = new Array();
 
-  // handle upload
-  const HandleChange = (e, i) => {
-    setErr(false);
-    const imgFile = Array.from(e.target.files);
-    if (images.length > 0) {
-      const newImg = [...images, ...imgFile];
-      setImages(newImg);
+  const HandleChange = (e) => {
+    const maxSize = 100 * 1024 * 1024; // 100MB
+
+    if (uploading) {
+      return null;
     } else {
-      setImages(imgFile);
+      setUploaded(false);
+      setUploading(0);
+      setFileName(null);
+      const imgFile = Array.from(e.target.files);
+      imgFile.map((img) => {
+        if (
+          img.type === "video/mp4" ||
+          img.type === "video/3gp" ||
+          img.type === "video/webm" ||
+          img.type === "video/mkv"
+        ) {
+          if (maxSize > img.size) {
+            Newimg = [...Newimg, img];
+            setImages([...images, ...Newimg]);
+            console.log(img.size);
+            console.log(maxSize <= img.size);
+          } else {
+            setFileName(
+              `the file is ${parseInt(
+                img.size / 1024 / 1024
+              )}MB large than max size `
+            );
+          }
+        }
+      });
     }
   };
+
   // handle delete file
   const HandleDelete = (i) => {
-    setErr(false);
     const onDelete = [...images];
     onDelete.splice(i, 1);
     setImages(onDelete);
@@ -84,23 +108,26 @@ const SessionData = () => {
     setUploading(true);
     const formData = new FormData();
     for (const file of images) {
-      if (
-        file.type === "video/mp4" ||
-        file.type === "video/3gp" ||
-        file.type === "video/webm" ||
-        file.type === "video/mkv"
-      ) {
-        formData.append("file", file);
-        await axios
-          .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
+      formData.append("file", file);
+      setFileName(file.name);
+      await axios
+        .post(
+          `${process.env.REACT_APP_API_URL}session-upload
+            `,
+          formData,
+          {
             onUploadProgress: (e) => {
               setUploaded(parseInt((e.loaded / e.total) * 100));
             },
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          })
-          .then((res) => {
+          }
+        )
+        .then((res) => {
+          setFileName(file.name);
+          if (images.lastIndexOf(file) + 1 === images.length) {
+            setUploading(false);
             setMsg({
               ...msg,
               active: true,
@@ -116,15 +143,13 @@ const SessionData = () => {
               });
               window.location.reload();
             }, 2000);
-          })
-          .catch((err) => setErr(true))
-          .finally(() => setUploading(false));
-      } else {
-        setErr(true);
-        setUploading(false);
-      }
+          }
+        })
+        .catch(() => console.log("Error"))
+        .finally(() => {});
     }
   };
+
   return (
     <>
       <Message active={msg.active} text={msg.text} success={msg.success} />
@@ -136,7 +161,7 @@ const SessionData = () => {
         <div
           id="upload-area"
           className="w-full h-2/6 flex flex-col items-center py-4
-      justify-center gap-4 bg-[#ddd] relative "
+      justify-center gap-4 bg-[#ddd] relative"
         >
           <MdCloudUpload size={60} />
           <input
@@ -152,11 +177,9 @@ const SessionData = () => {
             browse files
           </span>
           <span
-            className={`${
-              err && "text-red-600 "
-            } sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
+            className={` sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
           >
-            Only ( .3gp,.mp4, .webm, .mkv ) format are allowed and max size
+            Only ( .3gp, .mp4, .webm, .mkv) format are allowed and max size
             100MB
           </span>
         </div>
@@ -173,7 +196,7 @@ const SessionData = () => {
                   id="file"
                   className="w-full bg-gray-900 text-white py-2 px-3 flex justify-between items-center truncate rounded-lg"
                 >
-                  <span className="w-10/12 truncate">{file.name}</span>
+                  <span className="w-6/12 truncate">{file.name}</span>
                   <button
                     className={`${
                       uploading ? "cursor-not-allowed" : "cursor-pointer"
@@ -199,19 +222,19 @@ const SessionData = () => {
             id="upload-files"
             className="flex gap-5 items-center w-full justify-center flex-col"
           >
-            {uploaded > 1 && (
+            {fileName && (
+              <span className="w-7/12 truncate text-center">{fileName}</span>
+            )}
+            {uploaded > 0 && (
               <span
-                perc={`${err ? "FAILED" : `${uploaded - 1}%`}`}
+                perc={`${uploaded - 1}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
-          before:content-[attr(perc)] before:absolute ${
-            err ? "before:-right-16" : "before:-right-10"
-          } before:-top-[5px]`}
+          before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
               >
                 <span
                   style={{ width: `${uploaded - 1}%` }}
-                  className={`h-full absolute  ${
-                    err ? "bg-red-500" : "bg-green-600"
-                  } rounded-xl duration-200 ease-linear `}
+                  className={`h-full absolute bg-green-600
+                  rounded-xl duration-200 ease-linear `}
                 ></span>
               </span>
             )}
@@ -245,28 +268,45 @@ const SessionData = () => {
 const MissingPhoto = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
-  const [err, setErr] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState();
-  // handle upload
-  const HandleChange = (e, i) => {
-    setErr(false);
-    const imgFile = Array.from(e.target.files);
-    if (images.length > 0) {
-      const newImg = [...images, ...imgFile];
-      setImages(newImg);
+  const [fileName, setFileName] = useState();
+  let Newimg = new Array();
+
+  const HandleChange = (e) => {
+    if (uploading) {
+      return null;
     } else {
-      setImages(imgFile);
+      setUploaded(false);
+      setUploading(0);
+      setFileName(null);
+      const imgFile = Array.from(e.target.files);
+      imgFile.map((img) => {
+        if (
+          img.type === "video/mp4" ||
+          img.type === "video/3gp" ||
+          img.type === "video/webm" ||
+          img.type === "video/mkv" ||
+          img.type === "image/jpg" ||
+          img.type === "image/jpeg" ||
+          img.type === "image/png" ||
+          img.type === "image/webp"
+        ) {
+          Newimg = [...Newimg, img];
+          setImages([...images, ...Newimg]);
+        }
+      });
     }
   };
+
+  console.log(images);
   // handle delete file
   const HandleDelete = (i) => {
-    setErr(false);
     const onDelete = [...images];
     onDelete.splice(i, 1);
     setImages(onDelete);
-    setErr(false);
     setUploaded(0);
+    setFileName(null);
   };
   // handle submit
   const UploadFiles = async (e) => {
@@ -274,27 +314,21 @@ const MissingPhoto = () => {
     setUploading(true);
     const formData = new FormData();
     for (const file of images) {
-      if (
-        file.type === "video/mp4" ||
-        file.type === "video/3gp" ||
-        file.type === "video/webm" ||
-        file.type === "video/mkv" ||
-        file.type === "image/jpg" ||
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/webp"
-      ) {
-        formData.append("file", file);
-        await axios
-          .post(`${process.env.REACT_APP_API_URL}missing-upload`, formData, {
-            onUploadProgress: (e) => {
-              setUploaded(parseInt((e.loaded / e.total) * 100));
-            },
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
+      formData.append("file", file);
+      setFileName(file.name);
+      await axios
+        .post(`${process.env.REACT_APP_API_URL}missing-upload`, formData, {
+          onUploadProgress: (e) => {
+            setUploaded(parseInt((e.loaded / e.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setFileName(file.name);
+          if (images.lastIndexOf(file) + 1 === images.length) {
+            setUploading(false);
             setMsg({
               ...msg,
               active: true,
@@ -310,13 +344,10 @@ const MissingPhoto = () => {
               });
               window.location.reload();
             }, 2000);
-          })
-          .catch((err) => setErr(true))
-          .finally(() => setUploading(false));
-      } else {
-        setErr(true);
-        setUploading(false);
-      }
+          }
+        })
+        .catch(() => console.log("Error"))
+        .finally(() => {});
     }
   };
   return (
@@ -346,9 +377,7 @@ const MissingPhoto = () => {
             browse files
           </span>
           <span
-            className={`${
-              err && "text-red-600 "
-            } sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
+            className={` sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
           >
             Only ( .3gp, .mp4, .webm, .mkv, .jpg, .jpeg, .png, .webp ) format
             are allowed and max size 100MB
@@ -367,7 +396,7 @@ const MissingPhoto = () => {
                   id="file"
                   className="w-full bg-gray-900 text-white py-2 px-3 flex justify-between items-center truncate rounded-lg"
                 >
-                  <span className="w-10/12 truncate">{file.name}</span>
+                  <span className="w-6/12 truncate">{file.name}</span>
                   <button
                     className={`${
                       uploading ? "cursor-not-allowed" : "cursor-pointer"
@@ -393,19 +422,19 @@ const MissingPhoto = () => {
             id="upload-files"
             className="flex gap-5 items-center w-full justify-center flex-col"
           >
-            {uploaded > 1 && (
+            {fileName && (
+              <span className="w-7/12 truncate text-center">{fileName}</span>
+            )}
+            {uploaded > 0 && (
               <span
-                perc={`${err ? "FAILED" : `${uploaded - 1}%`}`}
+                perc={`${uploaded - 1}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
-          before:content-[attr(perc)] before:absolute ${
-            err ? "before:-right-16" : "before:-right-10"
-          } before:-top-[5px]`}
+          before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
               >
                 <span
                   style={{ width: `${uploaded - 1}%` }}
-                  className={`h-full absolute  ${
-                    err ? "bg-red-500" : "bg-green-600"
-                  } rounded-xl duration-200 ease-linear `}
+                  className={`h-full absolute bg-green-600
+                  rounded-xl duration-200 ease-linear `}
                 ></span>
               </span>
             )}
