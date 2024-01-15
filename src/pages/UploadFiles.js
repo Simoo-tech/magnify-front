@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
 import axios, { all } from "axios";
 import { Message } from "../component/Message";
 import PulseLoader from "react-spinners/PulseLoader";
@@ -54,20 +55,20 @@ export const UploadFiles = () => {
 const SessionData = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
-  const [err, setErr] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState();
   const [fileName, setFileName] = useState();
+  const [err, setError] = useState();
+  const [done, setDone] = useState([]);
   let Newimg = new Array();
 
   const HandleChange = (e) => {
     const maxSize = 100 * 1024 * 1024; // 100MB
-
     if (uploading) {
       return null;
     } else {
       setUploaded(false);
-      setUploading(0);
+      setUploading(false);
       setFileName(null);
       const imgFile = Array.from(e.target.files);
       imgFile.map((img) => {
@@ -80,15 +81,17 @@ const SessionData = () => {
           if (maxSize > img.size) {
             Newimg = [...Newimg, img];
             setImages([...images, ...Newimg]);
-            console.log(img.size);
-            console.log(maxSize <= img.size);
           } else {
-            setFileName(
-              `the file is ${parseInt(
+            setError(
+              `${img.name} is ${parseInt(
                 img.size / 1024 / 1024
               )}MB large than max size `
             );
+            setTimeout(() => setError(null), 2000);
           }
+        } else {
+          setError(`${img.name} is invalid`);
+          setTimeout(() => setError(null), 2000);
         }
       });
     }
@@ -99,7 +102,6 @@ const SessionData = () => {
     const onDelete = [...images];
     onDelete.splice(i, 1);
     setImages(onDelete);
-    setErr(false);
     setUploaded(0);
   };
   // handle submit
@@ -107,33 +109,31 @@ const SessionData = () => {
     e.preventDefault();
     setUploading(true);
     const formData = new FormData();
+    let fileDone = new Array();
     for (const file of images) {
       formData.append("file", file);
       setFileName(file.name);
       await axios
-        .post(
-          `${process.env.REACT_APP_API_URL}session-upload
-            `,
-          formData,
-          {
-            onUploadProgress: (e) => {
-              setUploaded(parseInt((e.loaded / e.total) * 100));
-            },
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
+        .post(`${process.env.REACT_APP_API_URL}session-upload`, formData, {
+          onUploadProgress: (e) => {
+            setUploaded(parseInt((e.loaded / e.total) * 100));
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((res) => {
-          setFileName(file.name);
+          fileDone = [...fileDone, images.indexOf(file)];
+          setDone(fileDone);
+          // if all fininsh
           if (images.lastIndexOf(file) + 1 === images.length) {
-            setUploading(false);
             setMsg({
               ...msg,
               active: true,
               text: res.data.message,
               success: true,
             });
+            setUploading(false);
             setTimeout(() => {
               setMsg({
                 ...msg,
@@ -157,6 +157,7 @@ const SessionData = () => {
         <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
           photo session data
         </h2>
+        {err && <span className="text-red-500 text-center"> {err}</span>}
         {/* choose files area */}
         <div
           id="upload-area"
@@ -197,20 +198,17 @@ const SessionData = () => {
                   className="w-full bg-gray-900 text-white py-2 px-3 flex justify-between items-center truncate rounded-lg"
                 >
                   <span className="w-6/12 truncate">{file.name}</span>
-                  <button
-                    className={`${
-                      uploading ? "cursor-not-allowed" : "cursor-pointer"
-                    } `}
-                    onClick={
-                      uploading
-                        ? null
-                        : () => {
-                            HandleDelete(i);
-                          }
-                    }
-                  >
-                    <FaTrash color="red" />
-                  </button>
+                  {uploading ? (
+                    done.includes(i) ? (
+                      <FaCheckCircle className="bg-white text-green-500 rounded-full" />
+                    ) : (
+                      <PulseLoader color="white" size={2} />
+                    )
+                  ) : (
+                    <button onClick={() => HandleDelete(i)}>
+                      <FaTrash color="red" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -225,14 +223,14 @@ const SessionData = () => {
             {fileName && (
               <span className="w-7/12 truncate text-center">{fileName}</span>
             )}
-            {uploaded > 0 && (
+            {uploading && (
               <span
-                perc={`${uploaded - 1}%`}
+                perc={`${uploaded}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded - 1}%` }}
+                  style={{ width: `${uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
@@ -244,7 +242,7 @@ const SessionData = () => {
               </span>
               <button
                 onClick={uploading ? null : UploadFiles}
-                className={`bg-black text-lg text-white py-2 px-3 capitalize ${
+                className={`bg-gray-900 rounded-lg text-lg text-white py-2 px-3 capitalize ${
                   uploading ? "cursor-not-allowed" : "cursor-pointer"
                 }`}
               >
@@ -271,14 +269,18 @@ const MissingPhoto = () => {
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState();
   const [fileName, setFileName] = useState();
+  const [err, setError] = useState();
+  const [done, setDone] = useState([]);
   let Newimg = new Array();
 
   const HandleChange = (e) => {
+    const maxSize = 100 * 1024 * 1024; // 100MB
     if (uploading) {
       return null;
     } else {
+      setError(null);
       setUploaded(false);
-      setUploading(0);
+      setUploading(false);
       setFileName(null);
       const imgFile = Array.from(e.target.files);
       imgFile.map((img) => {
@@ -292,14 +294,27 @@ const MissingPhoto = () => {
           img.type === "image/png" ||
           img.type === "image/webp"
         ) {
-          Newimg = [...Newimg, img];
-          setImages([...images, ...Newimg]);
+          if (maxSize > img.size) {
+            Newimg = [...Newimg, img];
+            setImages([...images, ...Newimg]);
+            console.log(img.size);
+            console.log(maxSize <= img.size);
+          } else {
+            setError(
+              `${img.name} is ${parseInt(
+                img.size / 1024 / 1024
+              )}MB large than max size `
+            );
+            setTimeout(() => setError(null), 2000);
+          }
+        } else {
+          setError(`${img.name} is invalid`);
+          setTimeout(() => setError(null), 2000);
         }
       });
     }
   };
 
-  console.log(images);
   // handle delete file
   const HandleDelete = (i) => {
     const onDelete = [...images];
@@ -307,12 +322,14 @@ const MissingPhoto = () => {
     setImages(onDelete);
     setUploaded(0);
     setFileName(null);
+    setError(null);
   };
   // handle submit
   const UploadFiles = async (e) => {
     e.preventDefault();
     setUploading(true);
     const formData = new FormData();
+    let fileDone = new Array();
     for (const file of images) {
       formData.append("file", file);
       setFileName(file.name);
@@ -326,15 +343,17 @@ const MissingPhoto = () => {
           },
         })
         .then((res) => {
-          setFileName(file.name);
+          fileDone = [...fileDone, images.indexOf(file)];
+          setDone(fileDone);
+          // if all fininsh
           if (images.lastIndexOf(file) + 1 === images.length) {
-            setUploading(false);
             setMsg({
               ...msg,
               active: true,
               text: res.data.message,
               success: true,
             });
+            setUploading(false);
             setTimeout(() => {
               setMsg({
                 ...msg,
@@ -357,6 +376,7 @@ const MissingPhoto = () => {
         <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
           missing photos
         </h2>
+        {err && <span className="text-red-500 text-center"> {err}</span>}
         {/* choose files area */}
         <div
           id="upload-area"
@@ -397,20 +417,17 @@ const MissingPhoto = () => {
                   className="w-full bg-gray-900 text-white py-2 px-3 flex justify-between items-center truncate rounded-lg"
                 >
                   <span className="w-6/12 truncate">{file.name}</span>
-                  <button
-                    className={`${
-                      uploading ? "cursor-not-allowed" : "cursor-pointer"
-                    } `}
-                    onClick={
-                      uploading
-                        ? null
-                        : () => {
-                            HandleDelete(i);
-                          }
-                    }
-                  >
-                    <FaTrash color="red" />
-                  </button>
+                  {uploading ? (
+                    done.includes(i) ? (
+                      <FaCheckCircle className="bg-white text-green-500 rounded-full" />
+                    ) : (
+                      <PulseLoader color="white" size={2} />
+                    )
+                  ) : (
+                    <button onClick={() => HandleDelete(i)}>
+                      <FaTrash color="red" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -425,14 +442,15 @@ const MissingPhoto = () => {
             {fileName && (
               <span className="w-7/12 truncate text-center">{fileName}</span>
             )}
-            {uploaded > 0 && (
+            {uploading && (
               <span
-                perc={`${uploaded - 1}%`}
+                perc={`${uploaded}%`}
+                done={<FaCheckCircle />}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded - 1}%` }}
+                  style={{ width: `${uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
@@ -444,7 +462,7 @@ const MissingPhoto = () => {
               </span>
               <button
                 onClick={uploading ? null : UploadFiles}
-                className={`bg-black text-lg text-white py-2 px-3 capitalize ${
+                className={`bg-gray-900 rounded-lg text-lg text-white py-2 px-3 capitalize ${
                   uploading ? "cursor-not-allowed" : "cursor-pointer"
                 }`}
               >
