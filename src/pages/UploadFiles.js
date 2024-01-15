@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
-import axios, { all } from "axios";
+import axios from "axios";
 import { Message } from "../component/Message";
 import PulseLoader from "react-spinners/PulseLoader";
 import imgae from "../assest/sessionData.webp";
@@ -227,10 +227,10 @@ const SessionData = () => {
               <span
                 perc={`${uploaded}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
-          before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
+          before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded}%` }}
+                  style={{ width: `${uploaded > 1 && uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
@@ -297,8 +297,7 @@ const MissingPhoto = () => {
           if (maxSize > img.size) {
             Newimg = [...Newimg, img];
             setImages([...images, ...Newimg]);
-            console.log(img.size);
-            console.log(maxSize <= img.size);
+          
           } else {
             setError(
               `${img.name} is ${parseInt(
@@ -447,10 +446,10 @@ const MissingPhoto = () => {
                 perc={`${uploaded}%`}
                 done={<FaCheckCircle />}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
-          before:content-[attr(perc)] before:absolute before:-right-10 before:-top-[5px]`}
+          before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
               >
                 <span
-                  style={{ width: `${uploaded}%` }}
+                  style={{ width: `${uploaded > 1 && uploaded}%` }}
                   className={`h-full absolute bg-green-600
                   rounded-xl duration-200 ease-linear `}
                 ></span>
