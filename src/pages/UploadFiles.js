@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCloudUpload } from "react-icons/md";
 import { FaTrash } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
@@ -6,53 +6,58 @@ import axios from "axios";
 import { Message } from "../component/Message";
 import PulseLoader from "react-spinners/PulseLoader";
 import imgae from "../assest/sessionData.webp";
+import { Link, Outlet } from "react-router-dom";
 export const UploadFiles = () => {
   const [uploadType, setUploadType] = useState();
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
 
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
   return (
     <div id="upload-files" className="section-h flex justify-center relative">
       <div
         id="choose-upload-Type"
         className={`${
           uploadType && "hidden"
-        } absolute top-0 w-full h-full flex  bg-white z-50 bg-no-repeat bg-cover bg-center
+        } absolute top-0 w-full h-full flex  bg-white z-10 bg-no-repeat bg-cover bg-center
         before:absolute before:top-0 before:left-0 before:bg-black before:w-full 
         before:h-full before:opacity-70`}
         style={{ backgroundImage: `url(${imgae})` }}
       >
         <div className="sm:text-xl lg:text-3xl w-full h-full sm:flex-col md:flex-row flex justify-between items-center z-20">
-          <button
-            onClick={() => setUploadType("SessionData")}
-            className="SessionData sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full"
+          <Link
+            to={"session-data"}
+            className="SessionData sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full flex justify-center items-center"
           >
             <h2 className=" capitalize font-light text-white ">
               photo session data
             </h2>
-          </button>
+          </Link>
           <span
             className={`sm:w-[97%] sm:h-1 md:w-1 md:h-[97%] rounded-xl bg-color1`}
           ></span>
-          <button
-            onClick={() => setUploadType("MissingPhoto")}
-            className="MissingPhoto sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full"
+          <Link
+            to={"missing-photo"}
+            className="MissingPhoto sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full flex justify-center items-center"
           >
             <h2 className=" capitalize font-light text-white ">
               Missing Photo
             </h2>
-          </button>
+          </Link>
         </div>
       </div>
-      <div className="container justify-between items-start flex flex-row-reverse">
-        <div className="flex w-full h-full justify-center ">
-          {uploadType === "MissingPhoto" && <MissingPhoto />}
-          {uploadType === "SessionData" && <SessionData />}
-        </div>
-      </div>
+      <Outlet />
     </div>
   );
 };
 
-const SessionData = () => {
+export const SessionData = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
   const [uploading, setUploading] = useState(false);
@@ -67,7 +72,7 @@ const SessionData = () => {
     if (uploading) {
       return null;
     } else {
-      setUploaded(false);
+      setUploaded(0);
       setUploading(false);
       setFileName(null);
       const imgFile = Array.from(e.target.files);
@@ -133,7 +138,6 @@ const SessionData = () => {
               text: res.data.message,
               success: true,
             });
-            setUploading(false);
             setTimeout(() => {
               setMsg({
                 ...msg,
@@ -141,8 +145,9 @@ const SessionData = () => {
                 text: res.data.message,
                 success: true,
               });
-              window.location.reload();
-            }, 2000);
+              setImages([]);
+              setUploading(false);
+            }, 1000);
           }
         })
         .catch(() => console.log("Error"))
@@ -151,9 +156,9 @@ const SessionData = () => {
   };
 
   return (
-    <>
+    <div className="w-full z-20 flex justify-center items-center bg-white relative">
       <Message active={msg.active} text={msg.text} success={msg.success} />
-      <div className="container flex flex-col items-center py-5 h-full gap-5 sm:w-full lg:w-8/12">
+      <div className="container flex flex-col items-center py-5 h-full gap-5  sm:w-full lg:w-8/12">
         <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
           photo session data
         </h2>
@@ -225,7 +230,7 @@ const SessionData = () => {
             )}
             {uploading && (
               <span
-                perc={`${uploaded > 1 && uploaded}%`}
+                perc={`${uploaded}%`}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
               >
@@ -259,11 +264,11 @@ const SessionData = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
-const MissingPhoto = () => {
+export const MissingPhoto = () => {
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({ active: false, text: "", success: "" });
   const [uploading, setUploading] = useState(false);
@@ -279,7 +284,7 @@ const MissingPhoto = () => {
       return null;
     } else {
       setError(null);
-      setUploaded(false);
+      setUploaded(0);
       setUploading(false);
       setFileName(null);
       const imgFile = Array.from(e.target.files);
@@ -351,7 +356,6 @@ const MissingPhoto = () => {
               text: res.data.message,
               success: true,
             });
-            setUploading(false);
             setTimeout(() => {
               setMsg({
                 ...msg,
@@ -359,7 +363,8 @@ const MissingPhoto = () => {
                 text: res.data.message,
                 success: true,
               });
-              window.location.reload();
+              setImages([]);
+              setUploading(false);
             }, 2000);
           }
         })
@@ -368,7 +373,7 @@ const MissingPhoto = () => {
     }
   };
   return (
-    <>
+    <div className="w-full z-20 flex justify-center items-center bg-white relative">
       <Message active={msg.active} text={msg.text} success={msg.success} />
       <div className="container flex flex-col items-center py-5 h-full gap-5 sm:w-full lg:w-8/12">
         <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
@@ -442,7 +447,7 @@ const MissingPhoto = () => {
             )}
             {uploading && (
               <span
-                perc={`${uploaded > 1 && uploaded}%`}
+                perc={`${uploaded}%`}
                 done={<FaCheckCircle />}
                 className={`w-10/12 h-3 bg-gray-200 relative rounded-xl 
           before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]`}
@@ -477,6 +482,6 @@ const MissingPhoto = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };

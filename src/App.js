@@ -10,7 +10,7 @@ import { UserProjects } from "./pages/UserProjects";
 import { NotFound } from "./component/NotFound";
 import { ResetPass, Verify } from "./pages/Verify";
 import { Projects } from "./pages/Projects";
-import { UploadFiles } from "./pages/UploadFiles";
+import { MissingPhoto, SessionData, UploadFiles } from "./pages/UploadFiles";
 import { useCookies } from "react-cookie";
 import cookie from "react-cookies";
 
@@ -59,7 +59,10 @@ function App() {
             <Route path={"/" || "/:id"} element={<Login />} />
             <Route path={"/:id"} element={<Login />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/upload-files" element={<UploadFiles />} />
+            <Route path="/upload-files" element={<UploadFiles />}>
+              <Route path="missing-photo" element={<MissingPhoto />} />
+              <Route path="session-data" element={<SessionData />} />
+            </Route>
             <Route path={`/${userID}/dashboard`} element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
               <Route path="edit-user" element={<EditUser />} />
