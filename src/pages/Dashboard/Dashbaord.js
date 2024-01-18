@@ -22,7 +22,7 @@ export const Dashbaord = () => {
   // get all users
   const GetUsers = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API_URL}/user`)
+      .get(`${process.env.REACT_APP_API_URL}user`)
       .then((res) => setUsers(res.data))
       .catch((err) => console.log(err));
   };
