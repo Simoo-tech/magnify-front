@@ -65,7 +65,7 @@ function App() {
             </Route>
             <Route path={`/${userID}/dashboard`} element={<Dashbaord />}>
               <Route path="create-user" element={<CreateUser />} />
-              <Route path="edit-user" element={<EditUser />} />
+              <Route path=":id/edit-user" element={<EditUser />} />
             </Route>
             <Route
               path={`/create-password/${verify_email}`}

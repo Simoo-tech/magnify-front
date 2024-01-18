@@ -127,7 +127,6 @@ const Form = ({ lang, setCookies, QREmail }) => {
     }
     setError(null);
   };
-
   // handle submit
   const HandleSubmit = async (e) => {
     e.preventDefault();
