@@ -3,7 +3,7 @@ import mainlogo from "../assest/logo/mainLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
-import { LanguageCon } from "../Context";
+import { LanguageCon, TimeSpent } from "../Context";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
@@ -105,10 +105,10 @@ export const Login = () => {
     </section>
   );
 };
-
 const Form = ({ lang, setCookies, QREmail }) => {
+  // login by QR
   const [authData, setAuthData] = useState(QREmail ? { email: QREmail } : {});
-  //
+  // verify email
   const verify_email = window.localStorage.getItem("verify-email");
   // error msg
   const [error, setError] = useState();
@@ -128,10 +128,10 @@ const Form = ({ lang, setCookies, QREmail }) => {
     setError(null);
   };
   // handle submit
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     await axios
       .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
       .then((res) => {
@@ -140,6 +140,7 @@ const Form = ({ lang, setCookies, QREmail }) => {
           secure: true,
           sameSite: "none",
         });
+
         // redirect to path
         const userID = uuidv4(res.data._id);
         window.localStorage.setItem("userID", userID);

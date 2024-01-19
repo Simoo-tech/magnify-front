@@ -16,6 +16,7 @@ import { QR } from "../../component/Qr";
 import { DeleteMsg } from "../../component/DeleteMsg";
 
 export const Dashbaord = () => {
+  
   const [users, setUsers] = useState([]);
   const [showMsg, setShowMsg] = useState(false);
   const [deleteUser, setDeleteUser] = useState();
