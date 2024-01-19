@@ -62,7 +62,6 @@ function App() {
     }, 60000);
   };
 
-  console.log(TimeSpendCoun);
 
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
