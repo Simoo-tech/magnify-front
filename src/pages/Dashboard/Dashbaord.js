@@ -26,7 +26,6 @@ export const Dashbaord = () => {
       .then((res) => setUsers(res.data))
       .catch((err) => console.log(err));
   };
-
   const navigate = useNavigate();
   // user cookies
   const [cookies] = useCookies(["user_token"]);
@@ -71,7 +70,8 @@ export const Dashbaord = () => {
             onClick={() => navigate("create-user")}
             className="flex py-2 sm:px-2 md:px-6 rounded-lg items-center gap-2 bg-white "
           >
-            Create new user <AiOutlineUserAdd size={20} />
+            {lang === "ar" ? "انشاء مستخدم" : "Create new user"}
+            <AiOutlineUserAdd size={20} />
           </button>
         </div>
         <div className="w-full h-full overflow-scroll">
@@ -79,16 +79,16 @@ export const Dashbaord = () => {
             <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
               <tr>
                 <th className="sm:text-sm lg:text-lg text-start py-3 px-2 w-2/12 font-normal">
-                  Name
+                  {lang === "ar" ? "الاسم" : "Name"}
                 </th>
                 <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-3/12 font-normal">
-                  Email
+                  {lang === "ar" ? "الايميل" : "Email"}
                 </th>
                 <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-2/12 font-normal">
-                  Phone No
+                  {lang === "ar" ? "رقم الهاتف" : "  Phone No"}
                 </th>
                 <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-1/12 font-normal">
-                  No of projects:
+                  {lang === "ar" ? "عدد المشاريع" : "No of projects"}
                 </th>
                 <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-1/12 font-normal"></th>
               </tr>
@@ -128,7 +128,7 @@ export const Dashbaord = () => {
                         size={23}
                         color="blue"
                       />
-                      Edit
+                      {lang === "ar" ? "تعديل" : "Edit"}
                     </span>
                     <span className="text-center text-xs flex flex-col items-center text-gray-600">
                       <button
@@ -139,7 +139,7 @@ export const Dashbaord = () => {
                       >
                         <MdDelete id="delete-user" size={23} color="red" />
                       </button>
-                      Delete
+                      {lang === "ar" ? "حذف" : "Delete"}
                     </span>
                   </td>
                 </tr>
@@ -188,7 +188,7 @@ export const EditUser = () => {
 };
 
 // create new user
-export const CreateUser = ({ userData, setUserData }) => {
+export const CreateUser = ({ userData }) => {
   const [data, setData] = useState({});
   const [projectInfo, setProjectInfo] = useState([]);
   // animation
@@ -201,8 +201,6 @@ export const CreateUser = ({ userData, setUserData }) => {
     }
     setAnimation(true);
   }, [userData]);
-
-  console.log(userData);
 
   // handle message from api
   const [msg, setMsg] = useState({});
@@ -235,7 +233,7 @@ export const CreateUser = ({ userData, setUserData }) => {
           setMsg({});
         }, 2000);
         setTimeout(() => {
-          window.location.reload();
+          window.location.assign("/");
         }, 2000);
       })
       .catch((err) =>
@@ -283,8 +281,8 @@ export const CreateUser = ({ userData, setUserData }) => {
           setMsg({});
         }, 2000);
         setTimeout(() => {
-          window.location.reload();
-        }, 2500);
+          window.location.assign("/");
+        }, 2000);
       })
       .catch((err) =>
         setMsg({
@@ -496,7 +494,6 @@ export const CreateUser = ({ userData, setUserData }) => {
                     } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
                   />
-
                   <input
                     value={project.projectName}
                     onChange={(e) => {
@@ -637,17 +634,15 @@ export const CreateUser = ({ userData, setUserData }) => {
                 focus-visible:border-black border-2 h-fit p-2 `}
                   />
                 </div>
-                {projectInfo.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => ProjectRem(i)}
-                    className={`absolute ${
-                      lang === "ar" ? "left-2" : "right-2"
-                    }  top-2 text-white bg-red-500 py-2 px-2 rounded-xl`}
-                  >
-                    <FaTrash />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => ProjectRem(i)}
+                  className={`absolute ${
+                    lang === "ar" ? "left-2" : "right-2"
+                  }  top-2 text-white bg-red-500 py-2 px-2 rounded-xl`}
+                >
+                  <FaTrash />
+                </button>
               </div>
             ))}
           </div>

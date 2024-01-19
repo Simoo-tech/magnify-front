@@ -28,7 +28,7 @@ export const Header = () => {
   // download qr code
 
   return (
-    <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative border-b-2 border-darkGrey">
+    <div className="logo py-2 w-full flex justify-center h-fit bg-color1 relative">
       <div className="container flex justify-between items-center w-full">
         <Link to={"/"}>
           <img src={sublogo} alt="magnify-logo" className="w-[30px]" />
