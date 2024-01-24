@@ -18,27 +18,44 @@ export const Header = () => {
   const Logout = async (e) => {
     e.preventDefault();
     // user session  time
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/report`, {
-        userName: user.fname + " " + user.lname,
-        email: user.email,
-        data: year,
-        timeSpent:
-          TimeSpendCoun.hour + " Hours" + " " + TimeSpendCoun.min + " Minutes",
-      })
-      .then((res) => {
-        cookie.remove("user_token", {
-          path: "/",
-          secure: true,
-        });
-        if (cookies.user_token.verified) {
-          window.localStorage.removeItem("verify-email");
-        }
-        window.localStorage.removeItem("userID");
-        window.location.assign("/");
-        window.localStorage.removeItem("session_time");
-      })
-      .catch((err) => console.log(err));
+    if (TimeSpendCoun.min > 1) {
+      await axios
+        .post(`${process.env.REACT_APP_API_URL}auth/report`, {
+          userName: user.fname + " " + user.lname,
+          email: user.email,
+          data: year,
+          timeSpent:
+            TimeSpendCoun.hour +
+            " Hours" +
+            " " +
+            TimeSpendCoun.min +
+            " Minutes",
+        })
+        .then((res) => {
+          cookie.remove("user_token", {
+            path: "/",
+            secure: true,
+          });
+          if (cookies.user_token.verified) {
+            window.localStorage.removeItem("verify-email");
+          }
+          window.localStorage.removeItem("userID");
+          window.location.assign("/");
+          window.localStorage.removeItem("session_time");
+        })
+        .catch((err) => console.log(err));
+    } else {
+      cookie.remove("user_token", {
+        path: "/",
+        secure: true,
+      });
+      if (cookies.user_token.verified) {
+        window.localStorage.removeItem("verify-email");
+      }
+      window.localStorage.removeItem("userID");
+      window.location.assign("/");
+      window.localStorage.removeItem("session_time");
+    }
   };
 
   return (
