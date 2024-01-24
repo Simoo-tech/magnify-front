@@ -3,7 +3,7 @@ import mainlogo from "../assest/logo/mainLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
-import { LanguageCon, TimeSpent } from "../Context";
+import { LanguageCon } from "../Context";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";

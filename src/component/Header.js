@@ -19,7 +19,7 @@ export const Header = () => {
     e.preventDefault();
     // user session  time
     await axios
-      .post(`http://localhost:8000/api/auth/report`, {
+      .post(`${process.env.REACT_APP_API_URL}auth/report`, {
         userName: user.fname + " " + user.lname,
         email: user.email,
         data: year,
