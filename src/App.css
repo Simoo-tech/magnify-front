@@ -1,7 +1,7 @@
 .section-h,
 .admin-dashboard,
 .not-found {
-  height: calc(100vh - 65px);
+  height: calc(100vh - 58px);
 }
 
 .react-tel-input .selected-flag::before {
@@ -14,4 +14,3 @@
   border-color: #cc8c3b !important;
   box-shadow: none !important;
 }
-

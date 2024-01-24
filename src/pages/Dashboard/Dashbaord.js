@@ -14,12 +14,14 @@ import { FaTrash } from "react-icons/fa6";
 import "../../App.css";
 import { QR } from "../../component/Qr";
 import { DeleteMsg } from "../../component/DeleteMsg";
+import { Header } from "../../component/Header";
 
 export const Dashbaord = () => {
-  
   const [users, setUsers] = useState([]);
   const [showMsg, setShowMsg] = useState(false);
   const [deleteUser, setDeleteUser] = useState();
+  // context
+  const { lang } = useContext(LanguageCon);
   // get all users
   const GetUsers = async () => {
     await axios
@@ -27,12 +29,16 @@ export const Dashbaord = () => {
       .then((res) => setUsers(res.data))
       .catch((err) => console.log(err));
   };
+
   const navigate = useNavigate();
+
   // user cookies
   const [cookies] = useCookies(["user_token"]);
+
   // get and check user id
   const userID = window.localStorage.getItem("userID");
   const user = cookies.user_token;
+
   // check if admin
   useEffect(() => {
     if (!user || !user.isAdmin) {
@@ -47,111 +53,137 @@ export const Dashbaord = () => {
   const DeleteUserMsg = () => {
     setShowMsg(!showMsg);
   };
-  // context
-  const { lang } = useContext(LanguageCon);
+  // download report
+  // const DownloadReport = async (e) => {
+  //   e.preventDefault();
+  //   await axios
+  //     .get("http://localhost:8000/api/report")
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
+
   return (
-    <div className="section-h relative  py-5 flex justify-center bg-color1 ">
+    <>
+      <Header />
       <DeleteMsg
         showMsg={showMsg}
         setShowMsg={setShowMsg}
         message={`${user.fname}`}
         user={deleteUser}
       />
-      <div className="container h-full flex flex-col gap-5 items-center">
-        <div className="welcome flex justify-between w-full items-center">
-          <h3
-            className={`${
-              lang === "ar" && "flex-row-reverse"
-            } flex sm:text-lg md:text-3xl text-white capitalize gap-2 font-bold`}
-          >
-            {lang === "ar" ? " ,مرحبا" : "Hello, "}
-            <span>{user.fname}</span>
-          </h3>
-          <button
-            onClick={() => navigate("create-user")}
-            className="flex py-2 sm:px-2 md:px-6 rounded-lg items-center gap-2 bg-white "
-          >
-            {lang === "ar" ? "انشاء مستخدم" : "Create new user"}
-            <AiOutlineUserAdd size={20} />
-          </button>
-        </div>
-        <div className="w-full h-full overflow-scroll">
-          <table id="users" className="w-full h-fit ">
-            <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
-              <tr>
-                <th className="sm:text-sm lg:text-lg text-start py-3 px-2 w-2/12 font-normal">
-                  {lang === "ar" ? "الاسم" : "Name"}
-                </th>
-                <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-3/12 font-normal">
-                  {lang === "ar" ? "الايميل" : "Email"}
-                </th>
-                <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-2/12 font-normal">
-                  {lang === "ar" ? "رقم الهاتف" : "  Phone No"}
-                </th>
-                <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-1/12 font-normal">
-                  {lang === "ar" ? "عدد المشاريع" : "No of projects"}
-                </th>
-                <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-1/12 font-normal"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr className="bg-white border-2 " key={user._id}>
-                  <td
-                    className="sm:text-sm lg:text-lg border-2 py-2 px-2 capitalize"
-                    id="name"
-                  >
-                    {user.fname + " " + user.lname}
-                  </td>
-                  <td
-                    className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
-                    id="email"
-                  >
-                    {user.email}
-                  </td>
-                  <td
-                    className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
-                    id="email"
-                  >
-                    +{user.phone}
-                  </td>
-                  <td
-                    className="sm:text-sm lg:text-lg border-2 py-2 px-2 text-center"
-                    id="projects"
-                  >
-                    {user.projectInfo.length}
-                  </td>
-                  <td className="py-2 px-3 flex items-center gap-8 justify-center">
-                    <span className="text-center text-xs flex flex-col items-center text-gray-600">
-                      <MdEdit
-                        onClick={() => navigate(`${user._id}/edit-user`)}
-                        id="edit-user"
-                        size={23}
-                        color="blue"
-                      />
-                      {lang === "ar" ? "تعديل" : "Edit"}
-                    </span>
-                    <span className="text-center text-xs flex flex-col items-center text-gray-600">
-                      <button
-                        onClick={() => {
-                          DeleteUserMsg(user);
-                          setDeleteUser(user._id);
-                        }}
-                      >
-                        <MdDelete id="delete-user" size={23} color="red" />
-                      </button>
-                      {lang === "ar" ? "حذف" : "Delete"}
-                    </span>
-                  </td>
+      <div className="section-h container max-w-[97%] relative w-full py-5 flex justify-center">
+        <div className=" w-full h-full flex flex-col gap-5 items-center">
+          <div className="tools flex justify-between w-full items-center">
+            <h3
+              id="user-welcome"
+              className={`${
+                lang === "ar" && "flex-row-reverse"
+              } flex sm:text-lg md:text-3xl text-white capitalize gap-2 font-bold`}
+            >
+              {lang === "ar" ? " ,مرحبا" : "Hello, "}
+              <span>{user.fname}</span>
+            </h3>
+            <div className="flex gap-3 items-center">
+              {/* <button
+        id="download-report"
+        onClick={DownloadReport}
+        className={`${
+          lang === "ar" && "flex-row-reverse"
+        } flex py-2 sm:px-2 md:px-6 rounded-lg items-center gap-2 bg-white `}
+      >
+        {lang === "ar" ? "تحميل تقرير" : "Download Report"}
+        <TbReportSearch size={20} />
+      </button> */}
+              <button
+                id="create-user"
+                onClick={() => navigate("create-user")}
+                className={`${
+                  lang === "ar" && "flex-row-reverse"
+                } flex py-2 sm:px-2 md:px-6 rounded-lg items-center gap-2 bg-white `}
+              >
+                {lang === "ar" ? "انشاء مستخدم" : "Create new user"}
+                <AiOutlineUserAdd size={20} />
+              </button>
+            </div>
+          </div>
+          <div id="users-table" className=" w-full h-full overflow-scroll">
+            <table id="users" className="w-full h-fit ">
+              <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
+                <tr>
+                  <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-2/12 font-normal">
+                    {lang === "ar" ? "الاسم" : "Name"}
+                  </th>
+                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-3/12 font-normal">
+                    {lang === "ar" ? "الايميل" : "Email"}
+                  </th>
+                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-2/12 font-normal">
+                    {lang === "ar" ? "رقم الهاتف" : "  Phone No"}
+                  </th>
+                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-1/12 font-normal">
+                    {lang === "ar" ? "عدد المشاريع" : "No of projects"}
+                  </th>
+                  <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-1/12 font-normal"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr className="bg-white border-2 " key={user._id}>
+                    <td
+                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 capitalize"
+                      id="name"
+                    >
+                      {user.fname + " " + user.lname}
+                    </td>
+                    <td
+                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
+                      id="email"
+                    >
+                      {user.email}
+                    </td>
+                    <td
+                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
+                      id="email"
+                    >
+                      +{user.phone}
+                    </td>
+                    <td
+                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 text-center"
+                      id="projects"
+                    >
+                      {user.projectInfo.length}
+                    </td>
+                    <td className="py-2 px-3 flex items-center gap-8 justify-center">
+                      <span className="text-center text-xs flex flex-col items-center text-gray-600">
+                        <MdEdit
+                          onClick={() => navigate(`${user._id}/edit-user`)}
+                          id="edit-user"
+                          size={23}
+                          color="blue"
+                        />
+                        {lang === "ar" ? "تعديل" : "Edit"}
+                      </span>
+                      <span className="text-center text-xs flex flex-col items-center text-gray-600">
+                        <button
+                          onClick={() => {
+                            DeleteUserMsg(user);
+                            setDeleteUser(user._id);
+                          }}
+                        >
+                          <MdDelete id="delete-user" size={23} color="red" />
+                        </button>
+                        {lang === "ar" ? "حذف" : "Delete"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Outlet />
         </div>
-        <Outlet />
+        {user && <QR />}
       </div>
-      {user && <QR />}
-    </div>
+    </>
   );
 };
 
@@ -166,24 +198,17 @@ export const EditUser = () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}user/${id}`, { id: id }, header)
       .then((res) => setUserData(res.data))
-      .catch((err) => setError(err.response.data.message));
+      .catch((err) => console.log(err.response.data.message));
   };
   useEffect(() => {
     GetUser();
   }, []);
 
-  // error
-  const [error, setError] = useState();
-
   return (
     <div
       className={`w-full bg-color1 absolute flex pt-5 justify-center items-center left-0 bg-cover sm:flex-col h-full top-0`}
     >
-      <CreateUser
-        userData={userData}
-        setUserData={setUserData}
-        setError={setError}
-      />
+      <CreateUser userData={userData} setUserData={setUserData} />
     </div>
   );
 };
@@ -338,7 +363,7 @@ export const CreateUser = ({ userData }) => {
   const [loading, setLoading] = useState(false);
   return (
     <div
-      className={`create-user w-full bg-color1 absolute flex justify-center items-center pt-5 
+      className={`create-user w-full absolute flex justify-center items-center pt-5 
       sm:flex-col h-full   ${
         animation ? "top-0" : "top-96"
       } left-0 duration-200 ease-linear bg-cover before:bg-color1 bg-center
@@ -354,7 +379,7 @@ export const CreateUser = ({ userData }) => {
           <msg.icon /> {msg.text}
         </span>
       )}
-      <div className="container flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
+      <div className="w-full flex flex-col gap-10 items-center overflow-scroll h-full py-5 z-30">
         <p className="sm:text-2xl lg:text-3xl capitalize text-center font-bold text-white">
           {userData
             ? lang === "ar"
@@ -380,63 +405,108 @@ export const CreateUser = ({ userData }) => {
               {lang === "ar" ? "معلومات المستخدم" : "user information"}
             </p>
             {/* inputs container */}
-            <input
-              id="userName"
-              name="userName"
-              type="text"
-              placeholder={lang === "ar" ? "اسم المستخدم" : "User name"}
-              className={` rounded-lg ${
-                lang === "ar" ? "text-end" : "text-start"
-              }  sm:text-base lg:text-lg w-full p-2 outline-none focus-visible:border-black border-2
-                `}
-              value={data.userName}
-              onChange={HandleChangeUser}
-            />
-            <div
-              className={`${
-                lang === "ar" ? "flex-row-reverse" : "flex-row"
-              } input-group-name w-full flex gap-2 sm:flex-wrap md:flex-nowrap `}
-            >
+            <div id="userName" className="flex flex-col">
+              <label
+                htmlFor="userName"
+                className={`${
+                  lang === "ar" && "text-right"
+                } text-lg text-white capitalize `}
+              >
+                {lang === "ar" ? "اسم المستخدم" : "user name"}
+              </label>
               <input
-                id="first-name"
-                name="fname"
+                id="userName"
+                name="userName"
                 type="text"
-                placeholder={lang === "ar" ? "الاسم الاول" : "first name"}
                 className={` rounded-lg ${
                   lang === "ar" ? "text-end" : "text-start"
                 }  sm:text-base lg:text-lg w-full p-2 outline-none focus-visible:border-black border-2
                 `}
-                value={data.fname}
+                value={data.userName}
                 onChange={HandleChangeUser}
-              />
-              <input
-                name="lname"
-                value={data.lname}
-                onChange={HandleChangeUser}
-                type="text"
-                placeholder={lang === "ar" ? "الاسم الاخير" : "last name"}
-                className={`${
-                  lang === "ar" ? "text-end" : "text-start"
-                } rounded-lg w-full sm:text-base lg:text-lg outline-none
-                focus-visible:border-black border-2 h-fit p-2 `}
               />
             </div>
-            <div className="input-group-email flex sm:flex-wrap md:flex-nowrap w-full items-center gap-2">
-              <input
-                name="email"
-                value={data.email}
-                onChange={(e) => {
-                  const email = e.target.value.toLocaleLowerCase();
-                  setData({ ...data, email });
-                }}
-                type="email"
-                placeholder={lang === "ar" ? "الايميل " : "email"}
-                className={`${
-                  lang === "ar" ? "text-end" : "text-start"
-                } rounded-lg w-full sm:text-base lg:text-lg outline-none
+            <div
+              className={`${
+                lang === "ar" ? "flex-row-reverse" : "flex-row"
+              } input-group w-full flex gap-2 sm:flex-wrap md:flex-nowrap `}
+            >
+              <div id="first-name" className="w-full flex flex-col">
+                <label
+                  htmlFor="fname"
+                  className={`${
+                    lang === "ar" && "text-right"
+                  } text-lg text-white capitalize `}
+                >
+                  {lang === "ar" ? "الاسم الاول" : "first name"}
+                </label>
+                <input
+                  id="first-name"
+                  name="fname"
+                  type="text"
+                  className={` rounded-lg ${
+                    lang === "ar" ? "text-end" : "text-start"
+                  }  sm:text-base lg:text-lg  p-2 outline-none focus-visible:border-black border-2
+                `}
+                  value={data.fname}
+                  onChange={HandleChangeUser}
+                />
+              </div>
+              <div id="last-name " className="w-full flex flex-col">
+                <label
+                  htmlFor="lname"
+                  className={`${
+                    lang === "ar" && "text-right"
+                  } text-lg text-white capitalize `}
+                >
+                  {lang === "ar" ? "الاسم الاخير" : "last name"}
+                </label>
+                <input
+                  name="lname"
+                  value={data.lname}
+                  onChange={HandleChangeUser}
+                  type="text"
+                  className={`${
+                    lang === "ar" ? "text-end" : "text-start"
+                  } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                focus-visible:border-black border-2 h-fit p-2 `}
+                />
+              </div>
+            </div>
+            <div className="input-group flex sm:flex-wrap md:flex-nowrap w-full items-center gap-2">
+              <div id="email" className="w-full flex flex-col">
+                <label
+                  htmlFor="email"
+                  className={`${
+                    lang === "ar" && "text-right"
+                  } text-lg text-white capitalize `}
+                >
+                  {lang === "ar" ? "الايميل " : "email"}
+                </label>
+                <input
+                  name="email"
+                  value={data.email}
+                  onChange={(e) => {
+                    if (!userData) {
+                      const email = e.target.value.toLocaleLowerCase();
+                      setData({ ...data, email });
+                    }
+                  }}
+                  type="email"
+                  className={`${
+                    lang === "ar" ? "text-end" : "text-start"
+                  } rounded-lg  sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2 lowercase`}
-              />
-              <div className="w-full">
+                />
+              </div>
+              <div id="phone-no" className="w-full flex flex-col">
+                <label
+                  className={`${
+                    lang === "ar" && "text-right"
+                  } text-lg text-white capitalize w-full `}
+                >
+                  {lang === "ar" ? "رقم الهالتف" : "Phone Number"}
+                </label>
                 <PhoneInput
                   inputStyle={{
                     borderRadius: "10px",
@@ -447,7 +517,7 @@ export const CreateUser = ({ userData }) => {
                   }}
                   buttonStyle={{ outline: "none", border: "none" }}
                   countryCodeEditable={false}
-                  country={"eg"}
+                  country={"jo"}
                   onChange={(e) => {
                     setData({ ...data, phone: e });
                   }}
@@ -473,152 +543,219 @@ export const CreateUser = ({ userData }) => {
                 className="project-info flex flex-col gap-3 w-full border-2 p-2 relative"
               >
                 <p
-                  className={`text-xl flex bg-darkGrey text-white w-fit py-2 px-6 rounded-lg drop-shadow-2xl capitalize ${
-                    lang === "ar" && "self-end"
-                  }`}
+                  className={`text-xl flex bg-darkGrey text-white w-fit py-1 px-4 rounded-lg
+                  capitalize font-light ${lang === "ar" && "self-end"}`}
                 >
                   {lang === "ar" ? "مشروع" : "project"} {i + 1}
                 </p>
                 <div className="input-group w-full flex gap-2 sm:flex-wrap md:flex-nowrap">
-                  <input
-                    name="projectNo"
-                    type="number"
-                    value={project.projectNo}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    placeholder={
-                      lang === "ar" ? "رقم المشروع" : "project number"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                  <div id="project-number" className="flex w-full flex-col">
+                    <label
+                      htmlFor="userName"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "رقم المشروع" : "project number"}
+                    </label>
+                    <input
+                      name="projectNo"
+                      type="number"
+                      value={project.projectNo}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
-                  <input
-                    value={project.projectName}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="projectName"
-                    type="text"
-                    placeholder={
-                      lang === "ar" ? "اسم المشروع " : "project name"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                    />
+                  </div>
+                  <div id="project-name" className="flex w-full flex-col">
+                    <label
+                      htmlFor="userName"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "اسم المشروع " : "project name"}
+                    </label>
+                    <input
+                      value={project.projectName}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="projectName"
+                      type="text"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
+                    />
+                  </div>
                 </div>
                 <div className="input-group w-full flex gap-2 sm:flex-wrap md:flex-nowrap">
-                  <input
-                    value={project.projectLoc}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="projectLoc"
-                    type="text"
-                    placeholder={
-                      lang === "ar" ? "موقع المشروع" : "project location"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                  <div id="project-location" className="flex w-full flex-col">
+                    <label
+                      htmlFor="projectLoc"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "موقع المشروع" : "project location"}
+                    </label>
+                    <input
+                      value={project.projectLoc}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="projectLoc"
+                      type="text"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
-                  <select
-                    name="projectType"
-                    value={project.projectType}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    placeholder={lang === "ar" ? "نوع المشروع" : "project type"}
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
-                focus-visible:border-black border-2 h-fit p-2 text-black`}
-                  >
-                    <option value="">
+                    />
+                  </div>
+                  <div id="project-type" className="flex w-full flex-col">
+                    <label
+                      htmlFor="projectType"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize  `}
+                    >
                       {lang === "ar" ? "نوع المشروع" : "project type"}
-                    </option>
-                    <option value="commercial">
-                      {lang === "ar" ? "تجاري" : "Commercial"}
-                    </option>
-                    <option value="residential">
-                      {lang === "ar" ? "سكني" : "Residential"}
-                    </option>
-                    <option value="industrial">
-                      {lang === "ar" ? "صناعي " : "Industrial"}
-                    </option>
-                    <option value="infrastructure">
-                      {lang === "ar" ? " بنية تحتية" : "Infrastructure"}
-                    </option>
-                  </select>
+                    </label>
+                    <select
+                      name="projectType"
+                      value={project.projectType}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                      border-2 h-fit p-2 `}
+                    >
+                      <option value="">
+                        {lang === "ar" ? "...اختر النوع" : "select type..."}
+                      </option>
+                      <option value="commercial">
+                        {lang === "ar" ? "تجاري" : "Commercial"}
+                      </option>
+                      <option value="residential">
+                        {lang === "ar" ? "سكني" : "Residential"}
+                      </option>
+                      <option value="industrial">
+                        {lang === "ar" ? "صناعي " : "Industrial"}
+                      </option>
+                      <option value="infrastructure">
+                        {lang === "ar" ? " بنية تحتية" : "Infrastructure"}
+                      </option>
+                    </select>
+                  </div>
                 </div>
                 <div className="input-group w-full flex gap-2 sm:flex-wrap md:flex-nowrap">
-                  <input
-                    value={project.projectArea}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="projectArea"
-                    type="text"
-                    placeholder={
-                      lang === "ar" ? "منطقة المشروع" : "project area"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                  <div id="project-area" className="flex w-full flex-col">
+                    <label
+                      htmlFor="projectArea"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "منطقة المشروع" : "project area"}
+                    </label>
+                    <input
+                      value={project.projectArea}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="projectArea"
+                      type="text"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
-                  <input
-                    value={project.projectHei}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="projectHei"
-                    type="number"
-                    placeholder={
-                      lang === "ar" ? "ارتفاع المشروع" : "project height"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg w-full sm:text-base lg:text-lg outline-none
+                    />
+                  </div>
+                  <div id="project-height" className="flex w-full flex-col">
+                    <label
+                      htmlFor="projectHei"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "ارتفاع المشروع" : "project height"}
+                    </label>
+                    <input
+                      value={project.projectHei}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="projectHei"
+                      type="number"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
+                    />
+                  </div>
                 </div>
                 <div className="input-group w-full sm:flex-wrap md:flex-nowrap flex gap-2">
-                  <input
-                    value={project.consultant}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="consultant"
-                    type="text"
-                    placeholder={lang === "ar" ? "مستشار" : "Consultant"}
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg sm:w-full lg:w-full sm:text-base lg:text-lg outline-none
+                  <div id="consultant" className="flex w-full flex-col">
+                    <label
+                      htmlFor="consultant"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "مستشار" : "Consultant"}
+                    </label>
+                    <input
+                      value={project.consultant}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="consultant"
+                      type="text"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg sm:w-full lg:w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
-                  <input
-                    value={project.projectDura}
-                    onChange={(e) => {
-                      HandleChangeProject(e, i);
-                    }}
-                    name="projectDura"
-                    type="number"
-                    placeholder={
-                      lang === "ar" ? "مدة المشروع" : "project duration"
-                    }
-                    className={`${
-                      lang === "ar" ? "text-end" : "text-start"
-                    } rounded-lg sm:w-full lg:w-full sm:text-base lg:text-lg outline-none
+                    />
+                  </div>
+                  <div id="project-duration" className="flex w-full flex-col">
+                    <label
+                      htmlFor="projectDura"
+                      className={`${
+                        lang === "ar" && "text-right"
+                      } text-lg text-white capitalize `}
+                    >
+                      {lang === "ar" ? "مدة المشروع" : "project duration"}
+                    </label>
+                    <input
+                      value={project.projectDura}
+                      onChange={(e) => {
+                        HandleChangeProject(e, i);
+                      }}
+                      name="projectDura"
+                      type="number"
+                      className={`${
+                        lang === "ar" ? "text-end" : "text-start"
+                      } rounded-lg sm:w-full lg:w-full sm:text-base lg:text-lg outline-none
                 focus-visible:border-black border-2 h-fit p-2`}
-                  />
+                    />
+                  </div>
                 </div>
-                <div className={`input-group`}>
+                <div id="project-folder-name" className="flex w-full flex-col">
+                  <label
+                    htmlFor="folderName"
+                    className={`${
+                      lang === "ar" && "text-right"
+                    } text-lg text-white capitalize `}
+                  >
+                    {lang === "ar" ? "ملف المشروع " : "project folder"}
+                  </label>
                   <input
                     type="text"
                     name="folderName"
@@ -626,9 +763,6 @@ export const CreateUser = ({ userData }) => {
                     onChange={(e) => {
                       HandleChangeProject(e, i);
                     }}
-                    placeholder={
-                      lang === "ar" ? "ملف المشروع " : "project folder"
-                    }
                     className={`${
                       lang === "ar" ? "text-end" : "text-start"
                     } rounded-lg w-full  sm:text-base lg:text-lg outline-none
@@ -651,11 +785,12 @@ export const CreateUser = ({ userData }) => {
             type="button"
             onClick={AddProject}
             className="add-project text-white py-2 px-6 border-2 flex items-center gap-3 rounded-md text-lg 
-          hover:bg-white hover:text-color1 duration-150"
+          hover:bg-white hover:text-color1 duration-150 font-semibold"
           >
             {lang === "ar" ? "اضف مشروع" : "Add Project"}
             <MdAdd />
           </button>
+          <span className="h-[2px] w-10/12 bg-white"></span>
           <button
             id="create-user"
             type="submit"

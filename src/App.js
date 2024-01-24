@@ -3,12 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { LanguageCon, TimeSpent } from "./Context";
 import { useEffect, useState } from "react";
-import { Header } from "./component/Header";
 import { CreatePass } from "./pages/CreatePass";
 import { CreateUser, Dashbaord, EditUser } from "./pages/Dashboard/Dashbaord";
 import { UserProjects } from "./pages/UserProjects";
-import { NotFound } from "./component/NotFound";
-import { ResetPass, Verify } from "./pages/Verify";
+import { ResetPass, Verify } from "./pages/Verify&Reset";
 import { Projects } from "./pages/Projects";
 import { MissingPhoto, SessionData, UploadFiles } from "./pages/UploadFiles";
 import { useCookies } from "react-cookie";
@@ -25,9 +23,9 @@ function App() {
 
   const TimeSpentVal = { TimeSpendCoun, setTimeSpendCoun };
   const LangValue = { lang, setLang };
-  // Session expired
-  const [cookies] = useCookies(["user_token"]);
 
+  // Session timeout
+  const [cookies] = useCookies(["user_token"]);
   const Session = async () => {
     await axios
       .post(`${process.env.REACT_APP_API_URL}auth/login-token-expire`, {
@@ -46,7 +44,7 @@ function App() {
 
   // session Time
   let Newmin;
-  let storeMin = window.localStorage.getItem("session_time_m");
+  let storeMin = window.localStorage.getItem("session_time");
   if (storeMin) {
     Newmin = parseInt(storeMin);
   } else {
@@ -58,10 +56,9 @@ function App() {
       Newmin = Newmin + 1;
       const NewHour = Math.floor(Newmin / 60);
       setTimeSpendCoun({ ...TimeSpendCoun, min: Newmin, hour: NewHour });
-      window.localStorage.setItem("session_time_m", Newmin);
+      window.localStorage.setItem("session_time", Newmin);
     }, 60000);
   };
-
 
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
@@ -80,12 +77,14 @@ function App() {
     <Router>
       <LanguageCon.Provider value={LangValue}>
         <TimeSpent.Provider value={TimeSpentVal}>
-          <div className="App h-screen overflow-hidden relative">
-            <Header />
+          <div
+            className="App h-screen overflow-hidden relative flex bg-color1
+          items-center flex-col"
+          >
             <Routes>
-              <Route path={"/" || "/:id"} element={<Login />} />
+              <Route path={"/"} element={<Login />} />
               <Route path={"/:id"} element={<Login />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path={"*"} element={<Login />} />
               <Route path="/upload-files" element={<UploadFiles />}>
                 <Route path="missing-photo" element={<MissingPhoto />} />
                 <Route path="session-data" element={<SessionData />} />
@@ -102,14 +101,14 @@ function App() {
                 path={`/reset-password/${resetToken}`}
                 element={<CreatePass />}
               />
+              <Route path={`/verify-email/${userID}`} element={<Verify />} />
+              <Route path={`/reset-password`} element={<ResetPass />} />
               <Route
                 path={`/${userID}/tour-projects`}
                 element={<UserProjects />}
               >
                 <Route path=":id" element={<Projects />} />
               </Route>
-              <Route path={`/verify-email/${userID}`} element={<Verify />} />
-              <Route path={`/reset-password`} element={<ResetPass />} />
             </Routes>
           </div>
         </TimeSpent.Provider>

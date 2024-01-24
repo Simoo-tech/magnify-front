@@ -8,6 +8,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { v4 as uuidv4 } from "uuid";
 import { Oval } from "react-loader-spinner";
+import { Header } from "../component/Header";
 export const Login = () => {
   // login user with qr code
   const url = window.location.href.split("/");
@@ -16,9 +17,9 @@ export const Login = () => {
   const [QREmail, setQREmail] = useState(null);
   const LoginWithQR = async () => {
     await axios
-      .post(`${process.env.REACT_APP_API_URL}user`, { _id: id })
+      .get(`${process.env.REACT_APP_API_URL}user/${id}`)
       .then((res) => setQREmail(res.data.email))
-      .catch("");
+      .catch((err) => console.error("not found"));
   };
 
   // handle change language
@@ -33,7 +34,7 @@ export const Login = () => {
     const user = cookie.user_token;
     // see if user is admin
     if (user && !user.verified && !user.passChanged) {
-      window.location.assign(`/verify-email/${userID}`);
+      navigate(`/verify-email/${userID}`);
     } else if (user && user.verified && user.passChanged) {
       if (user.isAdmin && user.verified && user.passChanged) {
         navigate(`/${userID}/dashboard`);
@@ -48,11 +49,13 @@ export const Login = () => {
   }, []);
 
   return (
-    <section
-      id="login-page"
-      className="section-h login bg-color1 w-full flex justify-center pt-5"
-    >
-      <div className="container flex flex-col justify-between">
+    <>
+      <Header />
+      <section
+        id="login-page"
+        className="section-h container login max-w-[97%] flex flex-col justify-between"
+      >
+        {/* login center-body */}
         <div
           className="form-background-image flex sm:h-5/6 lg:h-full justify-between items-center
         sm:flex-col md:flex-row mb-5 sm:gap-3"
@@ -73,6 +76,7 @@ export const Login = () => {
           </div>
           <Form lang={lang} setCookies={setCookies} QREmail={QREmail} />
         </div>
+        {/* bottom links */}
         <div
           id="buttom-links"
           className="links flex items-center w-full h-fit mb-3
@@ -81,28 +85,28 @@ export const Login = () => {
         >
           <Link
             id="about-us"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
             to={"/"}
           >
-            {lang === "en" || lang === null ? "about us " : "عن ماجنيفاي"}
+            {lang === "en" || lang === null ? "about Magnify " : " Magnify عن "}
           </Link>
           <Link
             id="privacy terms"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
             to={"/"}
           >
             {lang === "en" || lang === null ? "privacy terms" : "شروط الخصوصية"}
           </Link>
           <Link
             id="contact us"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white"
+            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
             to={"/"}
           >
             {lang === "en" || lang === null ? "contact us" : "!تواصل معنا "}
           </Link>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 const Form = ({ lang, setCookies, QREmail }) => {
@@ -140,7 +144,6 @@ const Form = ({ lang, setCookies, QREmail }) => {
           secure: true,
           sameSite: "none",
         });
-
         // redirect to path
         const userID = uuidv4(res.data._id);
         window.localStorage.setItem("userID", userID);
@@ -169,11 +172,11 @@ const Form = ({ lang, setCookies, QREmail }) => {
       autoComplete="off"
       onSubmit={HandleSubmit}
       className="form sm:w-full md:w-6/12 xl:w-[450px] sm:h-full bg-darkGrey flex flex-col
-    items-center justify-between py-8 px-10 shadow-lg rounded-xl border-2 border-color1 "
+    items-center justify-between py-8 px-10 shadow-2xl rounded-2xl border-2 border-color1 "
     >
       <div
         className="form-container flex flex-col w-full 
-    items-center sm:gap-4 lg:gap-8"
+    items-center sm:gap-6 lg:gap-8"
       >
         <h2
           className={`${
@@ -183,7 +186,7 @@ const Form = ({ lang, setCookies, QREmail }) => {
           {lang === "en" || lang === null ? "Sign in" : "تسجيل الدخول "}
         </h2>
         {/* inputs container */}
-        <div className="inputs-group flex flex-col gap-5 w-full">
+        <div className="inputs-group flex flex-col gap-4 w-full">
           {/* error messaage */}
           {error && (
             <span
@@ -285,7 +288,7 @@ const Form = ({ lang, setCookies, QREmail }) => {
         <Link
           to={"/reset-password"}
           id="forgot-password"
-          className="text-gray-100 sm:text-base lg:text-lg capitalize"
+          className="text-gray-100 sm:text-base sm:my-5 md:m-0 lg:text-lg capitalize "
         >
           {lang === "en" || lang === null
             ? "forgot your password?"
