@@ -25,7 +25,7 @@ export const Projects = () => {
   const checkID = folder.includes(id);
   setTimeout(() => {
     setLoading(false);
-  }, 4000);
+  }, 5000);
   return checkID ? (
     <>
       {loading && (
