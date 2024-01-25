@@ -5,7 +5,7 @@ import { BsTrash } from "react-icons/bs";
 export const DeleteMsg = ({ showMsg, setShowMsg, message, user }) => {
   const HandleDelete = async () => {
     await axios
-      .delete(`http://localhost:8000/api/user/${user}`)
+      .delete(`${process.env.REACT_APP_API_URL}user/${user}`)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     window.location.reload();
