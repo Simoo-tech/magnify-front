@@ -15,8 +15,10 @@ import "../../App.css";
 import { QR } from "../../component/Qr";
 import { DeleteMsg } from "../../component/DeleteMsg";
 import { Header } from "../../component/Header";
+import { load } from "react-cookies";
 
 export const Dashbaord = () => {
+  const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [showMsg, setShowMsg] = useState(false);
   const [deleteUser, setDeleteUser] = useState();
@@ -26,7 +28,10 @@ export const Dashbaord = () => {
   const GetUsers = async () => {
     await axios
       .get(`${process.env.REACT_APP_API_URL}user`)
-      .then((res) => setUsers(res.data))
+      .then((res) => {
+        setUsers(res.data);
+        setLoading(false);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -106,78 +111,85 @@ export const Dashbaord = () => {
               </button>
             </div>
           </div>
-          <div id="users-table" className=" w-full h-full overflow-scroll">
-            <table id="users" className="w-full h-fit ">
-              <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
-                <tr>
-                  <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-2/12 font-normal">
-                    {lang === "ar" ? "الاسم" : "Name"}
-                  </th>
-                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-3/12 font-normal">
-                    {lang === "ar" ? "الايميل" : "Email"}
-                  </th>
-                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-2/12 font-normal">
-                    {lang === "ar" ? "رقم الهاتف" : "  Phone No"}
-                  </th>
-                  <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-1/12 font-normal">
-                    {lang === "ar" ? "عدد المشاريع" : "No of projects"}
-                  </th>
-                  <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-1/12 font-normal"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr className="bg-white border-2 " key={user._id}>
-                    <td
-                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 capitalize"
-                      id="name"
-                    >
-                      {user.fname + " " + user.lname}
-                    </td>
-                    <td
-                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
-                      id="email"
-                    >
-                      {user.email}
-                    </td>
-                    <td
-                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
-                      id="email"
-                    >
-                      +{user.phone}
-                    </td>
-                    <td
-                      className="sm:text-sm lg:text-lg border-2 py-2 px-2 text-center"
-                      id="projects"
-                    >
-                      {user.projectInfo.length}
-                    </td>
-                    <td className="py-2 px-3 flex items-center gap-8 justify-center">
-                      <span className="text-center text-xs flex flex-col items-center text-gray-600">
-                        <MdEdit
-                          onClick={() => navigate(`${user._id}/edit-user`)}
-                          id="edit-user"
-                          size={23}
-                          color="blue"
-                        />
-                        {lang === "ar" ? "تعديل" : "Edit"}
-                      </span>
-                      <span className="text-center text-xs flex flex-col items-center text-gray-600">
-                        <button
-                          onClick={() => {
-                            DeleteUserMsg(user);
-                            setDeleteUser(user._id);
-                          }}
-                        >
-                          <MdDelete id="delete-user" size={23} color="red" />
-                        </button>
-                        {lang === "ar" ? "حذف" : "Delete"}
-                      </span>
-                    </td>
+          <div
+            id="users-table"
+            className=" w-full h-full flex justify-center items-center overflow-scroll"
+          >
+            {loading ? (
+              <Oval />
+            ) : (
+              <table id="users" className="w-full h-fit ">
+                <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
+                  <tr>
+                    <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-2/12 font-normal">
+                      {lang === "ar" ? "الاسم" : "Name"}
+                    </th>
+                    <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-3/12 font-normal">
+                      {lang === "ar" ? "الايميل" : "Email"}
+                    </th>
+                    <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-2/12 font-normal">
+                      {lang === "ar" ? "رقم الهاتف" : "  Phone No"}
+                    </th>
+                    <th className="sm:text-sm lg:text-lg text-start border-2 border-[#c9c9c9] py-2 px-2 w-1/12 font-normal">
+                      {lang === "ar" ? "عدد المشاريع" : "No of projects"}
+                    </th>
+                    <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-1/12 font-normal"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr className="bg-white border-2 " key={user._id}>
+                      <td
+                        className="sm:text-sm lg:text-lg border-2 py-2 px-2 capitalize"
+                        id="name"
+                      >
+                        {user.fname + " " + user.lname}
+                      </td>
+                      <td
+                        className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
+                        id="email"
+                      >
+                        {user.email}
+                      </td>
+                      <td
+                        className="sm:text-sm lg:text-lg border-2 py-2 px-2 truncate"
+                        id="email"
+                      >
+                        +{user.phone}
+                      </td>
+                      <td
+                        className="sm:text-sm lg:text-lg border-2 py-2 px-2 text-center"
+                        id="projects"
+                      >
+                        {user.projectInfo.length}
+                      </td>
+                      <td className="py-2 px-3 flex items-center gap-8 justify-center">
+                        <span className="text-center text-xs flex flex-col items-center text-gray-600">
+                          <MdEdit
+                            onClick={() => navigate(`${user._id}/edit-user`)}
+                            id="edit-user"
+                            size={23}
+                            color="blue"
+                          />
+                          {lang === "ar" ? "تعديل" : "Edit"}
+                        </span>
+                        <span className="text-center text-xs flex flex-col items-center text-gray-600">
+                          <button
+                            onClick={() => {
+                              DeleteUserMsg(user);
+                              setDeleteUser(user._id);
+                            }}
+                          >
+                            <MdDelete id="delete-user" size={23} color="red" />
+                          </button>
+                          {lang === "ar" ? "حذف" : "Delete"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           <Outlet />
         </div>

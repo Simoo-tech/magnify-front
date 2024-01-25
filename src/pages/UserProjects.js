@@ -40,7 +40,7 @@ export const UserProjects = () => {
   ) : (
     <>
       <Header />
-      <div className="section-h flex justify-center relative  bg-color1 overflow-hidden ">
+      <div className="section-h flex justify-center relative bg-color1 overflow-hidden ">
         <div className="container flex justify-center items-center flex-col h-full w-full ">
           <div className="user-project-data w-full h-fit py-6 overflow-scroll flex gap-5 justify-center flex-wrap">
             {project.map((project, i) => (

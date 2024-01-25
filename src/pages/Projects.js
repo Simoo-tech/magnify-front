@@ -23,26 +23,28 @@ export const Projects = () => {
   });
 
   const checkID = folder.includes(id);
-
+  setTimeout(() => {
+    setLoading(false);
+  }, 4000);
   return checkID ? (
     <>
-      <div
-        className={`${
-          loading ? "flex" : "hidden"
-        } h-full w-full absolute top-0 justify-center items-center z-50`}
-      >
-        {<Oval />}
-      </div>
-      {setTimeout(() => {
-        <iframe
-          title="3dvista-user"
-          src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
-          name={user.userName}
-          allowFullScreen
-          className="h-full w-full absolute top-0 z-40"
-        />;
-        setLoading(false);
-      }, 4000)}
+      {loading && (
+        <div
+          className={`${
+            loading ? "flex" : "hidden"
+          } h-full w-full absolute top-0 justify-center items-center bg-color1 z-50`}
+        >
+          {<Oval />}
+        </div>
+      )}
+
+      <iframe
+        title="3dvista-user"
+        src={`${process.env.REACT_APP_FOLDER}${user.userName}/${id}/index.htm`}
+        name={user.userName}
+        allowFullScreen
+        className={` h-full w-full absolute top-0 z-40`}
+      />
     </>
   ) : (
     navigate("/")
