@@ -375,6 +375,7 @@ export const MissingPhoto = () => {
                 text: res.data.message,
                 success: true,
               });
+              setDone([]);
               setImages([]);
               setUploading(false);
             }, 2000);
