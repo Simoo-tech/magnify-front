@@ -113,7 +113,9 @@ export const Dashbaord = () => {
           </div>
           <div
             id="users-table"
-            className=" w-full h-full flex justify-center items-center overflow-scroll"
+            className={`w-full h-full flex justify-center ${
+              loading ? "items-center" : "items-start"
+            } overflow-scroll`}
           >
             {loading ? (
               <Oval />
