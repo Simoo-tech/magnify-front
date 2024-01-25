@@ -9,7 +9,6 @@ import imgae from "../assest/sessionData.webp";
 import { Link, Outlet } from "react-router-dom";
 import { Header } from "../component/Header";
 
-
 export const UploadFiles = () => {
   const [uploadType, setUploadType] = useState();
   useEffect(() => {
@@ -155,6 +154,7 @@ export const SessionData = () => {
                 success: true,
               });
               setImages([]);
+              setDone([]);
               setUploading(false);
             }, 1000);
           }
@@ -218,7 +218,7 @@ export const SessionData = () => {
                       done.includes(i) ? (
                         <FaCheckCircle className="bg-white text-green-500 rounded-full" />
                       ) : (
-                        <PulseLoader color="white" size={2} />
+                        <PulseLoader color="white" size={3} />
                       )
                     ) : (
                       <button onClick={() => HandleDelete(i)}>
