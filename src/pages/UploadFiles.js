@@ -182,7 +182,7 @@ export const SessionData = () => {
           >
             <MdCloudUpload size={60} />
             <input
-              accept=".3gp,.mp4, .webm, .mkv"
+              accept=".3gp,.mp4, .webm, .mkv, .mov"
               onChange={uploading ? null : HandleChange}
               type="file"
               multiple
