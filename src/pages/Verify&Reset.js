@@ -37,7 +37,7 @@ export const Verify = () => {
       <div className="section-h w-full flex justify-center items-center">
         {verified ? (
           <div
-            className=" bg-darkGrey sm:w-9/12 xl:w-8/12 h-5/6 py-2 rounded-lg flex
+            className=" bg-darkGrey sm:w-11/12 xl:w-8/12 h-5/6 py-2 rounded-lg flex
         flex-col items-center gap-10 px-4 justify-center text-white "
           >
             <div
@@ -63,7 +63,7 @@ export const Verify = () => {
                 lang === "ar" ? "md:flex-row-reverse" : " md:flex-row"
               } flex items-center sm:gap-6 lg:gap-2 sm:flex-col`}
             >
-              <span className="text-lg font-thin">
+              <span className="text-lg font-thin text-center">
                 {lang === "ar"
                   ? "إذا لم تتلق رسالة"
                   : "If you do not receive a message"}
@@ -105,7 +105,7 @@ export const Verify = () => {
                 ? "تحقق من عنوان بريدك الإلكتروني"
                 : "Verify your email address"}
             </h2>
-            <div className="text flex flex-col items-center gap-4 font-thin">
+            <div className="text flex flex-col items-center gap-4 font-thin text-white">
               <p className="sm:text-sm md:text-lg lg:text-xl text-center ">
                 {lang === "ar"
                   ? "يرجى تأكيد رغبتك في استخدام هذا كعنوان بريد إلكتروني لحسابك المكبر"

@@ -117,7 +117,7 @@ export const CreatePass = () => {
         id="create-new-password"
       >
         <div
-          className=" bg-darkGrey sm:w-10/12 xl:w-8/12 h-5/6 rounded-lg flex
+          className=" bg-darkGrey sm:w-11/12 md:w-10/12 xl:w-8/12 h-5/6 rounded-lg flex
   flex-col items-center justify-evenly "
         >
           <h2 className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">

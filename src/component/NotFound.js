@@ -7,7 +7,7 @@ export const NotFound = () => {
       className="h-full absolute top-0 w-full bg-color1 flex justify-center items-center"
     >
       <div
-        className="container sm:w-full lg:w-4/6 h-5/6 bg-darkGrey rounded-lg py-10 px-5 flex flex-col
+        className=" sm:w-full lg:w-4/6 h-5/6 bg-darkGrey rounded-lg py-10 px-5 flex flex-col
       sm:gap-10 justify-center items-center text-white "
       >
         <h1
