@@ -303,6 +303,7 @@ export const MissingPhoto = () => {
       const imgFile = Array.from(e.target.files);
       imgFile.map((img) => {
         if (
+          img.type === "video/quicktime" ||
           img.type === "video/mp4" ||
           img.type === "video/3gp" ||
           img.type === "video/webm" ||
@@ -402,7 +403,7 @@ export const MissingPhoto = () => {
         >
           <MdCloudUpload size={60} />
           <input
-            accept=".3gp,.mp4, .webm, .mkv, .jpg, .jpeg, .png, .webp"
+            accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
             onChange={uploading ? null : HandleChange}
             type="file"
             multiple
@@ -416,8 +417,8 @@ export const MissingPhoto = () => {
           <span
             className={` sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
           >
-            Only ( .3gp, .mp4, .webm, .mkv, .jpg, .jpeg, .png, .webp ) format
-            are allowed and max size 100MB
+            Only ( .3gp, .mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp )
+            format are allowed and max size 100MB
           </span>
         </div>
         {/* show files chosen */}
