@@ -1,6 +1,4 @@
-.section-h,
-.admin-dashboard,
-.not-found {
+.section-h {
   height: calc(100vh - 58px);
 }
 

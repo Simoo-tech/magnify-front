@@ -32,7 +32,7 @@ export const UploadFiles = () => {
           id="choose-upload-Type"
           className={`${
             uploadType && "hidden"
-          } absolute top-0 w-full h-full flex  bg-white z-10 bg-no-repeat bg-cover bg-center
+          }  w-full h-full flex bg-white bg-no-repeat bg-cover bg-center relative
         before:absolute before:top-0 before:left-0 before:bg-black before:w-full 
         before:h-full before:opacity-70`}
           style={{ backgroundImage: `url(${imgae})` }}
@@ -40,9 +40,9 @@ export const UploadFiles = () => {
           <div className="sm:text-xl lg:text-3xl w-full h-full sm:flex-col md:flex-row flex justify-between items-center z-20">
             <Link
               to={"session-data"}
-              className="SessionData sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full flex justify-center items-center"
+              className="SessionData sm:w-full md:w-6/12 group h-full flex justify-center items-center"
             >
-              <h2 className=" capitalize font-light text-white ">
+              <h2 className=" capitalize font-light text-white group-hover:scale-125 duration-150">
                 photo session data
               </h2>
             </Link>
@@ -51,9 +51,9 @@ export const UploadFiles = () => {
             ></span>
             <Link
               to={"missing-photo"}
-              className="MissingPhoto sm:w-full md:w-6/12 hover:scale-125 duration-150 h-full flex justify-center items-center"
+              className="MissingPhoto sm:w-full md:w-6/12 group h-full flex justify-center items-center"
             >
-              <h2 className=" capitalize font-light text-white ">
+              <h2 className=" capitalize font-light text-white group-hover:scale-125 duration-150">
                 Missing Photo
               </h2>
             </Link>
@@ -166,11 +166,10 @@ export const SessionData = () => {
 
   return (
     <>
-      <Header />
-      <div className="w-full h-full z-20 flex justify-center items-center bg-white absolute">
+      <div className="w-full h-full flex justify-center items-center bg-white absolute top-0 left-0 z-30 ">
         <Message active={msg.active} text={msg.text} success={msg.success} />
-        <div className="container flex flex-col items-center py-5 h-full gap-5  sm:w-full lg:w-8/12">
-          <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
+        <div className="flex flex-col items-center py-5 h-full gap-5 sm:w-11/12 md:w-9/12 lg:w-8/12">
+          <h2 className="sm:text-[2rem] md:text-[2.5rem] font-medium capitalize ">
             photo session data
           </h2>
           {err && <span className="text-red-500 text-center"> {err}</span>}
@@ -386,10 +385,10 @@ export const MissingPhoto = () => {
     }
   };
   return (
-    <div className="w-full h-full z-20 flex justify-center items-center bg-white absolute">
+    <div className="w-full h-full flex justify-center items-center bg-white absolute top-0 left-0 z-30 ">
       <Message active={msg.active} text={msg.text} success={msg.success} />
-      <div className="container flex flex-col items-center py-5 h-full gap-5 sm:w-full lg:w-8/12">
-        <h2 className="sm:text-3xl lg:text-4xl font-medium capitalize ">
+      <div className="flex flex-col items-center py-5 h-full gap-5 sm:w-11/12 md:w-9/12 lg:w-8/12">
+        <h2 className="sm:text-[2rem] md:text-[2.5rem] font-medium capitalize ">
           missing photos
         </h2>
         {err && <span className="text-red-500 text-center"> {err}</span>}

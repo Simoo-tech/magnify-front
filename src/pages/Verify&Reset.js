@@ -92,8 +92,8 @@ export const Verify = () => {
           </div>
         ) : (
           <div
-            className="container bg-darkGrey sm:9/12 xl:w-8/12 h-5/6 py-2 rounded-lg  flex
-      flex-col items-center gap-5 justify-evenly text-white "
+            className="bg-darkGrey sm:w-11/12 h-5/6 py-2 rounded-lg flex
+            flex-col items-center gap-10 justify-center"
           >
             <img
               src={logo}
@@ -183,7 +183,7 @@ export const ResetPass = () => {
       <div className="section-h w-full flex justify-center items-center">
         {verified ? (
           <div
-            className="container bg-darkGrey sm:w-9/12 xl:w-8/12 h-5/6 py-2 rounded-lg flex
+            className=" bg-darkGrey sm:w-11/12 xl:w-8/12 h-5/6 py-2 rounded-lg flex
   flex-col items-center gap-10 px-4 justify-center text-white "
           >
             <div
@@ -201,15 +201,15 @@ export const ResetPass = () => {
             <h3 className="sm:text-base lg:text-xl text-center font-light">
               {lang === "ar"
                 ? "   لقد أرسلنا إليك رسالة تأكيد عبر البريد الإلكتروني تفيد بأنه أنت، ستصلك الرسالة خلال بضع دقائق"
-                : "  We sent you a confirmation email that it is you, The message will be delivered within"}
-              <br /> {lang === "ar" ? null : "10 minutes"}
+                : "  We sent you a confirmation email that it is you, The message will be delivered within "}
+              {lang === "ar" ? null : "10 minutes"}
             </h3>
             <div
               className={`${
                 lang === "ar" ? "md:flex-row-reverse" : " md:flex-row"
               } flex items-center sm:gap-6 lg:gap-2 sm:flex-col`}
             >
-              <span className="text-lg font-thin">
+              <span className="text-lg font-thin text-center">
                 {lang === "ar"
                   ? "إذا لم تتلق رسالة"
                   : "If you do not receive a message"}
@@ -238,8 +238,8 @@ export const ResetPass = () => {
           </div>
         ) : (
           <div
-            className="container bg-darkGrey sm:w-9/12 h-5/6 py-2 rounded-lg  flex
-  flex-col items-center gap-10 justify-center"
+            className="bg-darkGrey sm:w-11/12 h-5/6 py-2 rounded-lg flex
+            flex-col items-center gap-10 justify-center"
           >
             <img
               src={logo}
