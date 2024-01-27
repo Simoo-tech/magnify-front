@@ -89,7 +89,8 @@ export const SessionData = () => {
           img.type === "video/mp4" ||
           img.type === "video/3gp" ||
           img.type === "video/webm" ||
-          img.type === "video/mkv"
+          img.type === "video/mkv" ||
+          img.type === "video/mov"
         ) {
           if (maxSize > img.size) {
             Newimg = [...Newimg, img];
@@ -195,8 +196,8 @@ export const SessionData = () => {
             <span
               className={` sm:text-xs md:text-base text-gray-500 text-center flex items-center md:gap-2 px-2 `}
             >
-              Only ( .3gp, .mp4, .webm, .mkv) format are allowed and max size
-              100MB
+              Only ( .3gp, .mp4, .webm, .mkv, .mov) format are allowed and max
+              size 100MB
             </span>
           </div>
           {/* show files chosen */}
