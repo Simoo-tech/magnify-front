@@ -90,7 +90,7 @@ export const SessionData = () => {
           img.type === "video/3gp" ||
           img.type === "video/webm" ||
           img.type === "video/mkv" ||
-          img.type === "video/mov"
+          img.type === "video/quicktime"
         ) {
           if (maxSize > img.size) {
             Newimg = [...Newimg, img];
@@ -106,6 +106,7 @@ export const SessionData = () => {
         } else {
           setError(`${img.name} is invalid`);
           setTimeout(() => setError(null), 2000);
+          console.log(img);
         }
       });
     }
