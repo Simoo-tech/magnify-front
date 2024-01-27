@@ -15,7 +15,6 @@ import "../../App.css";
 import { QR } from "../../component/Qr";
 import { DeleteMsg } from "../../component/DeleteMsg";
 import { Header } from "../../component/Header";
-import { load } from "react-cookies";
 
 export const Dashbaord = () => {
   const [loading, setLoading] = useState(true);
@@ -113,14 +112,16 @@ export const Dashbaord = () => {
           </div>
           <div
             id="users-table"
-            className={`w-full h-full flex justify-center ${
-              loading ? "items-center" : "items-start"
+            className={`w-full h-full flex ${
+              loading
+                ? "items-center justify-center"
+                : "items-start justify-start"
             } overflow-scroll`}
           >
             {loading ? (
               <Oval />
             ) : (
-              <table id="users" className="w-full h-fit ">
+              <table id="users" className="w-full h-fit">
                 <thead className="bg-darkGrey text-white border-2 border-[#c9c9c9]  ">
                   <tr>
                     <th className="sm:text-sm lg:text-lg text-start py-2 px-2 w-2/12 font-normal">
