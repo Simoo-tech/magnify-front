@@ -106,7 +106,6 @@ export const SessionData = () => {
         } else {
           setError(`${img.name} is invalid`);
           setTimeout(() => setError(null), 2000);
-          console.log(img);
         }
       });
     }
