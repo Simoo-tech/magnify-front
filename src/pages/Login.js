@@ -21,6 +21,7 @@ export const Login = () => {
   // user cookies
   const [cookie, setCookies] = useCookies(["user_token"]);
   const navigate = useNavigate();
+
   useEffect(() => {
     UserType({ cookie, navigate });
     if (id) {

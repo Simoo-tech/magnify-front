@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdWavingHand } from "react-icons/md";
 import Logout from "../functions/LogoutReq";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export const GoodBye = () => {
+  const [cookie, setCookies] = useCookies(["user_token"]);
+  const user = cookie.user_token;
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, []);
   Logout();
   return (
     <div className="h-full w-full flex justify-center items-center">
