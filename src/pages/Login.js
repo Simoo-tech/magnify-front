@@ -4,23 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdLockOutline, MdErrorOutline } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { LanguageCon } from "../Context";
-import axios from "axios";
 import { useCookies } from "react-cookie";
-import { v4 as uuidv4 } from "uuid";
 import { Oval } from "react-loader-spinner";
 import { Header } from "../component/Header";
+import { EmailLogin, HandleSubmit, UserType } from "../functions/LoginReq";
+
 export const Login = () => {
   // login user with qr code
   const url = window.location.href.split("/");
   const id = url[3];
-
   const [QREmail, setQREmail] = useState(null);
-  const LoginWithQR = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}user/${id}`)
-      .then((res) => setQREmail(res.data.email))
-      .catch((err) => console.error("not found"));
-  };
 
   // handle change language
   const { lang } = useContext(LanguageCon);
@@ -28,23 +21,10 @@ export const Login = () => {
   // user cookies
   const [cookie, setCookies] = useCookies(["user_token"]);
   const navigate = useNavigate();
-
   useEffect(() => {
-    const userID = window.localStorage.getItem("userID");
-    const user = cookie.user_token;
-    // see if user is admin
-    if (user && !user.verified && !user.passChanged) {
-      navigate(`/verify-email/${userID}`);
-    } else if (user && user.verified && user.passChanged) {
-      if (user.isAdmin && user.verified && user.passChanged) {
-        navigate(`/${userID}/dashboard`);
-      } else if (!user.isAdmin && user.verified && user.passChanged) {
-        navigate(`/${userID}/tour-projects`);
-      }
-    }
-
+    UserType({ cookie, navigate });
     if (id) {
-      LoginWithQR();
+      EmailLogin({ setQREmail, id });
     }
   }, []);
 
@@ -55,7 +35,7 @@ export const Login = () => {
         id="login-page"
         className="section-h container login max-w-[97%] flex flex-col justify-between"
       >
-        {/* login center-body */}
+        {/* login center body */}
         <div
           className="form-background-image flex sm:h-5/6 lg:h-full justify-between items-center
         sm:flex-col md:flex-row mb-5 sm:gap-3"
@@ -109,15 +89,16 @@ export const Login = () => {
     </>
   );
 };
+
 const Form = ({ lang, setCookies, QREmail }) => {
   // login by QR
   const [authData, setAuthData] = useState(QREmail ? { email: QREmail } : {});
-  // verify email
-  const verify_email = window.localStorage.getItem("verify-email");
+
   // error msg
   const [error, setError] = useState();
   // loading spinner
   const [loading, setLoading] = useState(false);
+
   // handle change
   const HandleChange = (e) => {
     if (QREmail) {
@@ -131,52 +112,20 @@ const Form = ({ lang, setCookies, QREmail }) => {
     }
     setError(null);
   };
-  // handle submit
-
-  const HandleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login`, authData)
-      .then((res) => {
-        setCookies("user_token", res.data, {
-          path: "/",
-          secure: true,
-          sameSite: "none",
-        });
-        // redirect to path
-        const userID = uuidv4(res.data._id);
-        window.localStorage.setItem("userID", userID);
-        if (res.data.isAdmin && res.data.verified && res.data.passChanged) {
-          window.location.assign(`/${userID}/dashboard`);
-        } else if (
-          !res.data.isAdmin &&
-          res.data.verified &&
-          res.data.passChanged
-        ) {
-          window.location.assign(`/${userID}/tour-projects`);
-        } else if (!res.data.verified && !res.data.passChanged) {
-          window.location.assign(`/verify-email/${userID}`);
-        } else if (res.data.verified && !res.data.passChanged) {
-          window.location.assign(`/create-password/${verify_email}`);
-        }
-      })
-      .catch((err) => {
-        setError(err.response.data.message);
-      })
-      .finally(() => setLoading(false));
-  };
 
   return (
     <form
       autoComplete="off"
-      onSubmit={HandleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        HandleSubmit({ setLoading, authData, setCookies, setError });
+      }}
       className="form sm:w-full md:w-6/12 xl:w-[450px] sm:h-full bg-darkGrey flex flex-col
-    items-center justify-between py-8 px-10 shadow-2xl rounded-2xl border-2 border-color1 "
+        items-center justify-between py-8 px-10 shadow-2xl rounded-2xl border-2 border-color1 "
     >
       <div
         className="form-container flex flex-col w-full 
-    items-center sm:gap-6 lg:gap-8"
+        items-center sm:gap-6 lg:gap-8"
       >
         <h2
           className={`${

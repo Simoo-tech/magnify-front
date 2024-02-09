@@ -10,10 +10,9 @@ import { ResetPass, Verify } from "./pages/Verify&Reset";
 import { Projects } from "./pages/Projects";
 import { MissingPhoto, SessionData, UploadFiles } from "./pages/UploadFiles";
 import { useCookies } from "react-cookie";
-import cookie from "react-cookies";
-
-import axios from "axios";
 import { NotFound } from "./component/NotFound";
+import { GoodBye } from "./pages/GoodBye";
+import { Session, StartTimer } from "./functions/SessionTime";
 
 function App() {
   const [lang, setLang] = useState("");
@@ -25,47 +24,13 @@ function App() {
   const TimeSpentVal = { TimeSpendCoun, setTimeSpendCoun };
   const LangValue = { lang, setLang };
 
-  // Session timeout
   const [cookies] = useCookies(["user_token"]);
-  const Session = async () => {
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}auth/login-token-expire`, {
-        token: cookies.user_token.token,
-      })
-      .then()
-      .catch((err) => {
-        cookie.remove("user_token", {
-          path: "/",
-          secure: true,
-        });
-        window.localStorage.removeItem("userID");
-        window.location.assign("/");
-      });
-  };
-
-  // session Time
-  let Newmin;
-  let storeMin = window.localStorage.getItem("session_time");
-  if (storeMin) {
-    Newmin = parseInt(storeMin);
-  } else {
-    Newmin = 0;
-  }
-
-  const StartTimer = () => {
-    setInterval(() => {
-      Newmin = Newmin + 1;
-      const NewHour = Math.floor(Newmin / 60);
-      setTimeSpendCoun({ ...TimeSpendCoun, min: Newmin, hour: NewHour });
-      window.localStorage.setItem("session_time", Newmin);
-    }, 60000);
-  };
 
   useEffect(() => {
     setLang(window.localStorage.getItem("lang"));
     if (cookies.user_token) {
-      Session();
-      StartTimer();
+      Session({ cookies });
+      StartTimer({ setTimeSpendCoun, TimeSpendCoun });
     }
   }, []);
 
@@ -110,6 +75,7 @@ function App() {
               >
                 <Route path=":id" element={<Projects />} />
               </Route>
+              <Route path="logout" element={<GoodBye />} />
             </Routes>
           </div>
         </TimeSpent.Provider>

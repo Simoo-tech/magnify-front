@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
 import logo from "../assest/logo/mainLogo.png";
 import { useCookies } from "react-cookie";
-import axios from "axios";
 import { MdMarkEmailUnread, MdErrorOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import { LanguageCon } from "../Context";
 import { Header } from "../component/Header";
+import {
+  HandleResetSubmit,
+  HandleVerifySubmit,
+} from "../functions/Verify&ResetReq";
 
 ////////////////  Verify Email ///////////////////
 export const Verify = () => {
@@ -16,21 +19,6 @@ export const Verify = () => {
   const [verified, setVerified] = useState(false);
   const { lang } = useContext(LanguageCon);
 
-  // handle submit
-  const HandleSubmit = async (e) => {
-    e.preventDefault();
-    setSending(true);
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}user/verify-email`, {
-        email: user.email,
-      })
-      .then((res) => {
-        setVerified(true);
-        window.localStorage.setItem("verify-email", res.data.PassToken);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setSending(false));
-  };
   return (
     <>
       <Header />
@@ -70,7 +58,10 @@ export const Verify = () => {
               </span>
               <span className="lg:w-10 lg:h-[2px] sm:hidden lg:block bg-white"></span>
               <button
-                onClick={HandleSubmit}
+                onClick={(e) => {
+                  e.preventDefault();
+                  HandleVerifySubmit({ setSending, user, setVerified });
+                }}
                 className="bg-white py-2 px-6 text-lg text-color1 rounded-lg capitalize font-semibold"
               >
                 {sending ? (
@@ -100,7 +91,7 @@ export const Verify = () => {
               alt="logo"
               className="sm:w-[180px] md:w[200px] lg:w-[220px]"
             />
-            <h2 className="sm:text-xl lg:text-4xl font-light ">
+            <h2 className="sm:text-xl lg:text-4xl font-light text-white ">
               {lang === "ar"
                 ? "تحقق من عنوان بريدك الإلكتروني"
                 : "Verify your email address"}
@@ -129,7 +120,10 @@ export const Verify = () => {
               </span>
             </div>
             <button
-              onClick={HandleSubmit}
+              onClick={(e) => {
+                e.preventDefault();
+                HandleVerifySubmit({ setSending, user, setVerified });
+              }}
               className="bg-white py-2 px-6 text-lg text-color1 rounded-lg capitalize font-semibold"
             >
               {sending ? (
@@ -162,20 +156,6 @@ export const ResetPass = () => {
   const [err, setErr] = useState(null);
   const [email, setEmail] = useState("");
   const { lang } = useContext(LanguageCon);
-  // handle submit
-  const HandleSubmit = async (e) => {
-    e.preventDefault();
-    setSending(true);
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}user/reset-password`, { email })
-      .then((res) => {
-        setVerified(true);
-        window.localStorage.setItem("resetToken", res.data.PassToken);
-        window.localStorage.setItem("resetUserID", res.data.userID);
-      })
-      .catch((err) => setErr(err.response.data.message))
-      .finally(() => setSending(false));
-  };
 
   return (
     <>
@@ -216,7 +196,9 @@ export const ResetPass = () => {
               </span>
               <span className="lg:w-10 lg:h-[2px] sm:hidden lg:block bg-white"></span>
               <button
-                onClick={HandleSubmit}
+                onClick={(e) => {
+                  HandleResetSubmit({ setSending, email, setVerified, setErr });
+                }}
                 className="bg-white py-2 px-6 text-lg text-color1 rounded-lg capitalize font-semibold"
               >
                 {sending ? (
@@ -283,7 +265,9 @@ export const ResetPass = () => {
             >
               <button
                 type="submit"
-                onClick={HandleSubmit}
+                onClick={(e) => {
+                  HandleResetSubmit({ setSending, email, setVerified, setErr });
+                }}
                 className="bg-white py-2 px-6 text-lg text-color1 rounded-lg capitalize font-semibold"
               >
                 {sending ? (

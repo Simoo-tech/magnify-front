@@ -1,16 +1,8 @@
-import axios from "axios";
 import { BsTrash } from "react-icons/bs";
+import { HandleDelete } from "../functions/DashboardReq";
 
 // delete account
 export const DeleteMsg = ({ showMsg, setShowMsg, message, user }) => {
-  const HandleDelete = async () => {
-    await axios
-      .delete(`${process.env.REACT_APP_API_URL}user/${user}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    window.location.reload();
-    setShowMsg(false);
-  };
   return (
     <div
       className={`${
@@ -48,7 +40,9 @@ export const DeleteMsg = ({ showMsg, setShowMsg, message, user }) => {
             cancel
           </button>
           <button
-            onClick={HandleDelete}
+            onClick={(e) => {
+              HandleDelete({ user, setShowMsg });
+            }}
             className="text-white bg-red-500 capitalize py-2 px-3 rounded-lg"
           >
             yes, delete it
