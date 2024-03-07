@@ -31,7 +31,7 @@ export const HandleSubmit = async ({
   else {
     axios
       .put(
-        `http://localhost:8000/api/user/update-password/${user._id}`,
+        `${process.env.REACT_APP_API_URL}user/update-password/${user._id}`,
         userPass
       )
       .then(async (res) => {
@@ -47,7 +47,7 @@ export const HandleSubmit = async ({
         window.localStorage.removeItem("verify-email");
         window.localStorage.removeItem("userID");
         await axios
-          .get(`http://localhost:8000/api/user/verify-email/${user._id}`)
+          .get(`${process.env.REACT_APP_API_URL}user/verify-email/${user._id}`)
           .catch((err) => console.log(err));
       })
       .catch((err) => setError(err.response.data.message))
