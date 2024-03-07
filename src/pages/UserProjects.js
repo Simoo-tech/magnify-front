@@ -15,17 +15,14 @@ export default function UserProjects() {
   const project = user.projectInfo;
 
   useEffect(() => {
-    if (!cookies.user_token) {
+    if (!user) {
       window.location.assign("/");
     }
-  }, []);
+  }, [user]);
 
   const UserProjects = project.map((project, i) => {
     return (
-      <div
-        key={i}
-        className="project flex flex-col flex-wrap sm:w-full  lg:w-5/12 "
-      >
+      <div key={i} className="project flex flex-col flex-wrap h-fit">
         <div className="top flex w-full bg-darkGrey py-2 justify-between px-4 text-white capitalize rounded-t-xl">
           <h4
             className={`flex gap-2 ${
@@ -123,11 +120,10 @@ items-center justify-center w-fit px-4 text-white rounded-b-xl hover:bg-color1"
   ) : (
     <>
       <Header />
-      <section className="section-h flex justify-center relative bg-color1 overflow-hidden ">
-        <div className="container mt-10 h-full w-full ">
-          <div className="user-project-data w-full h-fit py-6 overflow-scroll flex gap-5 justify-center flex-wrap">
-            {UserProjects}
-          </div>
+      <section className="section-h flex flex-col items-center justify-start gap-10 relative bg-color1 overflow-hidden w-full">
+        <h1 className="text-3xl text-white font-semibold">Your Projects</h1>
+        <div className=" py-6 overflow-scroll container gap-10 grid sm:grid-cols-1 md:grid-cols-2 grid-flow-row">
+          {UserProjects}
         </div>
         {user && <QR />}
       </section>
