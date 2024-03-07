@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { LanguageCon } from "../Context";
 import sublogo from "../assest/logo/logo-darkGreen.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import { useCookies } from "react-cookie";
+import { Icon } from "@iconify/react";
 
 export const Header = () => {
   const { lang, setLang } = useContext(LanguageCon);
@@ -17,11 +18,9 @@ export const Header = () => {
 
   return (
     <div className="logo py-2 max-w-[97%] container flex justify-between h-fit relative">
-      <Link to={"/"}>
-        <img src={sublogo} alt="magnify-logo" className="w-[25px]" />
-      </Link>
+      <img src={sublogo} alt="magnify-logo" className="w-[25px]" />
       <div className="flex gap-4">
-        <select
+        {/* <select
           id="languages"
           value={lang}
           onChange={(event) => {
@@ -46,7 +45,35 @@ export const Header = () => {
           >
             ar
           </option>
-        </select>
+        </select> */}
+        {lang === "ar" ? (
+          <button
+            className="flex items-center bg-white px-2 rounded-lg "
+            onClick={() => {
+              setLang("en");
+              window.localStorage.setItem("lang", "en");
+            }}
+          >
+            <Icon
+              icon="ri:english-input"
+              className="text-xl text-color1 font-bold"
+            />
+          </button>
+        ) : (
+          <button
+            className="flex items-center bg-white px-2 rounded-lg "
+            onClick={() => {
+              setLang("ar");
+              window.localStorage.setItem("lang", "ar");
+            }}
+          >
+            <Icon
+              icon="mdi:abjad-arabic"
+              className="text-xl text-color1 font-bold"
+            />
+          </button>
+        )}
+
         {cookies.user_token ? (
           <div className="flex items-center gap-6">
             <button

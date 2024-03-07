@@ -19,7 +19,7 @@ const Report = async () => {
         email: user.email,
         data: year,
         timeSpent:
-          TimeSpendCoun.hour + "Hours" + " " + TimeSpendCoun.min + " Minutes",
+          TimeSpendCoun.hour + " Hours " + TimeSpendCoun.min + " Minutes",
       })
       .then((res) => {
         console.log("sdw");

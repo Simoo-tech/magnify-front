@@ -1,18 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import { LanguageCon } from "../Context";
 import { FaInfoCircle } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { MdErrorOutline } from "react-icons/md";
 import { Oval } from "react-loader-spinner";
-import { NotFound } from "../component/NotFound";
-import { Header } from "../component/Header";
-import {
-  HandleSubmit,
-  ResetLinkToken,
-  Verified,
-} from "../functions/CreatePassReq";
+import { HandleSubmit, ResetLinkToken } from "../functions/CreatePassReq";
 
-export const CreatePass = () => {
+const NotFound = lazy(() => import("../component/NotFound"));
+
+export default function CreatePass() {
   // get user id
   const resetUserID = window.localStorage.getItem("resetUserID");
   const resetToken = window.localStorage.getItem("resetToken");
@@ -23,13 +19,10 @@ export const CreatePass = () => {
   const [validateLink, setValidateLink] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      Verified({ user });
-    }
     if (resetToken) {
       ResetLinkToken({ setValidateLink });
     }
-  }, []);
+  }, [user, resetToken]);
 
   const { lang } = useContext(LanguageCon);
 
@@ -42,48 +35,45 @@ export const CreatePass = () => {
   const [loading, setLoading] = useState(false);
 
   return validateLink ? (
-    <>
-      <Header />
+    <div
+      className="section-h w-full create-password flex justify-center items-center"
+      id="create-new-password"
+    >
       <div
-        className="section-h w-full create-password flex justify-center items-center"
-        id="create-new-password"
-      >
-        <div
-          className=" bg-darkGrey sm:w-11/12 md:w-10/12 xl:w-8/12 h-5/6 rounded-lg flex
+        className=" bg-darkGrey sm:w-11/12 md:w-10/12 xl:w-8/12 h-5/6 rounded-lg flex
   flex-col items-center justify-evenly "
-        >
-          <h2 className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">
-            {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
-          </h2>
-          {/* error message */}
-          {error && (
-            <span
-              className="text-center text-white flex items-center gap-3 justify-center bg-red-500 
+      >
+        <h2 className="text-center text-white capitalize sm:text-2xl md:text-3xl font-bold ">
+          {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
+        </h2>
+        {/* error message */}
+        {error && (
+          <span
+            className="text-center text-white flex items-center gap-3 justify-center bg-red-500 
           py-2 px-4 rounded-lg sm:text-sm lg:text-base "
-            >
-              <MdErrorOutline size={20} />
-              {error}
-            </span>
-          )}
-          <Form
-            userPass={userPass}
-            setUserPass={setUserPass}
-            setError={setError}
-            setShow={setShow}
-            show={show}
-            loading={loading}
-            lang={lang}
-            resetUserID={resetUserID}
-            setLoading={setLoading}
-            user={user}
-          />
-        </div>
+          >
+            <MdErrorOutline size={20} />
+            {error}
+          </span>
+        )}
+        <Form
+          userPass={userPass}
+          setUserPass={setUserPass}
+          setError={setError}
+          setShow={setShow}
+          show={show}
+          loading={loading}
+          lang={lang}
+          resetUserID={resetUserID}
+          setLoading={setLoading}
+          user={user}
+        />
       </div>
-    </>
+    </div>
   ) : (
     <NotFound />
   );
-};
+}
 
 const Form = ({
   userPass,

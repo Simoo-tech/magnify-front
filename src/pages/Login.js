@@ -6,10 +6,11 @@ import { FaRegUser } from "react-icons/fa";
 import { LanguageCon } from "../Context";
 import { useCookies } from "react-cookie";
 import { Oval } from "react-loader-spinner";
-import { Header } from "../component/Header";
-import { EmailLogin, HandleSubmit, UserType } from "../functions/LoginReq";
+import { EmailLogin, HandleSubmit, UserLoged } from "../functions/LoginReq";
 
-export const Login = () => {
+export default function Login() {
+  const userID = window.localStorage.getItem("userID");
+  const navigate = useNavigate();
   // login user with qr code
   const url = window.location.href.split("/");
   const id = url[3];
@@ -19,79 +20,79 @@ export const Login = () => {
   const { lang } = useContext(LanguageCon);
 
   // user cookies
-  const [cookie, setCookies] = useCookies(["user_token"]);
-  const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(["user_token"]);
+  useEffect(
+    () => UserLoged({ navigate, userID, cookies }),
+    [navigate, userID, cookies]
+  );
 
   useEffect(() => {
-    UserType({ cookie, navigate });
     if (id) {
       EmailLogin({ setQREmail, id });
     }
-  }, []);
+  }, [id]);
 
   return (
-    <>
-      <Header />
-      <section
-        id="login-page"
-        className="section-h container login max-w-[97%] flex flex-col justify-between"
+    <section
+      id="login-page"
+      className="section-h container login max-w-[97%] flex flex-col justify-between"
+    >
+      {/* login center body */}
+      <div
+        className="form-background-image flex sm:h-5/6 lg:h-full justify-between items-center
+        sm:flex-col md:flex-row sm:gap-3"
       >
-        {/* login center body */}
         <div
-          className="form-background-image flex sm:h-5/6 lg:h-full justify-between items-center
-        sm:flex-col md:flex-row mb-5 sm:gap-3"
-        >
-          <div
-            id="img-container"
-            className="img flex items-center
-          sm:w-full  sm:justify-center sm:pt-4
+          id="img-container"
+          className="img flex items-center
+          sm:w-full sm:justify-center sm:pt-4
           md:w-6/12 md:justify-center md:bg-inherit 
           lg:5/12 lg:justify-center  
           xl:w-6/12 xl:justify-end"
-          >
-            <img
-              src={mainlogo}
-              alt="magnify-main-logo"
-              className=" sm:w-[230px] md:w-[280px] lg:w-[370px] xl:w-[400px] object-contain"
-            />
-          </div>
-          <Form lang={lang} setCookies={setCookies} QREmail={QREmail} />
+        >
+          <img
+            src={mainlogo}
+            alt="magnify-main-logo"
+            className=" sm:w-[230px] md:w-[280px] lg:w-[370px] xl:w-[400px] object-contain"
+          />
         </div>
-        {/* bottom links */}
-        <div
-          id="buttom-links"
-          className="links flex items-center w-full h-fit mb-3
+        <Form lang={lang} setCookies={setCookies} QREmail={QREmail} />
+      </div>
+      {/* bottom links */}
+      <div
+        id="buttom-links"
+        className="links flex items-center w-full h-fit mb-3
         sm:justify-between
         md:justify-start md:gap-10 "
+      >
+        <Link
+          id="about-us"
+          className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
+          to={"/"}
         >
-          <Link
-            id="about-us"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
-            to={"/"}
-          >
-            {lang === "en" || lang === null ? "about Magnify " : " Magnify عن "}
-          </Link>
-          <Link
-            id="privacy terms"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
-            to={"/"}
-          >
-            {lang === "en" || lang === null ? "privacy terms" : "شروط الخصوصية"}
-          </Link>
-          <Link
-            id="contact us"
-            className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
-            to={"/"}
-          >
-            {lang === "en" || lang === null ? "contact us" : "!تواصل معنا "}
-          </Link>
-        </div>
-      </section>
-    </>
+          {lang === "en" || lang === null ? "about Magnify " : " Magnify عن "}
+        </Link>
+        <Link
+          id="privacy terms"
+          className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
+          to={"/"}
+        >
+          {lang === "en" || lang === null ? "privacy terms" : "شروط الخصوصية"}
+        </Link>
+        <Link
+          id="contact us"
+          className="capitalize sm:w-4/12 md:w-fit sm:text-sm lg:text-lg text-center text-white font-semibold"
+          to={"/"}
+        >
+          {lang === "en" || lang === null ? "contact us" : "!تواصل معنا "}
+        </Link>
+      </div>
+    </section>
   );
-};
+}
 
 const Form = ({ lang, setCookies, QREmail }) => {
+  const navigate = useNavigate();
   // login by QR
   const [authData, setAuthData] = useState(QREmail ? { email: QREmail } : {});
 
@@ -119,9 +120,9 @@ const Form = ({ lang, setCookies, QREmail }) => {
       autoComplete="off"
       onSubmit={(e) => {
         e.preventDefault();
-        HandleSubmit({ setLoading, authData, setCookies, setError });
+        HandleSubmit({ setLoading, authData, setCookies, setError, navigate });
       }}
-      className="form sm:w-full md:w-6/12 xl:w-[450px] sm:h-full bg-darkGrey flex flex-col
+      className="form sm:w-full md:w-6/12 xl:w-[500px] sm:h-full bg-darkGrey flex flex-col m-0
         items-center justify-between py-8 px-10 shadow-2xl rounded-2xl border-2 border-color1 "
     >
       <div

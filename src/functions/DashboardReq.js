@@ -2,19 +2,9 @@ import axios from "axios";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineError } from "react-icons/md";
 
-// get all users
-export const GetUsers = async ({ setLoading, setUsers }) => {
-  await axios
-    .get(`${process.env.REACT_APP_API_URL}user`)
-    .then((res) => {
-      setUsers(res.data);
-      setLoading(false);
-    })
-    .catch((err) => console.log(err));
-};
+const userID = window.localStorage.getItem("userID");
 
 // check if admin
-const userID = window.localStorage.getItem("userID");
 export const CheckUser = ({ navigate, user }) => {
   if (!user || !user.isAdmin) {
     navigate("/");
@@ -23,14 +13,32 @@ export const CheckUser = ({ navigate, user }) => {
   }
 };
 
-// get user from id
-export const GetUser = async ({ cookies, id, setUserData }) => {
-  const header = { headers: { token: `${cookies.user_token.token}` } };
-  await axios
-    .get(`${process.env.REACT_APP_API_URL}user/${id}`, { id: id }, header)
-    .then((res) => setUserData(res.data))
-    .catch((err) => console.log(err.response.data.message));
+// handle add new project
+export const AddProject = ({ setProjectInfo, projectInfo }) => {
+  setProjectInfo([
+    ...projectInfo,
+    {
+      folderName: ``,
+      projectNo: "",
+      projectName: "",
+      projectLoc: "",
+      projectArea: "",
+      projectHei: "",
+      consultant: "",
+      projectDura: "",
+      projectType: "",
+    },
+  ]);
 };
+
+// handle remove project
+export const ProjectRem = ({ i, projectInfo, setProjectInfo }) => {
+  const onRemove = [...projectInfo];
+  onRemove.splice(i, 1);
+  setProjectInfo(onRemove);
+};
+
+////////// API functions ////////////////
 
 // handle submit create new user
 export const HandleSubmitCreate = async ({
@@ -39,6 +47,7 @@ export const HandleSubmitCreate = async ({
   projectInfo,
   cookies,
   setMsg,
+  navigate,
 }) => {
   setLoading(true);
   await axios
@@ -58,10 +67,8 @@ export const HandleSubmitCreate = async ({
       });
       setTimeout(() => {
         setMsg({});
-      }, 2000);
-      setTimeout(() => {
-        window.location.assign("/");
-      }, 2000);
+        navigate(-1, { reload: true });
+      }, 1000);
     })
     .catch((err) =>
       setMsg({
@@ -71,7 +78,7 @@ export const HandleSubmitCreate = async ({
         icon: MdOutlineError,
       })
     )
-    .then(() => {
+    .finally(() => {
       setLoading(false);
     });
 };
@@ -84,6 +91,7 @@ export const HandleSubmitEdit = async ({
   userData,
   cookies,
   setMsg,
+  navigate,
 }) => {
   setLoading(true);
   const userNewData = { ...data, projectInfo: projectInfo };
@@ -113,10 +121,8 @@ export const HandleSubmitEdit = async ({
       });
       setTimeout(() => {
         setMsg({});
-      }, 2000);
-      setTimeout(() => {
-        window.location.assign("/");
-      }, 2000);
+        navigate(-1, { reload: true });
+      }, 1000);
     })
     .catch((err) =>
       setMsg({
@@ -135,33 +141,30 @@ export const HandleSubmitEdit = async ({
 export const HandleDelete = async ({ user, setShowMsg }) => {
   await axios
     .delete(`${process.env.REACT_APP_API_URL}user/${user}`)
-    .then((res) => console.log(res))
+    .then(() => {
+      window.location.reload();
+      setShowMsg(false);
+    })
     .catch((err) => console.log(err));
-  window.location.reload();
-  setShowMsg(false);
+  console.log(user);
 };
 
-// handle add new project
-export const AddProject = ({ setProjectInfo, projectInfo }) => {
-  setProjectInfo([
-    ...projectInfo,
-    {
-      folderName: ``,
-      projectNo: "",
-      projectName: "",
-      projectLoc: "",
-      projectArea: "",
-      projectHei: "",
-      consultant: "",
-      projectDura: "",
-      projectType: "",
-    },
-  ]);
+// get all users
+export const GetUsers = async ({ setLoading, setUsers }) => {
+  await axios
+    .get(`${process.env.REACT_APP_API_URL}user`)
+    .then((res) => {
+      setUsers(res.data);
+      setLoading(false);
+    })
+    .catch((err) => console.log(err));
 };
 
-// handle remove project
-export const ProjectRem = ({ i, projectInfo, setProjectInfo }) => {
-  const onRemove = [...projectInfo];
-  onRemove.splice(i, 1);
-  setProjectInfo(onRemove);
+// get user from id
+export const GetUser = async ({ cookies, id, setUserData }) => {
+  const header = { headers: { token: `${cookies.user_token.token}` } };
+  await axios
+    .get(`${process.env.REACT_APP_API_URL}user/${id}`, { id: id }, header)
+    .then((res) => setUserData(res.data))
+    .catch((err) => console.log(err.response.data.message));
 };

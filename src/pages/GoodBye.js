@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
 import { MdWavingHand } from "react-icons/md";
 import Logout from "../functions/LogoutReq";
+import UserChecker from "../functions/CheckUser";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 
-export const GoodBye = () => {
-  const [cookie, setCookies] = useCookies(["user_token"]);
-  const user = cookie.user_token;
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, []);
+export default function GoodBye() {
+  const [cookies] = useCookies(["user_token"]);
+
+  useEffect(() => UserChecker({ cookies }), [cookies]);
+
   Logout();
+
   return (
     <div className="h-full w-full flex justify-center items-center">
       <div
@@ -36,4 +33,4 @@ export const GoodBye = () => {
       </div>
     </div>
   );
-};
+}

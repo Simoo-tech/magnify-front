@@ -27,14 +27,14 @@ export const HandleSubmit = async ({
       })
       .catch((err) => setError(err.response.data.message))
       .finally(() => setLoading(false));
-  } // new password
+  } // new user password
   else {
     axios
       .put(
-        `${process.env.REACT_APP_API_URL}user/update-password/${user._id}`,
+        `http://localhost:8000/api/user/update-password/${user._id}`,
         userPass
       )
-      .then((res) => {
+      .then(async (res) => {
         alert(res.data.message);
         setTimeout(() => {
           window.location.assign("/");
@@ -46,18 +46,13 @@ export const HandleSubmit = async ({
         }, 1000);
         window.localStorage.removeItem("verify-email");
         window.localStorage.removeItem("userID");
+        await axios
+          .get(`http://localhost:8000/api/user/verify-email/${user._id}`)
+          .catch((err) => console.log(err));
       })
       .catch((err) => setError(err.response.data.message))
       .finally(() => setLoading(false));
   }
-};
-
-// make user verified
-export const Verified = async ({ user }) => {
-  await axios
-    .get(`${process.env.REACT_APP_API_URL}user/verify-email/${user._id}`)
-    .then()
-    .catch((err) => console.log(err));
 };
 
 // check if reset password token is valid
@@ -67,7 +62,7 @@ export const ResetLinkToken = async ({ setValidateLink }) => {
     .post(`${process.env.REACT_APP_API_URL}user/reset-password-token`, {
       token: resetToken,
     })
-    .then((res) => console.log(res.data))
+    .then()
     .catch((err) => {
       setValidateLink(false);
       window.localStorage.removeItem("resetUserID");

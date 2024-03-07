@@ -4,10 +4,9 @@ import Report from "./ReportReq";
 
 const Logout = () => {
   const [cookies] = useCookies(["user_token"]);
-  // User Report
   Report();
+  // user logout
   setTimeout(() => {
-    // user logout
     cookie.remove("user_token", {
       path: "/",
       secure: true,
@@ -17,8 +16,8 @@ const Logout = () => {
     }
     window.localStorage.removeItem("userID");
     window.localStorage.removeItem("session_time");
-    window.location.assign("/");
-  }, 3000);
+    window.location.replace("/");
+  }, 2000);
 };
 
 export default Logout;

@@ -48,7 +48,7 @@ export const QR = () => {
             : "Download your QR to login without your email"}
         </h6>
         <QRCode
-          value={`https://www.magnifyportal.com/${user._id}`}
+          value={`http://localhost:3000/${user._id}`}
           size="70"
           title="QRcode"
           id="QRCode"

@@ -1,19 +1,20 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-// check user type and permission
-const userID = window.localStorage.getItem("userID");
-export const UserType = ({ cookie, navigate }) => {
-  const user = cookie.user_token;
+const verify_email = window.localStorage.getItem("verify-email");
 
-  // see if user is admin
-  if (user && !user.verified && !user.passChanged) {
-    navigate(`/verify-email/${userID}`);
-  } else if (user && user.verified && user.passChanged) {
+// if user loged
+export const UserLoged = ({ navigate, userID, cookies }) => {
+  const user = cookies.user_token;
+  if (user) {
     if (user.isAdmin && user.verified && user.passChanged) {
-      navigate(`/${userID}/dashboard`);
+      window.location.replace(`/${userID}/dashboard`);
     } else if (!user.isAdmin && user.verified && user.passChanged) {
-      navigate(`/${userID}/tour-projects`);
+      navigate(`/${userID}/tour-projects`, { replace: true });
+    } else if (!user.verified && !user.passChanged) {
+      navigate(`/verify-email/${userID}`, { replace: true });
+    } else if (user.data.verified && !user.passChanged) {
+      navigate(`/create-password/${verify_email}`, { replace: true });
     }
   }
 };
@@ -27,13 +28,12 @@ export const EmailLogin = async ({ setQREmail, id }) => {
 };
 
 // login handle submit
-// verify email
-const verify_email = window.localStorage.getItem("verify-email");
 export const HandleSubmit = async ({
   setLoading,
   authData,
   setCookies,
   setError,
+  navigate,
 }) => {
   setLoading(true);
   await axios
@@ -46,19 +46,20 @@ export const HandleSubmit = async ({
       });
       // redirect to path
       const userID = uuidv4(res.data._id);
+
       window.localStorage.setItem("userID", userID);
       if (res.data.isAdmin && res.data.verified && res.data.passChanged) {
-        window.location.assign(`/${userID}/dashboard`);
+        window.location.replace(`/${userID}/dashboard`);
       } else if (
         !res.data.isAdmin &&
         res.data.verified &&
         res.data.passChanged
       ) {
-        window.location.assign(`/${userID}/tour-projects`);
+        navigate(`/${userID}/tour-projects`, { replace: true });
       } else if (!res.data.verified && !res.data.passChanged) {
-        window.location.assign(`/verify-email/${userID}`);
+        navigate(`/verify-email/${userID}`, { replace: true });
       } else if (res.data.verified && !res.data.passChanged) {
-        window.location.assign(`/create-password/${verify_email}`);
+        navigate(`/create-password/${verify_email}`, { replace: true });
       }
     })
     .catch((err) => {

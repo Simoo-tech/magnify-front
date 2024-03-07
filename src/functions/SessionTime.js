@@ -25,7 +25,6 @@ export const Session = async ({ cookies }) => {
     .post(`${process.env.REACT_APP_API_URL}auth/login-token-expire`, {
       token: cookies.user_token.token,
     })
-    .then()
     .catch(() => {
       cookie.remove("user_token", {
         path: "/",
