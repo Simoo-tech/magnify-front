@@ -8,7 +8,10 @@ export const ContactUsLink = () => {
   return (
     <span id="need-help" className="sm:text-xs md:text-sm text-primary-color1 ">
       {lang === "ar" ? "هل تحتاج مساعدة؟" : "Do You Need Help?"}
-      <Link className="font-bold mx-[1px]" to={"/"}>
+      <Link
+        className="font-bold mx-[1px]"
+        to={"https://magnify-vt.com/contact/"}
+      >
         {lang === "ar" ? "تواصل معنا" : "  Contact Us"}
       </Link>
     </span>
