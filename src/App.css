@@ -12,3 +12,97 @@
   border-color: #cc8c3b !important;
   box-shadow: none !important;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: #878787;
+  -webkit-box-shadow: transparent;
+  box-shadow: transparent;
+  background-color: transparent;
+  transition: background-color 5000s ease-in-out 0s;
+  color: #878787;
+}
+
+table {
+  width: 100%;
+}
+
+
+
+::-webkit-scrollbar,
+::-webkit-scrollbar:horizontal {
+  width: 5px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #B6EED6;
+  width: 5px
+}
+
+::-webkit-scrollbar-thumb {
+  background: #497B62;
+  border-radius: 50px !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+.react-tel-input .form-control {
+  outline: none !important;
+  border: none !important;
+}
+
+.react-tel-input .selected-flag:focus::before {
+  border: none !important;
+}
+
+.react-tel-input .form-control {
+  background-color: #D2ECDF !important;
+  color: #878787 !important;
+  border-radius: 48px !important;
+  width: 100% !important;
+}
+
+.react-tel-input .form-control:focus {
+  box-shadow: none !important;
+}
+
+.react-tel-input .selected-flag.open::before {
+  border: none !important;
+}
+
+.react-tel-input .selected-flag {
+  padding: 0px 0px 0px 20px !important;
+}
+
+
+/* english phone input style  */
+.react-tel-input .form-control.en {
+  padding: 11px 65px !important;
+}
+
+
+/* arabic phone input style */
+.react-tel-input .flag-dropdown.ar .selected-flag {
+  padding: 0px 30px 0px 0px !important;
+}
+
+.react-tel-input .flag-dropdown.ar .selected-flag .arrow {
+  left: -30px;
+}
+
+.react-tel-input .form-control.ar {
+  text-align: end;
+}
+
+.react-tel-input .form-control.ar {
+  padding: 11px 80px !important;
+}

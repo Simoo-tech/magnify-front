@@ -2,13 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+* {
+  margin: 0;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
 body {
   margin: 0;
   font-family: "Montserrat", sans-serif;
   scroll-behavior: smooth;
+  box-sizing: border-box;
 }
-
-::-webkit-scrollbar {
-  display: none;
-}
-
