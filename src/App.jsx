@@ -31,6 +31,7 @@ function App() {
 
   return (
     <main
+      id={lang === "ar" && "arabic"}
       className="App h-dvh overflow-hidden relative flex 
           items-center flex-col"
     >
