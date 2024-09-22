@@ -20,7 +20,7 @@ export const QR = () => {
 
   return (
     <div
-      className={`fixed bottom-5  z-30 ${lang === "ar" ? "left-5" : "right-5"}`}
+      className={`fixed bottom-5 z-30 ${lang === "ar" ? "left-5" : "right-5"}`}
     >
       <div className="bg-primary-color1 rounded-full  relative">
         <MdQrCodeScanner
@@ -30,9 +30,9 @@ export const QR = () => {
         />
       </div>
       <div
-        className={`${
-          showQr ? "flex" : "hidden"
-        } qr-container absolute right-[10%] bottom-[4rem] h-fit bg-white z-50 py-2 px-4 flex- flex-col
+        className={`${showQr ? "flex" : "hidden"} qr-container absolute ${
+          lang === "ar" ? "left-[10%]" : "right-[10%]"
+        } bottom-[4rem] h-fit bg-white z-50 py-2 px-4 flex- flex-col
       items-center border-[1px] rounded-lg border-black 
       lg:w-[200px] lg:gap-5
       md:w-[180px] md:gap-5
@@ -41,7 +41,9 @@ export const QR = () => {
         <IoMdArrowDropup
           size={25}
           color="497B62"
-          className="absolute rotate-180 -bottom-[16px] right-2 "
+          className={`absolute rotate-180 -bottom-[16px] ${
+            lang === "ar" ? "left-2" : "right-2"
+          }`}
           onClick={(e) => e.stopPropagation()}
         />
         <h6
