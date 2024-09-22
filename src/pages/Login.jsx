@@ -32,17 +32,17 @@ export default function Login() {
   const links = [
     {
       id: "about-us",
-      url: "/",
+      url: "https://magnify-vt.com/",
       text: lang === "en" || lang === null ? "About magnify " : "  عن magnify",
     },
     {
       id: "privacy terms",
-      url: "/",
+      url: "https://magnify-vt.com/privacy-policy/",
       text: lang === "en" || lang === null ? "Privacy Terms" : "شروط الخصوصية",
     },
     {
       id: "contact us",
-      url: "/",
+      url: "https://magnify-vt.com/contact/",
       text: lang === "en" || lang === null ? "Contact Us" : "تواصل معنا !",
     },
   ];
@@ -177,7 +177,7 @@ const Form = ({ lang, QREmail }) => {
           placeholder={
             lang === "en" || lang === null
               ? "Enter your email address......"
-              : "......ادخل البريد الالكتروني"
+              : "ادخل البريد الالكتروني......"
           }
           onChangeHandle={(e) => {
             const email = e.target.value.toLocaleLowerCase();
@@ -199,7 +199,7 @@ const Form = ({ lang, QREmail }) => {
             placeholder={
               lang === "en" || lang === null
                 ? "Enter your password......"
-                : "......ادخل كلمة المرور"
+                : "ادخل كلمة المرور......"
             }
             onChangeHandle={HandleChange}
             type={"password"}
