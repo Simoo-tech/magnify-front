@@ -136,6 +136,7 @@ export default function UserProjects() {
             >
               {projectImg?.path ? (
                 <img
+                  loading="lazy"
                   className="rounded-3xl object-cover"
                   src={projectImg?.path}
                   style={{ width: "100%", maxHeight: "240px" }}
@@ -199,6 +200,7 @@ export default function UserProjects() {
             >
               {projectImg?.path ? (
                 <img
+                  loading="lazy"
                   className="rounded-3xl object-cover"
                   src={projectImg?.path}
                   style={{ width: "100%", maxHeight: "270px" }}

@@ -265,7 +265,7 @@ const Form = ({
         key={index}
         id="project-info"
         dir={langDir}
-        className=" gap-7 flex flex-col pt-10 border-t-2 border-lineColor-color1
+        className=" gap-7 flex flex-col border-t-2 border-lineColor-color1
         first-of-type:border-none first-of-type:p-0"
       >
         {/*  project number and delete */}
@@ -286,6 +286,7 @@ const Form = ({
             onClick={() => ProjectRem({ index, projectInfo, setProjectInfo })}
           >
             <img
+              loading="lazy"
               src={deleteIcon}
               alt="delete-icon"
               className="sm:w-[23px] md:w-[30px]"

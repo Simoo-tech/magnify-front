@@ -17,7 +17,6 @@ export const InputSearch = ({
       dir={langDir ? langDir : undefined}
       className=" relative focus-within:border-black flex w-full justify-between border-2 border-[#656565]
   px-5 py-2 rounded-3xl items-center bg-white
-  sm:max-w-[280px] 
   md:w-3/6 md:order-3 md:max-w-full
   lg:w-3/6 lg:order-2"
     >

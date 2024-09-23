@@ -130,16 +130,16 @@ const Form = ({ lang, QREmail }) => {
         HandleSubmit({ setLoading, authData, setError, navigate });
       }}
       id="login-form"
-      className=" h-full bg-darkGreen flex flex-col 
-        items-center justify-between rounded-3xl
+      className=" h-full bg-darkGreen flex flex-col items-center justify-between rounded-3xl max-h-[650px]
         xl:w-[420px]
         lg:w-[400px] lg:py-14
-        md:w-[380px] md:max-w-full md:max-h-[650px] md:py-10 md:px-8
-        sm:w-[90%] sm:max-w-[300px] sm:max-h-full sm:py-10 sm:px-4"
+        md:w-[380px] md:max-w-full md:py-10 md:px-8
+        sm:w-[90%] sm:max-w-[400px] sm:max-h-full sm:py-10 sm:px-4"
     >
       {/* top-form */}
       <div className="w-full flex flex-col gap-5 items-center">
         <img
+          loading="lazy"
           src={logo}
           alt="magnify-logo"
           className="sm:w-[180px] md:w-[230px]"

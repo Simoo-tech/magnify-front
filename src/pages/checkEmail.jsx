@@ -61,6 +61,7 @@ export default function CheckEmail() {
           {/* text */}
           <div id="text" className="flex flex-col items-center gap-5">
             <img
+              loading="lazy"
               src={icon1}
               alt="check-email-icon"
               className="sm:w-[80px] md:w-[130px] lg:w-[150px] xl:w-[170px]"

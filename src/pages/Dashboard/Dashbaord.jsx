@@ -103,7 +103,9 @@ export function Dashbaord() {
       )}
       <section
         dir={langDir}
-        className="container max-w-full relative w-full py-5 justify-center flex flex-col gap-10 items-center"
+        className="container max-w-full relative w-full py-5 justify-center flex flex-col items-center
+        sm:gap-5
+        md:gap-10  "
       >
         <>
           {/* admin tools  */}

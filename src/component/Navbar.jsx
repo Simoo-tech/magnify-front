@@ -34,7 +34,12 @@ export const Navbar = ({ setPopUp }) => {
       dir={langDir ? langDir : undefined}
       className="logo py-3 max-w-full container flex justify-between h-fit top-0 bg-primary-color1 sticky z-50 "
     >
-      <img src={logo} alt="magnify-logo" className="sm:w-[85px] md:w-[110px]" />
+      <img
+        loading="lazy"
+        src={logo}
+        alt="magnify-logo"
+        className="sm:w-[85px] md:w-[110px]"
+      />
       {user ? (
         <div
           className=" flex items-center

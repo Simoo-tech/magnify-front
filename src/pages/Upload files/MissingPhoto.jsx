@@ -220,8 +220,8 @@ export default function MissingPhoto() {
             id="files"
             className="flex flex-col h-[350px] gap-5 justify-between items-center
             rounded-xl bg-lightGreen p-5 overflow-y-scroll
-            sm:max-w-full 
-            md:w-7/12"
+            sm:w-full sm:max-w-[450px]
+            md:w-7/12 md:max-w-full"
           >
             <div id="show-choosen-files" className="flex flex-col gap-2 w-full">
               {ShowFile}

@@ -22,6 +22,7 @@ export default function Logout() {
         className="flex flex-col justify-center h-full items-center gap-20 container max-w-full"
       >
         <img
+          loading="lazy"
           src={logo}
           className="sm:w-[100%] sm:max-w-[300px] md:max-w-full md:w-[350px] lg:w-[450px] xl:w-[550px]"
           alt="logo-logout"

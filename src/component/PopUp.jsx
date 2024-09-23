@@ -34,8 +34,13 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img src={logo} alt="logo" />
-        <img src={iconImage} alt="icon-reset-submit" width={120} />
+        <img loading="lazy" src={logo} alt="logo" />
+        <img
+          loading="lazy"
+          src={iconImage}
+          alt="icon-reset-submit"
+          width={120}
+        />
         <p
           className="text-primary-color1 w-full text-center 
         lg:text-[20px]

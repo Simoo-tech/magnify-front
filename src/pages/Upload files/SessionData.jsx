@@ -119,7 +119,12 @@ export default function SessionData() {
               HandleDeleteFile({ i, images, setImages, setUploaded })
             }
           >
-            <img src={icon6} alt="delete-photo-icon" width={25} />
+            <img
+              loading="lazy"
+              src={icon6}
+              alt="delete-photo-icon"
+              width={25}
+            />
           </button>
         )}
       </div>
@@ -184,7 +189,11 @@ export default function SessionData() {
             className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
           >
-            <img src={icon9} className="sm:w-[100px] md:w-[150px]" />
+            <img
+              loading="lazy"
+              src={icon9}
+              className="sm:w-[100px] md:w-[150px]"
+            />
             <input
               accept=".3gp,.mp4, .webm, .mkv, .mov"
               onChange={uploading ? null : HandleChange}
@@ -216,8 +225,8 @@ export default function SessionData() {
             id="files"
             className="flex flex-col h-[350px] gap-5 justify-between items-center
             rounded-xl bg-lightGreen p-5 overflow-y-scroll
-            sm:max-w-full 
-            md:w-7/12 "
+            sm:w-full sm:max-w-[450px]
+            md:w-7/12 md:max-w-full "
           >
             <div id="show-choosen-files" className="flex flex-col gap-3 w-full">
               {ShowFile}

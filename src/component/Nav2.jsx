@@ -27,6 +27,7 @@ export const Nav2 = ({ logoStyle }) => {
       } items-center w-full`}
     >
       <img
+        loading="lazy"
         src={logo}
         alt="magnify-logo"
         width={"110px"}

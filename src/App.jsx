@@ -19,6 +19,7 @@ import SessionData from "./pages/Upload files/SessionData";
 import UploadFiles from "./pages/Upload files/UploadFiles";
 import Logout from "./pages/Logout";
 import CheckEmail from "./pages/checkEmail";
+import { Loading } from "./component/Loading";
 
 function App() {
   // set language
