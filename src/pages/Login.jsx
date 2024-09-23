@@ -68,7 +68,7 @@ export default function Login() {
     <Layout1 logoStyle="hidden">
       <section
         id="login-page"
-        className="flex flex-col items-center justify-between w-full h-full gap-6
+        className="flex flex-col items-center justify-between w-full h-full gap-6 
         sm:mt-5 lg:mt-0"
       >
         {/* login form */}

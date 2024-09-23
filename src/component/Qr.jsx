@@ -20,9 +20,11 @@ export const QR = () => {
 
   return (
     <div
-      className={`fixed bottom-5 z-30 ${lang === "ar" ? "left-5" : "right-5"}`}
+      className={`fixed bottom-5 h-fit w-fit z-30 ${
+        lang === "ar" ? "left-5" : "right-5"
+      }`}
     >
-      <div className="bg-primary-color1 rounded-full  relative">
+      <div className="bg-primary-color1 rounded-full h-fit w-fit relative">
         <MdQrCodeScanner
           color="white"
           className="h-full p-2 sm:w-[45px] md:w-[50px] lg:w-[55px] cursor-pointer"
