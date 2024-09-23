@@ -275,12 +275,8 @@ const Table = ({
             <button
               title="edit"
               id="focus-btn"
-              className="py-2 px-3 bg-blue-900 text-white flex justify-center items-center
-              hover:bg-white hover:text-blue-900 duration-200 
-              lg:rounded-2xl
-              md:rounded-xl
-              sm:rounded-lg
-              "
+              className="py-2 px-3 bg-primary-color3 text-white flex justify-center items-center
+              hover:bg-white hover:text-primary-color3 duration-200 rounded-lg"
               onClick={() => {
                 navigate(`${user._id}/edit-user`);
               }}
@@ -294,11 +290,7 @@ const Table = ({
             <button
               title="delete"
               className="py-2 px-3 bg-red-500 text-white flex justify-center items-center
-              hover:bg-white hover:text-red-500 duration-200 
-              lg:rounded-2xl
-              md:rounded-xl
-              sm:rounded-lg
-              "
+              hover:bg-white hover:text-red-500 duration-200 rounded-lg"
               id="focus-btn"
               onClick={() => {
                 setPopUp(true);
