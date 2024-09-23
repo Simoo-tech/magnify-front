@@ -15,7 +15,7 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 export function NotFound() {
   const [lang] = useLang();
 
-  const { isLoading, data } = useQuery(
+  const { isLoading } = useQuery(
     "fetchHome",
     () => {
       return axios.get(`${serverPath}user/${user_cookies}`);
@@ -75,13 +75,7 @@ export function NotFound() {
               className="underline text-primary-color1 capitalize mt-5
               sm:text-sm 
               md:text-base "
-              to={
-                user_cookies
-                  ? data.data.isAdmin
-                    ? `/${user_cookies}/dashboard`
-                    : `/${user_cookies}/tour-projects`
-                  : "/"
-              }
+              to={"/"}
             >
               {lang === "ar" ? "الرجوع إلى الصفحة الرئيسية" : "Go to home page"}
             </Link>

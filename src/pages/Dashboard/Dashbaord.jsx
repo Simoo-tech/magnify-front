@@ -54,12 +54,7 @@ export function Dashbaord() {
       return axios.get(`${serverPath}user/${user_cookies}`);
     },
     {
-      onSuccess: setUserData,
-      refetchOnmount: false,
-      refetchOnReconnect: false,
-      retry: false,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 60 * 24,
+      onSuccess: (res) => setUserData(res.data),
     }
   );
 
@@ -67,8 +62,7 @@ export function Dashbaord() {
     return <Loading />;
   }
   // user data
-  const { fname, isAdmin } = userData?.data;
-
+  const { fname, isAdmin } = userData;
   // check user
   if (error || id !== user_cookies || !isAdmin) {
     return <NotFound />;
@@ -353,6 +347,7 @@ const Table = ({
       setResult(0);
     }
   });
+
   return (
     <div
       id="users-table"

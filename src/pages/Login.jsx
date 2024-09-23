@@ -1,5 +1,5 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 // components
 import { HandleSubmit, UserLoged } from "../lib/LoginReq";
 import { useLang } from "../context/LangContext";
@@ -14,21 +14,17 @@ import { Input } from "../component/Input";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { NotFound } from "../component/NotFound";
+import cookie from "react-cookies";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function Login() {
-  useEffect(() => {
-    UserLoged();
-  }, []);
   // login user with qr code
   const url = window.location.href.split("/");
   const id = url[3];
   const [QREmail, setQREmail] = useState(null);
-
-  // handle change languagepng
+  const user_cookies = cookie.load("user_token");
   const [lang] = useLang();
-
   const links = [
     {
       id: "about-us",
@@ -46,8 +42,30 @@ export default function Login() {
       text: lang === "en" || lang === null ? "Contact Us" : "تواصل معنا !",
     },
   ];
-
-  // fetch data
+  if (user_cookies) {
+    const { isLoading, data } = useQuery(
+      "checkUserLoged",
+      () => {
+        return axios.get(`${serverPath}user/${user_cookies}`);
+      },
+      {
+        refetchOnmount: false,
+        refetchOnReconnect: false,
+        retry: false,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 60 * 24,
+      }
+    );
+    if (isLoading) {
+      return <Loading />;
+    }
+    if (data.data.isAdmin) {
+      return <Navigate to={`/${user_cookies}/dashboard`} replace />;
+    } else {
+      return <Navigate to={`/${user_cookies}/tour-projects`} replace />;
+    }
+  }
+  // fetch data for email login
   if (id) {
     const { isLoading, error } = useQuery(
       "emailLogin",
@@ -69,7 +87,7 @@ export default function Login() {
       <section
         id="login-page"
         className="flex flex-col items-center justify-between w-full h-full gap-6 
-        sm:mt-5 lg:mt-0"
+      sm:mt-5 lg:mt-0"
       >
         {/* login form */}
         <Form lang={lang} QREmail={QREmail} />
@@ -84,9 +102,9 @@ export default function Login() {
               key={i}
               id={link.id}
               className="text-center truncate text-primary-color1 font-semibold
-              lg:text-base
-              md:text-sm
-              sm:text-xs"
+            lg:text-base
+            md:text-sm
+            sm:text-xs"
               to={link.url}
             >
               {link.text}
