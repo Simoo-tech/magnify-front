@@ -192,7 +192,7 @@ const Form = ({ lang, QREmail }) => {
         <div className="w-full flex flex-col sm:gap-6 md:gap-10 lg:gap-6">
           {/* email input */}
           <Input
-            labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-auto"
+            labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-base"
             inputStyle="sm:!text-xs md:!text-auto"
             name={"email"}
             text={lang === "ar" ? "البريد الالكتروني" : "E-mail"}
@@ -214,7 +214,7 @@ const Form = ({ lang, QREmail }) => {
           <div className="flex flex-col gap-2">
             {/* password input */}
             <Input
-              labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-auto"
+              labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-base"
               inputStyle="sm:!text-xs md:!text-auto"
               name={"password"}
               text={lang === "ar" ? "كلمة المرور" : "Password"}

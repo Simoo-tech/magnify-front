@@ -253,11 +253,11 @@ export default function UserProjects() {
         style={{ backgroundImage: `url(${BackgroundImg})` }}
         id="projects-page"
         dir={langDir}
-        className="flex flex-col container max-w-full h-fit bg-scroll bg-center
+        className="flex flex-col container max-w-full bg-scroll bg-center
       items-center justify-start relative gap-5 pt-10        
       lg:bg-cover 
-      md:pb-5
-      sm:bg-[length:100%] sm:pb-10"
+      md:pb-5 md:h-full
+      sm:bg-[length:100%] sm:pb-10 sm:h-fit"
       >
         <h3
           id="user-welcome"
@@ -324,7 +324,7 @@ export default function UserProjects() {
         {UserProjects?.length >= 1 ? (
           <div
             id="projects"
-            className="w-full flex flex-wrap min-h-[426px] justify-center items-center 
+            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center 
             xl:mt-14
             lg:gap-14 lg:mt-8
             md:gap-12 md:mt-5

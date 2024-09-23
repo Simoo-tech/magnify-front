@@ -49,9 +49,9 @@ export default function CheckEmail() {
       <section
         id="check-email"
         className="h-full flex flex-col items-center justify-between
-        lg:w-3/6 
-        md:w-4/6 
-        sm:w-5/6"
+        lg:w-3/6 lg:max-h-full
+        md:w-4/6 md:max-h-[700px]
+        sm:w-5/6 sm:max-h-[500px]"
       >
         {/*top container  */}
         <div

@@ -97,7 +97,7 @@ export function Dashbaord() {
       )}
       <section
         dir={langDir}
-        className="container max-w-full relative w-full py-5 justify-center flex flex-col items-center
+        className="container h-full max-w-full relative w-full py-5 justify-start flex flex-col items-center
         sm:gap-5
         md:gap-10  "
       >
@@ -351,7 +351,8 @@ const Table = ({
   return (
     <div
       id="users-table"
-      className="w-full h-[420px] flex items-start flex-col justify-start overflow-auto "
+      className="w-full h-full flex items-start flex-col justify-start overflow-auto 
+      sm:max-h-[420px]"
     >
       {!isLoading && (
         <table
