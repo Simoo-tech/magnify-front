@@ -36,11 +36,6 @@ export default function UserProjects() {
     },
     {
       onSuccess: (res) => setFilter(res.data),
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 60 * 24,
-      refetchOnmount: false,
-      refetchOnReconnect: false,
-      retry: false,
     }
   );
   if (isLoading) {
@@ -53,7 +48,7 @@ export default function UserProjects() {
   }
 
   // if user has one project
-  if (projectInfo.length === 1) {
+  if (projectInfo?.length === 1) {
     return (
       <>
         <iframe
@@ -326,7 +321,7 @@ export default function UserProjects() {
           />
         </div>
         {/* no user found */}
-        {UserProjects.length >= 1 ? (
+        {UserProjects?.length >= 1 ? (
           <div
             id="projects"
             className="w-full flex flex-wrap min-h-[426px] justify-center items-center 
