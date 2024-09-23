@@ -24,7 +24,11 @@ export const QR = () => {
         lang === "ar" ? "left-5" : "right-5"
       }`}
     >
-      <div className="bg-primary-color1 rounded-full h-fit w-fit relative">
+      <div
+        className="bg-primary-color1 flex justify-center items-center rounded-full relative
+      sm:h-[50px] sm:w-[50px]
+      md:h-[55px] md:w-[55px]"
+      >
         <MdQrCodeScanner
           color="white"
           className="h-full p-2 sm:w-[45px] md:w-[50px] lg:w-[55px] cursor-pointer"
