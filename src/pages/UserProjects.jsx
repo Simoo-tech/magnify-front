@@ -254,8 +254,8 @@ export default function UserProjects() {
         id="projects-page"
         dir={langDir}
         className="flex flex-col container max-w-full bg-scroll bg-center
-      items-center justify-start relative gap-5 pt-10        
-      lg:bg-cover 
+      items-center justify-start relative gap-5 py-10 mb-20        
+      lg:bg-cover lg:h-fit
       md:pb-5 md:h-full
       sm:bg-[length:100%] sm:pb-10 sm:h-fit"
       >

@@ -155,7 +155,7 @@ const Form = ({ lang, QREmail }) => {
         className="w-full h-full bg-darkGreen flex flex-col rounded-3xl items-center justify-between max-h-[600px]
         xl:w-[420px]
         lg:w-[400px] lg:py-14
-        md:w-[500px] md:max-w-full md:max-h-[600px] md:py-10 md:px-8
+        md:w-[500px] md:max-w-full md:max-h-[700px] md:py-10 md:px-8
         sm:w-[90%] sm:max-w-[460px] sm:py-10 sm:px-4"
       >
         {/* top-form */}

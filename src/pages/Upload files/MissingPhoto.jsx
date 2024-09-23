@@ -152,7 +152,7 @@ export default function MissingPhoto() {
       dir={langDir}
       className={`${
         animation ? "top-0" : "top-full"
-      } w-full h-full flex justify-center items-center absolute duration-500 left-0 z-30  `}
+      } w-full h-full  flex justify-center items-center absolute duration-500 left-0 z-30  `}
     >
       <Layout2 type="check-email">
         <h2
@@ -168,7 +168,7 @@ export default function MissingPhoto() {
           <span
             className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
               msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
-            }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate
+            }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate 
           sm:text-[12px] sm:w-fit sm:px-2 sm:top-16
           md:text-[16px] md:px-4 md:top-8`}
           >

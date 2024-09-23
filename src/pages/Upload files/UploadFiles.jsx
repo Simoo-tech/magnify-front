@@ -21,11 +21,11 @@ export default function UploadFiles() {
     <Layout2 type="verify-email">
       <section
         id="upload-files"
-        className=" h-full w-full items-center flex flex-col justify-between py-3 container max-w-full"
+        className=" h-full max-h-[600px] w-full items-center flex flex-col justify-between py-3 container max-w-full"
       >
         <div
           id="choose-upload-Type"
-          className="flex justify-between items-center h-full
+          className="flex justify-between items-center h-full 
           sm:w-full sm:flex-col
           md:w-9/12 md:flex-row"
         >
