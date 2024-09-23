@@ -118,6 +118,7 @@ export default function Login() {
 
 const Form = ({ lang, QREmail }) => {
   const navigate = useNavigate();
+
   // login by QR
   const [authData, setAuthData] = useState(
     QREmail ? { email: QREmail, password: "" } : { email: "", password: "" }
@@ -148,137 +149,144 @@ const Form = ({ lang, QREmail }) => {
         HandleSubmit({ setLoading, authData, setError, navigate });
       }}
       id="login-form"
-      className=" h-full bg-darkGreen flex flex-col items-center justify-between rounded-3xl max-h-[650px]
+      className="w-full h-full flex flex-col items-center justify-center"
+    >
+      <div
+        className="w-full h-full bg-darkGreen flex flex-col rounded-3xl items-center justify-between max-h-[600px]
         xl:w-[420px]
         lg:w-[400px] lg:py-14
-        md:w-[380px] md:max-w-full md:py-10 md:px-8
-        sm:w-[90%] sm:max-w-[400px] sm:max-h-full sm:py-10 sm:px-4"
-    >
-      {/* top-form */}
-      <div className="w-full flex flex-col gap-5 items-center">
-        <img
-          loading="lazy"
-          src={logo}
-          alt="magnify-logo"
-          className="sm:w-[180px] md:w-[230px]"
-        />
-        <div className="w-full flex flex-col items-center gap-3">
-          <h2
-            className="capitalize w-full font-light text-lightGreen text-center
-          md:text-xl
+        md:w-[500px] md:max-w-full md:max-h-[800px] md:py-10 md:px-8
+        sm:w-[90%] sm:max-w-[460px] sm:py-10 sm:px-4"
+      >
+        {/* top-form */}
+        <div className="w-full flex flex-col gap-5 items-center">
+          <img
+            loading="lazy"
+            src={logo}
+            alt="magnify-logo"
+            className="sm:w-[180px] md:w-[330px] lg:w-[230px]"
+          />
+          <div className="w-full flex flex-col items-center gap-3">
+            <h2
+              className="capitalize w-full font-light text-lightGreen text-center
+          lg:text-xl
+          md:text-2xl
           sm:text-lg "
-          >
-            {lang === "en" || lang === null ? "log in" : "تسجيل الدخول "}
-          </h2>
-          {/* error messaage */}
-          {error && (
-            <span
-              className="text-center text-white flex items-center gap-3 justify-center w-full
+            >
+              {lang === "en" || lang === null ? "log in" : "تسجيل الدخول "}
+            </h2>
+            {/* error messaage */}
+            {error && (
+              <span
+                className="text-center text-white flex items-center gap-3 justify-center w-full
               bg-red-500 
               py-2 rounded-lg text-xs "
-            >
-              <MdErrorOutline size={18} />
-              {error}
-            </span>
-          )}
-        </div>
-      </div>
-      {/* inputs container */}
-      <div className="w-full flex flex-col gap-6">
-        {/* email input */}
-        <Input
-          labelStlye="sm:!text-[17px] md:!text-auto"
-          inputStyle="sm:!text-xs md:!text-auto"
-          name={"email"}
-          text={lang === "ar" ? "البريد الالكتروني" : "E-mail"}
-          value={QREmail ? QREmail : authData.email}
-          placeholder={
-            lang === "en" || lang === null
-              ? "Enter your email address......"
-              : "ادخل البريد الالكتروني......"
-          }
-          onChangeHandle={(e) => {
-            const email = e.target.value.toLocaleLowerCase();
-            setAuthData({ ...authData, email });
-            setError(null);
-          }}
-          type={"email"}
-          autoFocus={true}
-        />
-        {/* links */}
-        <div className="flex flex-col gap-2">
-          {/* password input */}
-          <Input
-            labelStlye="sm:!text-[17px] md:!text-auto"
-            inputStyle="sm:!text-xs md:!text-auto"
-            name={"password"}
-            text={lang === "ar" ? "كلمة المرور" : "Password"}
-            value={authData.password}
-            placeholder={
-              lang === "en" || lang === null
-                ? "Enter your password......"
-                : "ادخل كلمة المرور......"
-            }
-            onChangeHandle={HandleChange}
-            type={"password"}
-            required={true}
-            minLen={8}
-            maxLen={16}
-          />
-          <div
-            className={`${
-              lang === "ar" && "flex-row-reverse"
-            } flex justify-between px-2`}
-          >
-            {/* remember me */}
-            <label
-              htmlFor="remember-me"
-              id="remember"
-              className="cursor-pointer text-textColor2 capitalize flex items-center gap-1
-              sm:text-[12px]
-              md:text-xs "
-            >
-              <input
-                type="checkbox"
-                name="remember"
-                className="appearance-none w-3 h-3 peer relative checked:border-0 bg-lightGreen text-primary-color1"
-                id="remember-me"
-              />
-              {lang === "en" || lang === null ? "Remember me" : "تذكرني"}
-              <svg
-                className="stroke-primary-color1 absolute w-3 h-3 peer-checked:block hidden "
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
               >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </label>
-            {/* forgot pass */}
-            <Link
-              to={"/forgot-password"}
-              id="forgot-password"
-              className=" underline text-textColor2 
-              sm:text-[12px]
-              md:text-xs "
-            >
-              {lang === "en" || lang === null
-                ? "forgot password?"
-                : "نسيت كلمة المرور؟"}
-            </Link>
+                <MdErrorOutline size={18} />
+                {error}
+              </span>
+            )}
           </div>
         </div>
+        {/* inputs container */}
+        <div className="w-full flex flex-col sm:gap-6 md:gap-10 lg:gap-6">
+          {/* email input */}
+          <Input
+            labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-auto"
+            inputStyle="sm:!text-xs md:!text-auto"
+            name={"email"}
+            text={lang === "ar" ? "البريد الالكتروني" : "E-mail"}
+            value={QREmail ? QREmail : authData.email}
+            placeholder={
+              lang === "en" || lang === null
+                ? "Enter your email address......"
+                : "ادخل البريد الالكتروني......"
+            }
+            onChangeHandle={(e) => {
+              const email = e.target.value.toLocaleLowerCase();
+              setAuthData({ ...authData, email });
+              setError(null);
+            }}
+            type={"email"}
+            autoFocus={true}
+          />
+          {/* links */}
+          <div className="flex flex-col gap-2">
+            {/* password input */}
+            <Input
+              labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-auto"
+              inputStyle="sm:!text-xs md:!text-auto"
+              name={"password"}
+              text={lang === "ar" ? "كلمة المرور" : "Password"}
+              value={authData.password}
+              placeholder={
+                lang === "en" || lang === null
+                  ? "Enter your password......"
+                  : "ادخل كلمة المرور......"
+              }
+              onChangeHandle={HandleChange}
+              type={"password"}
+              required={true}
+              minLen={8}
+              maxLen={16}
+            />
+            <div
+              className={`${
+                lang === "ar" && "flex-row-reverse"
+              } flex justify-between px-2`}
+            >
+              {/* remember me */}
+              <label
+                htmlFor="remember-me"
+                id="remember"
+                className="cursor-pointer text-textColor2 capitalize flex items-center gap-1
+              sm:text-[12px]
+              md:text-sm
+              lg:text-xs "
+              >
+                <input
+                  type="checkbox"
+                  name="remember"
+                  className="appearance-none w-3 h-3 peer relative checked:border-0 bg-lightGreen text-primary-color1"
+                  id="remember-me"
+                />
+                {lang === "en" || lang === null ? "Remember me" : "تذكرني"}
+                <svg
+                  className="stroke-primary-color1 absolute w-3 h-3 peer-checked:block hidden "
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </label>
+              {/* forgot pass */}
+              <Link
+                to={"/forgot-password"}
+                id="forgot-password"
+                className=" underline text-textColor2 
+              sm:text-[12px]
+              md:text-sm
+              lg:text-xs  "
+              >
+                {lang === "en" || lang === null
+                  ? "forgot password?"
+                  : "نسيت كلمة المرور؟"}
+              </Link>
+            </div>
+          </div>
+        </div>
+        {/* sign in btn */}
+        <PrimaryBtn
+          text={lang === "en" || lang === null ? "log in" : "تسجيل  "}
+          loading={loading}
+          style="sm:!text-sm md:!text-lg lg:!text-base sm:!py-2 "
+          type={"submit"}
+        />
       </div>
-      {/* sign in btn */}
-      <PrimaryBtn
-        text={lang === "en" || lang === null ? "log in" : "تسجيل  "}
-        loading={loading}
-        style="sm:!text-sm md:!text-base sm:!py-2 "
-        type={"submit"}
-      />
     </form>
   );
 };
