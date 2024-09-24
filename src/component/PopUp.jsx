@@ -34,9 +34,9 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img loading="lazy" src={logo} alt="logo" />
+        <img loading="eager" src={logo} alt="logo" />
         <img
-          loading="lazy"
+          loading="eager"
           src={iconImage}
           alt="icon-reset-submit"
           width={120}

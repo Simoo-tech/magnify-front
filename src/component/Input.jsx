@@ -106,7 +106,7 @@ export const Input = ({
             {value?.path && (
               <>
                 <img
-                  loading="lazy"
+                  loading="eager"
                   src={value?.path}
                   className="w-full sm:h-full md:max-h-[350px] object-cover rounded-3xl"
                 />

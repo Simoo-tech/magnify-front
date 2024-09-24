@@ -40,7 +40,7 @@ export function NotFound() {
         <div className="flex flex-col justify-center items-center h-full">
           {/* image */}
           <img
-            loading="lazy"
+            loading="eager"
             src={image}
             className="sm:w-[150px] md:w-[200px] lg:w-[250px]"
             alt="not-found-image"
