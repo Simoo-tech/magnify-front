@@ -120,7 +120,7 @@ export default function SessionData() {
             }
           >
             <img
-              loading="lazy"
+              loading="eager"
               src={icon6}
               alt="delete-photo-icon"
               width={25}
@@ -190,7 +190,7 @@ export default function SessionData() {
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
           >
             <img
-              loading="lazy"
+              loading="eager"
               src={icon9}
               className="sm:w-[100px] md:w-[150px]"
             />

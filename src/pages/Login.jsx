@@ -161,7 +161,7 @@ const Form = ({ lang, QREmail }) => {
         {/* top-form */}
         <div className="w-full flex flex-col gap-5 items-center">
           <img
-            loading="lazy"
+            loading="eager"
             src={logo}
             alt="magnify-logo"
             className="sm:w-[180px] md:w-[330px] lg:w-[230px]"

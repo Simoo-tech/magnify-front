@@ -123,7 +123,12 @@ export default function MissingPhoto() {
               HandleDeleteFile({ i, images, setImages, setUploaded })
             }
           >
-            <img src={icon6} alt="delete-photo-icon" width={25} />
+            <img
+              loading="eager"
+              src={icon6}
+              alt="delete-photo-icon"
+              width={25}
+            />
           </button>
         )}
       </div>
@@ -189,7 +194,11 @@ export default function MissingPhoto() {
             className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
           >
-            <img src={icon9} className="sm:w-[100px] md:w-[150px]" />
+            <img
+              loading="eager"
+              src={icon9}
+              className="sm:w-[100px] md:w-[150px]"
+            />
             <input
               accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
               onChange={uploading ? null : HandleChange}

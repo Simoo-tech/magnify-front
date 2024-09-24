@@ -36,7 +36,7 @@ export default function UploadFiles() {
             md:w-6/12"
           >
             <img
-              loading="lazy"
+              loading="eager"
               src={icon8}
               alt="photo-session-data"
               className="sm:w-[50px] md:w-[80px] lg:w-[120px]"
@@ -54,7 +54,7 @@ export default function UploadFiles() {
             md:w-6/12"
           >
             <img
-              loading="lazy"
+              loading="eager"
               src={icon7}
               alt="Missing-Photo"
               className="sm:w-[90px] md:w-[160px] lg:w-[240px]"
