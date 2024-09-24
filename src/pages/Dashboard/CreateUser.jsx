@@ -286,7 +286,7 @@ const Form = ({
             onClick={() => ProjectRem({ index, projectInfo, setProjectInfo })}
           >
             <img
-              loading="lazy"
+              loading="eager"
               src={deleteIcon}
               alt="delete-icon"
               className="sm:w-[23px] md:w-[30px]"
