@@ -196,7 +196,7 @@ const Form = ({ lang, QREmail }) => {
             inputStyle="sm:!text-xs md:!text-auto"
             name={"email"}
             text={lang === "ar" ? "البريد الالكتروني" : "E-mail"}
-            value={QREmail ? QREmail : authData.email}
+            value={authData.email}
             placeholder={
               lang === "en" || lang === null
                 ? "Enter your email address......"
