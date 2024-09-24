@@ -253,7 +253,7 @@ const Form = ({
       {
         type: "file",
         name: "projectImg",
-        accept: ".jpg, .png, .jpeg",
+        accept: ".jpg, .png, .jpeg, .webp",
         index,
         value: project.projectImg,
         style: "col-span-full min-h-[200px]",
