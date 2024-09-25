@@ -26,7 +26,7 @@ export default function SendReset() {
           e.preventDefault();
           HandleSendReset({ setSending, email, setErr });
         }}
-        className="flex md:h-full flex-col items-center sm:gap-10 md:gap-20 justify-center 
+        className="flex h-full flex-col items-center sm:gap-10 md:gap-20 justify-center 
         lg:w-6/12 
         sm:w-full"
       >

@@ -48,9 +48,9 @@ export default function CheckEmail() {
     <Layout2 type={"check-email"}>
       <section
         id="check-email"
-        className="flex flex-col items-center justify-center 
+        className="flex flex-col items-center justify-center h-full
         lg:w-3/6
-        md:w-4/6 md:gap-14 md:h-full
+        md:w-4/6 md:gap-14
         sm:w-full sm:gap-8 "
       >
         {/* text */}

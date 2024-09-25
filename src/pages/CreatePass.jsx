@@ -56,7 +56,9 @@ export default function CreatePass() {
     <Layout2 type={"create-password"}>
       <section
         dir={langDir}
-        className="w-full md:h-full flex items-center flex-col gap-16 justify-center"
+        className="flex items-center flex-col justify-center h-full
+        md:gap-16 
+        sm:w-full sm:gap-8"
         id="create-new-password"
       >
         {/* finish popUp  */}
@@ -228,11 +230,9 @@ const Form = ({
           >
             {lang === "ar" ? " كلمة المرور يجب ان تكون:" : "Password must be:"}
           </h3>
-          <ol
-            className={`list-inside list-item flex-col capitalize space-y-1 text-base`}
-          >
+          <ol className="list-inside list-item flex-col capitalize space-y-1 text-base">
             {listInstructions.map((list) => (
-              <li className="list-decimal text-primary-color1 sm:text-sm md:text-xs lg:text-base">
+              <li className="list-decimal text-primary-color1 sm:text-xs md:text-xs lg:text-base">
                 {list.text}
               </li>
             ))}

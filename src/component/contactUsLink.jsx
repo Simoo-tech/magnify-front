@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const ContactUsLink = ({ visible }) => {
   const [lang] = useLang();
-  console.log(visible);
+
   return (
     <span
       id="need-help"
