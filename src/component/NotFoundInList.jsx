@@ -4,8 +4,9 @@ import { MdOutlineSearchOff } from "react-icons/md";
 export const NotFoundInList = ({ textStyle, text, color, height, border }) => {
   return (
     <div
-      style={{ height: height }}
-      className={`${border && " border-b-2 border-x-2 border-primary-color2"}  
+      className={`${height} ${
+        border && " border-b-2 border-x-2 border-primary-color2"
+      }  
       w-full flex self-center flex-col justify-center items-center gap-5`}
     >
       <MdOutlineSearchOff

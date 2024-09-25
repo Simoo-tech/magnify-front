@@ -97,6 +97,7 @@ export default function Login() {
           className="links flex w-full justify-between"
           dir={lang === "ar" && "rtl"}
         >
+          {/* links */}
           {links.map((link, i) => (
             <Link
               key={i}
@@ -152,11 +153,11 @@ const Form = ({ lang, QREmail }) => {
       className="w-full h-full flex flex-col items-center justify-center"
     >
       <div
-        className="w-full h-full bg-darkGreen flex flex-col rounded-3xl items-center justify-between max-h-[600px]
+        className="w-full h-full bg-darkGreen flex flex-col rounded-3xl items-center justify-between 
         xl:w-[420px]
-        lg:w-[400px] lg:py-14
+        lg:w-[400px] lg:py-14 lg:max-h-[600px]
         md:w-[500px] md:max-w-full md:max-h-[700px] md:py-10 md:px-8
-        sm:w-[90%] sm:max-w-[460px] sm:py-10 sm:px-4"
+        sm:w-[90%] sm:max-w-[460px] sm:py-10 sm:px-4 sm:max-h-[650px]"
       >
         {/* top-form */}
         <div className="w-full flex flex-col gap-5 items-center">
@@ -210,7 +211,6 @@ const Form = ({ lang, QREmail }) => {
             type={"email"}
             autoFocus={true}
           />
-          {/* links */}
           <div className="flex flex-col gap-2">
             {/* password input */}
             <Input

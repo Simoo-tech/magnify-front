@@ -344,7 +344,8 @@ const Table = ({
     <div
       id="users-table"
       className="w-full h-full flex items-start flex-col justify-start overflow-auto 
-      sm:max-h-[420px]"
+      lg:max-h-[420px]
+      sm:max-h-[490px]"
     >
       {!isLoading && (
         <table

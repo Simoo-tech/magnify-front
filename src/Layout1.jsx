@@ -1,8 +1,9 @@
 import React from "react";
 import BackgroundImg from "/assest/background1.svg";
 import { Nav2 } from "./component/Nav2";
+import { ContactUsLink } from "./component/contactUsLink";
 
-export default function Layout1({ children, logoStyle }) {
+export default function Layout1({ children, logoStyle, footer }) {
   return (
     <div
       style={{ backgroundImage: `url("${BackgroundImg}")` }}
@@ -11,6 +12,8 @@ export default function Layout1({ children, logoStyle }) {
     >
       <Nav2 logoStyle={logoStyle} />
       {children}
+      {/* contact us link */}
+      {footer && <ContactUsLink />}
     </div>
   );
 }

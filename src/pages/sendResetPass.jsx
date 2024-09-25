@@ -26,8 +26,8 @@ export default function SendReset() {
           e.preventDefault();
           HandleSendReset({ setSending, email, setErr });
         }}
-        className="flex flex-col items-center sm:gap-10 md:gap-20 justify-between 
-        lg:w-5/12 
+        className="flex md:h-full flex-col items-center sm:gap-10 md:gap-20 justify-center 
+        lg:w-6/12 
         sm:w-full"
       >
         {/* top text form */}
@@ -98,8 +98,8 @@ export default function SendReset() {
               }
               style="bg-darkGreen text-white truncate border-none 
               lg:text-base 
-              md:text-sm md:min-w-[310px]
-              sm:text-xs sm:min-w-[250px]"
+              md:text-sm md:min-w-[310px] md:w-fit
+              sm:text-xs sm:min-w-[250px] sm:w-full"
             />
             <button
               type="button"

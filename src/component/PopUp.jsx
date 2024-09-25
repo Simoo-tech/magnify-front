@@ -44,8 +44,7 @@ export const PopUp = ({
         <p
           className="text-primary-color1 w-full text-center 
         lg:text-[20px]
-        md:text-sm
-        sm:text-xs"
+        sm:text-sm"
         >
           {text}
         </p>
@@ -76,7 +75,7 @@ export const PopUp = ({
             type="button"
             style="
             !py-1 md:!text-base md:!px-20 
-              sm:!text-sm sm:!px-11 "
+              sm:!text-base sm:!px-11 "
           />
         )}
       </div>

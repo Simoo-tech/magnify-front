@@ -48,92 +48,84 @@ export default function CheckEmail() {
     <Layout2 type={"check-email"}>
       <section
         id="check-email"
-        className="h-full flex flex-col items-center justify-between
-        lg:w-3/6 lg:max-h-full
-        md:w-4/6 md:max-h-[700px]
-        sm:w-5/6 sm:max-h-[500px]"
+        className="flex flex-col items-center justify-center 
+        lg:w-3/6
+        md:w-4/6 md:gap-14 md:h-full
+        sm:w-full sm:gap-8 "
       >
-        {/*top container  */}
-        <div
-          className=" inline-flex flex-col items-center justify-around text-center h-5/6
-        lg:gap-10 xl:gap-0"
-        >
-          {/* text */}
-          <div id="text" className="flex flex-col items-center gap-5">
-            <img
-              loading="eager"
-              src={icon1}
-              alt="check-email-icon"
-              className="sm:w-[80px] md:w-[130px] lg:w-[150px] xl:w-[170px]"
-            />
-            <h1
-              className="font-semibold text-primary-color1
+        {/* text */}
+        <div id="text" className="flex flex-col items-center gap-5">
+          <img
+            loading="eager"
+            src={icon1}
+            alt="check-email-icon"
+            className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"
+          />
+          <h1
+            id="section-heading"
+            className="font-semibold text-primary-color1
               xl:text-2xl
-              lg:text-xl
               md:text-xl
-              sm:text-[22px]"
-            >
-              {lang === "ar" ? "تحقق من بريدك الإلكتروني" : "Check your email"}
-            </h1>
-          </div>
-          <p
-            className="text-primary-color1 font-normal
+              sm:text-[24px]"
+          >
+            {lang === "ar" ? "تحقق من بريدك الإلكتروني" : "Check your email"}
+          </h1>
+        </div>
+        <p
+          className="text-primary-color1 font-normal text-center
           lg:text-[18px]
           md:text-base
-          sm:text-xs"
-          >
-            {lang === "ar"
-              ? "لقد أرسلنا لك رسالة تأكيد بالبريد الإلكتروني تفيد بأنك أنت، وسيتم تسليم الرسالة خلال 10 دقائق"
-              : "We sent you a confirmation email that it is you, The message will be delivered within 10 minutes"}
-          </p>
-          {/* line */}
-          <Line w="full" h="2px" />
-          {/* button */}
-          <div
-            id="buttons"
-            className={`${
-              lang === "ar" && "flex-row-reverse"
-            } flex w-full items-center justify-between
-              xl:flex-row xl:gap-0
-            sm:flex-col sm:gap-2`}
-          >
-            <span
-              className="text-base text-primary-color1 truncate
+          sm:text-sm"
+        >
+          {lang === "ar"
+            ? "لقد أرسلنا لك رسالة تأكيد بالبريد الإلكتروني تفيد بأنك أنت، وسيتم تسليم الرسالة خلال 10 دقائق"
+            : "We sent you a confirmation email that it is you, The message will be delivered within 10 minutes"}
+        </p>
+        {/* line */}
+        <Line w="full" h="2px" />
+        {/* button */}
+        <div
+          id="buttons"
+          className={`${
+            lang === "ar" && "flex-row-reverse"
+          } flex w-full items-center justify-between
+            xl:flex-row xl:gap-0
+            sm:flex-col sm:gap-4`}
+        >
+          <span
+            className="text-base text-primary-color1 truncate
             sm:text-xs 
             md:text-base"
-            >
-              {lang === "ar"
-                ? "إذا لم تتلق رسالة"
-                : "If you do not receive a message"}
-            </span>
-            <SecondaryBtn
-              type={"button"}
-              style="lg:text-base !py-2
-              md:text-sm md:min-w-[310px]
-              sm:text-xs sm:min-w-[250px]"
-              action={
-                !verified
-                  ? (e) => {
-                      e.preventDefault();
-                      HandleSendVerify({
-                        setSending,
-                        email,
-                      });
-                    }
-                  : (e) => {
-                      e.preventDefault();
-                      HandleSendReset({
-                        setSending,
-                        email,
-                      });
-                    }
-              }
-              loading={sending}
-              text={
-                lang === "ar" ? "اعداة الارسال" : "Resend Verifictaion Link"
-              }
-            />
-          </div>
+          >
+            {lang === "ar"
+              ? "إذا لم تتلق رسالة"
+              : "If you do not receive a message"}
+          </span>
+          <SecondaryBtn
+            type={"button"}
+            style="lg:text-base !py-2 truncate
+              md:text-sm md:min-w-[310px] md:w-fit
+              sm:text-xs sm:min-w-[250px] sm:w-full"
+            action={
+              !verified
+                ? (e) => {
+                    e.preventDefault();
+                    HandleSendVerify({
+                      setSending,
+                      email,
+                    });
+                  }
+                : (e) => {
+                    e.preventDefault();
+                    HandleSendReset({
+                      setSending,
+                      email,
+                    });
+                  }
+            }
+            loading={sending}
+            text={lang === "ar" ? "اعداة الارسال" : "Resend Verifictaion Link"}
+          />
         </div>
       </section>
     </Layout2>

@@ -18,7 +18,7 @@ export default function UploadFiles() {
   }, []);
   const navigate = useNavigate();
   return (
-    <Layout2 type="verify-email">
+    <Layout2 type="upload-files">
       <section
         id="upload-files"
         className=" h-full max-h-[600px] w-full items-center flex flex-col justify-between py-3 container max-w-full"
@@ -39,12 +39,12 @@ export default function UploadFiles() {
               loading="eager"
               src={icon8}
               alt="photo-session-data"
-              className="sm:w-[50px] md:w-[80px] lg:w-[120px]"
+              className="sm:w-[70px] md:w-[80px] lg:w-[120px]"
             />
             <SecondaryBtn
               action={() => navigate("session-data")}
               text="photo session data"
-              style="sm:!px-10 sm:!py-2 sm:!text-xs md:!text-sm md:!py-2 lg:!px-16 truncate"
+              style="sm:!px-10 sm:!py-2 sm:!text-sm md:!text-sm md:!py-2 lg:!px-16 truncate"
             />
           </div>
           <div
@@ -57,12 +57,12 @@ export default function UploadFiles() {
               loading="eager"
               src={icon7}
               alt="Missing-Photo"
-              className="sm:w-[90px] md:w-[160px] lg:w-[240px]"
+              className="sm:w-[120px] md:w-[160px] lg:w-[240px]"
             />
             <SecondaryBtn
               action={() => navigate("missing-photo")}
               text="Missing Photo"
-              style="sm:!px-10 sm:!py-2 sm:!text-xs md:!text-sm md:!py-2 lg:!px-16 truncate"
+              style="sm:!px-10 sm:!py-2 sm:!text-sm md:!text-sm md:!py-2 lg:!px-16 truncate"
             />
           </div>
         </div>

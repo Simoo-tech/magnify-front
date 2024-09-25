@@ -105,7 +105,7 @@ export default function MissingPhoto() {
         id="file"
         className="w-full bg-primary-color4 py-2 px-3 flex justify-between items-center truncate rounded-lg"
       >
-        <span className="w-8/12 truncate sm:text-xs md:text-sm">
+        <span className="w-10/12 truncate sm:text-xs md:text-sm">
           {file.name}
         </span>
         {uploading || msg.active ? (
@@ -157,148 +157,156 @@ export default function MissingPhoto() {
       dir={langDir}
       className={`${
         animation ? "top-0" : "top-full"
-      } w-full h-full  flex justify-center items-center absolute duration-500 left-0 z-30  `}
+      } w-full h-full flex justify-center items-center absolute duration-500 left-0 z-30  `}
     >
-      <Layout2 type="check-email">
-        <h2
-          className="text-primary-color1 font-bold capitalize
+      <Layout2 type="upload-files">
+        <div
+          id="missing-photo"
+          className="flex flex-col gap-10 items-center w-full"
+        >
+          <h2
+            className="text-primary-color1 font-bold capitalize
         sm:text-lg
         md:text-xl
         lg:text-3xl "
-        >
-          missing photos
-        </h2>
-        {/* alert message */}
-        {msg.active && (
-          <span
-            className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
-              msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
-            }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate 
+          >
+            missing photos
+          </h2>
+          {/* alert message */}
+          {msg.active && (
+            <span
+              className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
+                msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
+              }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate 
           sm:text-[12px] sm:w-fit sm:px-2 sm:top-16
           md:text-[16px] md:px-4 md:top-8`}
-          >
-            <msg.icon
-              color={msg.type === "success" ? "497B62" : "BD5151"}
-              size={25}
-            />
-            {msg.text}
-            <button className="ml-2" onClick={() => setMsg({})}>
-              <IoIosClose size={22} />
-            </button>
-          </span>
-        )}
-        {/* choose files area */}
-        {images.length < 1 && (
-          <div
-            id="upload-area"
-            className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
+            >
+              <msg.icon
+                color={msg.type === "success" ? "497B62" : "BD5151"}
+                size={25}
+              />
+              {msg.text}
+              <button className="ml-2" onClick={() => setMsg({})}>
+                <IoIosClose size={22} />
+              </button>
+            </span>
+          )}
+          {/* choose files area */}
+          {images.length < 1 && (
+            <div
+              id="upload-area"
+              className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
-          >
-            <img
-              loading="eager"
-              src={icon9}
-              className="sm:w-[100px] md:w-[150px]"
-            />
-            <input
-              accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
-              onChange={uploading ? null : HandleChange}
-              type="file"
-              multiple
-              className={`absolute w-full h-full opacity-0 ${
-                uploading ? "cursor-not-allowed" : " cursor-pointer"
-              }`}
-            />
-            <span
-              className="text-center flex items-center px-6 
+            >
+              <img
+                loading="eager"
+                src={icon9}
+                className="sm:w-[100px] md:w-[150px]"
+              />
+              <input
+                accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
+                onChange={uploading ? null : HandleChange}
+                type="file"
+                multiple
+                className={`absolute w-full h-full opacity-0 ${
+                  uploading ? "cursor-not-allowed" : " cursor-pointer"
+                }`}
+              />
+              <span
+                className="text-center flex items-center px-6 
             sm:text-xs 
             md:text-sm md:gap-2"
-            >
-              {lang === "ar"
-                ? " الصيغ المسموح بها  فقط [ 3gp, mp4, webm, mkv, mov, jpg, jpeg, png, webp ] و حجم الملف لايزيد عن 100 MB    "
-                : "  Only [ .3gp, .mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp ] format are allowed and max size 100M"}
-            </span>
-            <SecondaryBtn
-              style="sm:!px-10 sm:!text-xs md:!text-sm md:!py-2 md:!px-16 "
-              text={lang === "ar" ? "تصفح الصور" : "browse images"}
-            />
-          </div>
-        )}
-        {/* show files chosen */}
-        {images && images.length > 0 && (
-          <div
-            id="files"
-            className="flex flex-col h-[350px] gap-5 justify-between items-center
+              >
+                {lang === "ar"
+                  ? " الصيغ المسموح بها  فقط [ 3gp, mp4, webm, mkv, mov, jpg, jpeg, png, webp ] و حجم الملف لايزيد عن 100 MB    "
+                  : "  Only [ .3gp, .mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp ] format are allowed and max size 100M"}
+              </span>
+              <SecondaryBtn
+                style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 "
+                text={lang === "ar" ? "تصفح الصور" : "browse images"}
+              />
+            </div>
+          )}
+          {/* show files chosen */}
+          {images && images.length > 0 && (
+            <div
+              id="files"
+              className="flex flex-col h-[350px] gap-5 justify-between items-center
             rounded-xl bg-lightGreen p-5 overflow-y-scroll
             sm:w-full sm:max-w-[450px]
             md:w-7/12 md:max-w-full"
-          >
-            <div id="show-choosen-files" className="flex flex-col gap-2 w-full">
-              {ShowFile}
-            </div>
-            {/* upload another photo */}
-            {!uploading && !uploaded && (
-              <div id="upload-another-photo" className="w-fit h-fit relative">
-                <input
-                  accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
-                  onChange={uploading ? null : HandleChange}
-                  type="file"
-                  multiple
-                  className={`absolute w-full h-full opacity-0 ${
-                    uploading ? "cursor-not-allowed" : " cursor-pointer"
-                  }`}
-                />
-                <SecondaryBtn
-                  style="sm:!px-10 sm:!text-xs md:!text-sm md:!py-2 md:!px-16 !bg-transparent !text-primary-color1 !border-[2px]"
-                  text={lang === "ar" ? "اضف صورة" : "Add Files"}
-                />
+            >
+              <div
+                id="show-choosen-files"
+                className="flex flex-col gap-2 w-full"
+              >
+                {ShowFile}
               </div>
-            )}
-          </div>
-        )}
-        {/* upload buttom */}
-        {images && images.length > 0 && (
-          <div
-            id="upload-files"
-            className="flex gap-5 items-center w-7/12 justify-center flex-col"
-          >
-            {fileName && (
-              <span className="w-full truncate text-center">{fileName}</span>
-            )}
-            {/* uploading progress */}
-            {uploading && (
-              <span
-                perc={`${uploaded}%`}
-                className="w-10/12 h-3 bg-gray-200 relative rounded-xl 
-      before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]"
-              >
-                <span
-                  style={{ width: `${uploaded}%` }}
-                  className={`h-full absolute bg-green-600
-              rounded-xl duration-200 ease-linear `}
-                ></span>
-              </span>
-            )}
-            {/* upload button */}
-            <div className="full gap-5 flex items-center flex-col ">
-              <SecondaryBtn
-                style="sm:!px-10 sm:!text-xs md:!text-sm md:!py-2 md:!px-16 truncate"
-                action={uploading ? null : handleUploadBtnMissing}
-                text={lang === "ar" ? "رفع الصور" : "upload files"}
-                loading={uploading}
-                disabled={uploading}
-              />
-              {/* show files counter */}
-              <span
-                dir="ltr"
-                id="uploaded-files"
-                className="capitalize text-gray-500  sm:text-xs md:text-sm"
-              >
-                {+" " + images.length + " "}
-                {lang === "ar" ? "عدد الصورة " : "files choosen"}
-              </span>
+              {/* upload another photo */}
+              {!uploading && !uploaded && (
+                <div id="upload-another-photo" className="w-fit h-fit relative">
+                  <input
+                    accept=".3gp,.mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp"
+                    onChange={uploading ? null : HandleChange}
+                    type="file"
+                    multiple
+                    className={`absolute w-full h-full opacity-0 ${
+                      uploading ? "cursor-not-allowed" : " cursor-pointer"
+                    }`}
+                  />
+                  <SecondaryBtn
+                    style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 !bg-transparent !text-primary-color1 !border-[2px]"
+                    text={lang === "ar" ? "اضف صورة" : "Add Files"}
+                  />
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
+          {/* upload buttom */}
+          {images && images.length > 0 && (
+            <div
+              id="upload-files"
+              className="flex gap-5 items-center w-7/12 justify-center flex-col"
+            >
+              {fileName && (
+                <span className="w-full truncate text-center">{fileName}</span>
+              )}
+              {/* uploading progress */}
+              {uploading && (
+                <span
+                  perc={`${uploaded}%`}
+                  className="w-10/12 h-3 bg-gray-200 relative rounded-xl 
+                  before:content-[attr(perc)] before:absolute before:-right-12 before:-top-[5px]"
+                >
+                  <span
+                    style={{ width: `${uploaded}%` }}
+                    className={`h-full absolute bg-green-600
+                    rounded-xl duration-200 ease-linear `}
+                  ></span>
+                </span>
+              )}
+              {/* upload button */}
+              <div className="full gap-5 flex items-center flex-col ">
+                <SecondaryBtn
+                  style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 truncate"
+                  action={uploading ? null : handleUploadBtnMissing}
+                  text={lang === "ar" ? "رفع الصور" : "upload files"}
+                  loading={uploading}
+                  disabled={uploading}
+                />
+                {/* show files counter */}
+                <span
+                  dir="ltr"
+                  id="uploaded-files"
+                  className="capitalize text-gray-500  sm:text-xs md:text-sm"
+                >
+                  {+" " + images.length + " "}
+                  {lang === "ar" ? "عدد الصورة " : "files choosen"}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </Layout2>
     </section>
   );

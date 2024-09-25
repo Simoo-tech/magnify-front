@@ -56,9 +56,7 @@ export default function CreatePass() {
     <Layout2 type={"create-password"}>
       <section
         dir={langDir}
-        className="w-full h-full create-password flex items-center flex-col 
-        sm:justify-center sm:mt-8 gap-5
-        md:justify-between md:mt-14"
+        className="w-full md:h-full flex items-center flex-col gap-16 justify-center"
         id="create-new-password"
       >
         {/* finish popUp  */}
@@ -79,23 +77,11 @@ export default function CreatePass() {
         <h2
           className="text-center text-primary-color1 capitalize font-bold 
         flex flex-col items-center gap-2 truncate
-        sm:text-[22px]
+        sm:text-[24px]
         md:text-xl"
         >
           {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
           {/* error message */}
-          {error && (
-            <span
-              dir="ltr"
-              className="text-center text-white flex items-center gap-3 justify-center bg-red-500 
-          py-2 px-6 rounded-xl font-normal
-          md:text-sm
-          sm:text-xs"
-            >
-              <MdErrorOutline size={20} />
-              {error}
-            </span>
-          )}
         </h2>
         <Form
           userPass={userPass}
@@ -104,13 +90,22 @@ export default function CreatePass() {
           data={data}
           setError={setError}
           setPopUp={setPopUp}
+          error={error}
         />
       </section>
     </Layout2>
   );
 }
 
-const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
+const Form = ({
+  userPass,
+  setUserPass,
+  lang,
+  data,
+  setError,
+  setPopUp,
+  error,
+}) => {
   const langDir = lang === "ar" && "rtl";
 
   // handle change
@@ -136,16 +131,28 @@ const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
         e.preventDefault();
         HandleSubmit({ setError, data, setLoading, userPass, setPopUp });
       }}
-      className="flex justify-around flex-col items-center
+      className="flex justify-around flex-col items-center relative gap-10
       sm:w-full sm:max-w-[450]
-      md:h-5/6 md:w-10/12 md:max-w-full
+      md:w-10/12 md:max-w-full
       lg:w-8/12"
     >
+      {error && (
+        <span
+          dir="ltr"
+          className="text-center text-white absolute -top-16 flex items-center gap-3 justify-center bg-red-500 
+          py-2 px-6 rounded-xl font-normal
+          md:text-sm
+          sm:text-xs"
+        >
+          <MdErrorOutline size={20} />
+          {error}
+        </span>
+      )}
       <div
         dir="ltr"
-        className="flex w-full gap-5 items-center justify-center 
-        sm:flex-col 
-        md:flex-row md:h-4/6"
+        className="flex w-full h-fit items-center justify-center 
+        sm:flex-col gap-8
+        md:flex-row "
       >
         {/* input container */}
         <div
@@ -157,7 +164,7 @@ const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
         >
           <Input
             labelStlye="sm:!text-[16px] md:!text-auto text-primary-color1"
-            inputStyle="sm:!text-xs md:!text-auto"
+            inputStyle="sm:!text-xs lg:!text-auto"
             maxLen={16}
             minLen={8}
             name={"password"}
@@ -215,7 +222,7 @@ const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
           xl:pl-20 "
         >
           <h3
-            className="flex items-end mb-5 text-primary-color1
+            className="flex items-end mb-5 font-medium text-primary-color1
           md:text-lg
           sm:text-base"
           >
@@ -225,7 +232,7 @@ const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
             className={`list-inside list-item flex-col capitalize space-y-1 text-base`}
           >
             {listInstructions.map((list) => (
-              <li className="list-decimal text-primary-color1 sm:text-xs md:text-sm lg:text-base">
+              <li className="list-decimal text-primary-color1 sm:text-sm md:text-xs lg:text-base">
                 {list.text}
               </li>
             ))}
@@ -234,7 +241,7 @@ const Form = ({ userPass, setUserPass, lang, data, setError, setPopUp }) => {
       </div>
       <SecondaryBtn
         type={"submit"}
-        style="sm:hidden md:flex !text-base !py-2"
+        style="sm:hidden sm:min-w-[250px] sm:!text-sm md:flex lg:!text-base !py-2"
         text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
         loading={loading}
       />

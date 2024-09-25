@@ -118,9 +118,9 @@ export default function UserProjects() {
           <div
             id="project-info"
             className={`flex flex-col flex-wrap rounded-3xl bg-lightGreen relative        
-          xl:w-[30%] xl:mb-28
+          xl:w-[30%]
           lg:w-[40%]
-          md:w-5/12 md:mb-20
+          md:w-5/12
           sm:w-full sm:mb-16 sm:flex
             ${!listType && "md:hidden lg:hidden"} `}
           >
@@ -183,7 +183,7 @@ export default function UserProjects() {
           {/* // gallery style */}
           <div
             id="project-info"
-            className={`w-full rounded-3xl mb-10 bg-lightGreen relative 
+            className={`w-full rounded-3xl bg-lightGreen relative 
             sm:hidden
           ${!listType && "md:flex lg:flex"} `}
           >
@@ -254,10 +254,9 @@ export default function UserProjects() {
         id="projects-page"
         dir={langDir}
         className="flex flex-col container max-w-full bg-scroll bg-center
-      items-center justify-start relative gap-5 pt-10 pb-20        
-      lg:bg-cover lg:h-fit
-      md:pb-5 md:h-full
-      sm:bg-[length:100%] sm:pb-10 sm:h-fit"
+      items-center justify-start relative gap-8 h-full py-14   
+      lg:bg-cover
+      sm:bg-[length:100%]"
       >
         <h3
           id="user-welcome"
@@ -324,11 +323,10 @@ export default function UserProjects() {
         {UserProjects?.length >= 1 ? (
           <div
             id="projects"
-            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center 
-            xl:mt-14
-            lg:gap-14 lg:mt-8
-            md:gap-12 md:mt-5
-            sm:gap-10 sm:mt-4"
+            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center
+            lg:gap-14
+            md:gap-12
+            sm:gap-10"
           >
             {UserProjects}
           </div>
@@ -337,7 +335,7 @@ export default function UserProjects() {
             text="no project found"
             color="#497B62"
             textStyle="text-primary-color1"
-            height="426px"
+            height=" h-full"
           />
         )}
         {filter && <QR />}
