@@ -11,7 +11,7 @@ function Layout({ children, overFlow }) {
   return (
     <div
       dir={lang === "ar" && "rtl"}
-      className="w-full h-full flex flex-col justify-between sm:overflow-y-scroll xl:overflow-hidden"
+      className="w-full h-full flex flex-col justify-between sm:overflow-y-scroll lg:overflow-hidden"
       style={{ overflowY: overFlow }}
     >
       <Navbar setPopUp={setPopUp} />

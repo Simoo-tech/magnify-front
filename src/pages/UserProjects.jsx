@@ -253,8 +253,8 @@ export default function UserProjects() {
         style={{ backgroundImage: `url(${BackgroundImg})` }}
         id="projects-page"
         dir={langDir}
-        className="flex flex-col container max-w-full bg-scroll bg-center
-      items-center justify-start relative gap-8 h-full py-14   
+        className="flex flex-col container max-w-full bg-center
+      items-center justify-start relative gap-8 h-full min-h-fit py-10   
       lg:bg-cover
       sm:bg-[length:100%]"
       >
@@ -335,7 +335,7 @@ export default function UserProjects() {
             text="no project found"
             color="#497B62"
             textStyle="text-primary-color1"
-            height=" h-full"
+            height="h-full sm:max-h-full lg:max-h-[400px]"
           />
         )}
         {filter && <QR />}
