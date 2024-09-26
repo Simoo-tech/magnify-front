@@ -108,7 +108,7 @@ export default function MissingPhoto() {
         <span className="w-10/12 truncate sm:text-xs md:text-sm">
           {file.name}
         </span>
-        {uploading || msg.active ? (
+        {uploading || msg?.type === "success" ? (
           done.includes(i) ? (
             <FaCheckCircle
               size={20}
@@ -173,7 +173,7 @@ export default function MissingPhoto() {
             missing photos
           </h2>
           {/* alert message */}
-          {msg.active && (
+          {msg?.active && (
             <span
               className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
                 msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
@@ -222,6 +222,7 @@ export default function MissingPhoto() {
                   : "  Only [ .3gp, .mp4, .webm, .mkv, .mov, .jpg, .jpeg, .png, .webp ] format are allowed and max size 100M"}
               </span>
               <SecondaryBtn
+                type="button"
                 style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 "
                 text={lang === "ar" ? "تصفح الصور" : "browse images"}
               />

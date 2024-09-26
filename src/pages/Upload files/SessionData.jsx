@@ -59,7 +59,7 @@ export default function SessionData() {
               type: "failed",
               icon: MdOutlineError,
             });
-            // setTimeout(() => setMsg({}), 2000);
+            setTimeout(() => setMsg({}), 2000);
           }
         } else {
           setMsg({
@@ -68,7 +68,7 @@ export default function SessionData() {
             type: "failed",
             icon: MdOutlineError,
           });
-          // setTimeout(() => setMsg({}), 2000);
+          setTimeout(() => setMsg({}), 2000);
         }
       });
     }
@@ -104,7 +104,7 @@ export default function SessionData() {
         <span className="w-10/12 truncate sm:text-xs md:text-sm">
           {file.name}
         </span>
-        {uploading || msg.active ? (
+        {uploading || msg?.type === "success" ? (
           done.includes(i) ? (
             <FaCheckCircle
               size={20}
@@ -168,7 +168,7 @@ export default function SessionData() {
             photo session data
           </h2>
           {/* alert message */}
-          {msg.active && (
+          {msg?.active && (
             <span
               className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
                 msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
