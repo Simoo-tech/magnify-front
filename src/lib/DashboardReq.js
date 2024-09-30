@@ -60,6 +60,11 @@ export const HandleUploadImg = async ({
         .put(`${serverPath}user-project-upload`, file, {
           onUploadProgress: (e) => {
             setUploading(parseInt((e.loaded / e.total) * 100));
+            onChange[i].projectImg = {
+              path: false,
+              name: false,
+            };
+            setProjectInfo(onChange);
           },
           headers: { token: `${userCookies}` },
         })

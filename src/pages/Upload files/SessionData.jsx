@@ -130,7 +130,16 @@ export default function SessionData() {
       </div>
     );
   });
-  useEffect(() => setAnimation(true), []);
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+    setAnimation(true);
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
   const handleUploadBtnSession = (e) => {
     e.preventDefault();
     UploadFiles({

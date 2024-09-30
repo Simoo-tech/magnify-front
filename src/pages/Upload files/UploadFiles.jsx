@@ -6,16 +6,6 @@ import icon8 from "/assest/icon8.svg";
 import { SecondaryBtn } from "../../component/Btns";
 
 export default function UploadFiles() {
-  useEffect(() => {
-    const unloadCallback = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
-      return "";
-    };
-
-    window.addEventListener("beforeunload", unloadCallback);
-    return () => window.removeEventListener("beforeunload", unloadCallback);
-  }, []);
   const navigate = useNavigate();
   return (
     <Layout2 type="upload-files">
