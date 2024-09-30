@@ -64,18 +64,11 @@ export const HandleUploadImg = async ({
           headers: { token: `${userCookies}` },
         })
         .then((res) => {
-          setMsg({
-            active: true,
-            text: res.data.message,
-            type: "success",
-            icon: FaCheckCircle,
-          });
           onChange[i].projectImg = {
             path: res.data.path,
             name: res.data.name,
           };
           setProjectInfo(onChange);
-          setUploading();
           setMsg({
             active: true,
             text: res.data.message,
@@ -84,6 +77,7 @@ export const HandleUploadImg = async ({
           });
           setTimeout(() => {
             setMsg({});
+            setUploading();
           }, 2000);
         });
     } else {
