@@ -102,7 +102,7 @@ export const Input = ({
             className={`${inputContainerStyle} h-full sm:w-full md:w-8/12 bg-lightGreen rounded-3xl relative group overflow-hidden
             flex justify-center items-center `}
           >
-            {value?.path && !uploading && (
+            {value?.path && (
               <>
                 <img
                   loading="eager"
@@ -127,7 +127,7 @@ export const Input = ({
                 </div>
               </>
             )}
-            {uploading && !value && (
+            {uploading && !value?.path && (
               <div className="w-9/12 relative flex gap-5 items-center flex-col justify-center ">
                 <Oval />
                 <p className="absolute left-[50%] top-[30%] translate-x-[-50%] translate-y-[-30%]">

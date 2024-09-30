@@ -19,7 +19,15 @@ export function EditUser() {
     ["fetchClientEdit", { cleintId }],
     () => {
       return axios.get(`${serverPath}client/${cleintId}`, {
-        headers: { token: `${userCookies}` },
+        refetchOnmount: false,
+        headers: {
+          token: `${userCookies}`,
+          refetchOnmount: false,
+          refetchOnReconnect: false,
+          retry: false,
+          refetchOnWindowFocus: false,
+          staleTime: 1000 * 60 * 60 * 24,
+        },
       });
     },
     {
