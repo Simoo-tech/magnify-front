@@ -5,6 +5,7 @@ import { IoMdArrowDropup } from "react-icons/io";
 import { QRCode } from "react-qr-code";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { SecondaryBtn } from "./Btns";
+const webPath = import.meta.env.VITE_APP_WEB_BASE;
 
 export const QR = () => {
   const lang = window.localStorage.getItem("lang");
@@ -63,7 +64,7 @@ export const QR = () => {
             : "Download your QR to login without your email"}
         </h6>
         <QRCode
-          value={`https://www.magnifyportal.com/${user}`}
+          value={`${webPath}${user}`}
           title="QRcode"
           id="QRCode"
           ref={Qr}

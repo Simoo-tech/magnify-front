@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 // components
-import { HandleSubmit, UserLoged } from "../lib/LoginReq";
+import { HandleSubmit } from "../lib/LoginReq";
 import { useLang } from "../context/LangContext";
 import { Loading } from "../component/Loading";
 // icons
@@ -25,6 +25,7 @@ export default function Login() {
   const [QREmail, setQREmail] = useState(null);
   const user_cookies = cookie.load("user_token");
   const [lang] = useLang();
+  console.log(id);
   const links = [
     {
       id: "about-us",
@@ -42,6 +43,7 @@ export default function Login() {
       text: lang === "en" || lang === null ? "Contact Us" : "تواصل معنا !",
     },
   ];
+  // if user loged
   if (user_cookies) {
     const { isLoading, data } = useQuery(
       "checkUserLoged",
@@ -80,41 +82,41 @@ export default function Login() {
     if (error) {
       return <NotFound />;
     }
-  } else {
-    return (
-      <Layout1 logoStyle="hidden">
-        <section
-          id="login-page"
-          className="flex flex-col items-center justify-between w-full h-full gap-6 
-        sm:mt-5 lg:mt-0"
-        >
-          {/* login form */}
-          <Form lang={lang} QREmail={QREmail} />
-          {/* bottom links */}
-          <div
-            id="buttom-links"
-            className="links flex w-full justify-between"
-            dir={lang === "ar" && "rtl"}
-          >
-            {/* links */}
-            {links.map((link, i) => (
-              <Link
-                key={i}
-                id={link.id}
-                className="text-center truncate text-primary-color1 font-semibold
-              lg:text-base
-              md:text-sm
-              sm:text-xs"
-                to={link.url}
-              >
-                {link.text}
-              </Link>
-            ))}
-          </div>
-        </section>
-      </Layout1>
-    );
   }
+
+  return (
+    <Layout1 logoStyle="hidden">
+      <section
+        id="login-page"
+        className="flex flex-col items-center justify-between w-full h-full gap-6 
+      sm:mt-5 lg:mt-0"
+      >
+        {/* login form */}
+        <Form lang={lang} QREmail={QREmail} />
+        {/* bottom links */}
+        <div
+          id="buttom-links"
+          className="links flex w-full justify-between"
+          dir={lang === "ar" && "rtl"}
+        >
+          {/* links */}
+          {links.map((link, i) => (
+            <Link
+              key={i}
+              id={link.id}
+              className="text-center truncate text-primary-color1 font-semibold
+            lg:text-base
+            md:text-sm
+            sm:text-xs"
+              to={link.url}
+            >
+              {link.text}
+            </Link>
+          ))}
+        </div>
+      </section>
+    </Layout1>
+  );
 }
 
 const Form = ({ lang, QREmail }) => {

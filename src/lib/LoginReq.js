@@ -3,20 +3,6 @@ import cookie from "react-cookies";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
-// if user loged
-export const UserLoged = async () => {
-  const user = cookie.load("user_token");
-  if (user) {
-    await axios.get(`${serverPath}user/${user}`).then((res) => {
-      if (res.data.isAdmin) {
-        window.location.replace(`/${user}/dashboard`);
-      } else {
-        window.location.replace(`/${user}/tour-projects`);
-      }
-    });
-  }
-};
-
 // login handle submit
 export const HandleSubmit = async ({ setLoading, authData, setError }) => {
   setLoading(true);
