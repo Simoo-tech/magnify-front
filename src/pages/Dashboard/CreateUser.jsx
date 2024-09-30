@@ -265,7 +265,7 @@ const Form = ({
         key={index}
         id="project-info"
         dir={langDir}
-        className=" gap-7 flex flex-col border-t-2 border-lineColor-color1
+        className=" gap-7 flex flex-col border-t-2 border-lineColor-color1 pt-4
         first-of-type:border-none first-of-type:p-0"
       >
         {/*  project number and delete */}
@@ -298,7 +298,7 @@ const Form = ({
             return (
               <Input
                 type={input.type}
-                key={i}
+                inkey={i}
                 name={input.name}
                 value={input.value}
                 text={input.text}
@@ -429,7 +429,6 @@ const Form = ({
             {lang === "ar" ? "معلومات المشروع" : "project information"}
           </h2>
           {Projects}
-          {/* project inputs containers */}
         </div>
       )}
       {/* add project btn */}

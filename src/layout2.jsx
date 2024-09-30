@@ -16,21 +16,21 @@ export default function Layout2({ children, type }) {
       }
         ${
           type === "reset-password" &&
-          `sm:!bg-[url('../public/assest/background4-res.svg')] sm:bg-[length:70%] sm:bg-left-bottom 
+          `sm:!bg-[url('../public/assest/background4-res.svg')] sm:bg-[length:60%] sm:bg-left-bottom 
         md:!bg-[url('../public/assest/background2.svg')] md:bg-contain`
         }  ${
         type === "check-email" &&
-        `sm:!bg-[url('../public/assest/background2-res.svg')] sm:bg-[length:70%] sm:bg-right-bottom 
+        `sm:!bg-[url('../public/assest/background2-res.svg')] sm:bg-[length:60%] sm:bg-right-bottom 
         md:!bg-[url('../public/assest/background4.svg')] md:bg-contain`
       }
       ${
         type === "create-password" &&
-        `sm:!bg-[url('../public/assest/background1-res.svg')] sm:bg-[length:70%] sm:bg-right-bottom 
+        `sm:!bg-[url('../public/assest/background1-res.svg')] sm:bg-[length:60%] sm:bg-right-bottom 
         md:!bg-[url('../public/assest/background5.svg')] md:bg-contain`
       } 
         ${
           type === "verify-email" &&
-          `sm:!bg-[url('../public/assest/background3-res.svg')] sm:bg-[length:70%] sm:bg-right-bottom 
+          `sm:!bg-[url('../public/assest/background3-res.svg')] sm:bg-[length:60%] sm:bg-right-bottom 
         md:!bg-[url('../public/assest/background3.svg')] md:bg-contain`
         } `}
     >

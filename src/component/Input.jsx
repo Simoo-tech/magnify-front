@@ -19,7 +19,6 @@ export const Input = ({
   maxLen,
   text,
   labelStlye,
-  autoFocus,
   containerStyle,
   inputContainerStyle,
   inputStyle,
@@ -29,6 +28,7 @@ export const Input = ({
   iconColor,
   uploading,
   deleteImg,
+  inkey,
 }) => {
   const [lang] = useLang();
 
@@ -38,6 +38,7 @@ export const Input = ({
 
   return (
     <label
+      key={inkey}
       htmlFor={`${name}-input`}
       dir={langDir}
       className={`${containerStyle} sm:text-sm md:text-base text-lightGreen w-full font-medium flex items-center flex-col gap-1`}
@@ -63,12 +64,10 @@ export const Input = ({
           className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[48px]`}
         >
           <input
-            autoFocus={autoFocus}
             minLength={minLen}
             maxLength={maxLen}
             onChange={onChangeHandle}
             name={name}
-            id={`${name}-input`}
             value={value}
             dir={langDir}
             type={type === "password" ? (showPass ? "text" : "password") : type}
@@ -103,7 +102,7 @@ export const Input = ({
             className={`${inputContainerStyle} h-full sm:w-full md:w-8/12 bg-lightGreen rounded-3xl relative group overflow-hidden
             flex justify-center items-center `}
           >
-            {value?.path && (
+            {value?.path && !uploading && (
               <>
                 <img
                   loading="eager"
@@ -146,10 +145,10 @@ export const Input = ({
               >
                 <FiUploadCloud size={iconSize} color={iconColor} />
                 <input
+                  id={`${name}-input-img`}
                   ref={upload}
                   onChange={onChangeHandle}
                   name={name}
-                  id={`${name}-input-img`}
                   value=""
                   dir={langDir}
                   type={type}

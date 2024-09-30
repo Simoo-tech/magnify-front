@@ -190,7 +190,8 @@ const Form = ({
           />
           <SecondaryBtn
             type={"submit"}
-            style="sm:flex md:hidden sm:!text-sm md:!text-base sm:!py-2"
+            style="sm:flex sm:text-xs sm:min-w-full sm:!py-2
+            md:hidden "
             text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
             loading={loading}
           />
@@ -241,7 +242,10 @@ const Form = ({
       </div>
       <SecondaryBtn
         type={"submit"}
-        style="sm:hidden sm:min-w-[250px] sm:!text-sm md:flex lg:!text-base !py-2"
+        style="!py-2 truncate
+              lg:text-sm md:flex
+              md:min-w-[310px] md:w-fit
+              sm:text-xs sm:min-w-[250px] sm:w-full sm:hidden"
         text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
         loading={loading}
       />
