@@ -59,7 +59,7 @@ export default function Login() {
     if (isLoading) {
       return <Loading />;
     }
-    if (data.data.isAdmin) {
+    if (data?.data?.isAdmin) {
       return <Navigate to={`/${user_cookies}/dashboard`} replace />;
     } else {
       return <Navigate to={`/${user_cookies}/tour-projects`} replace />;
@@ -72,7 +72,7 @@ export default function Login() {
       () => {
         return axios.get(`${serverPath}user/${id}`);
       },
-      { onSuccess: (res) => setQREmail(res.data.email) }
+      { onSuccess: (res) => setQREmail(res?.data?.email) }
     );
     if (isLoading) {
       return <Loading />;
@@ -80,41 +80,41 @@ export default function Login() {
     if (error) {
       return <NotFound />;
     }
-  }
-
-  return (
-    <Layout1 logoStyle="hidden">
-      <section
-        id="login-page"
-        className="flex flex-col items-center justify-between w-full h-full gap-6 
-      sm:mt-5 lg:mt-0"
-      >
-        {/* login form */}
-        <Form lang={lang} QREmail={QREmail} />
-        {/* bottom links */}
-        <div
-          id="buttom-links"
-          className="links flex w-full justify-between"
-          dir={lang === "ar" && "rtl"}
+  } else {
+    return (
+      <Layout1 logoStyle="hidden">
+        <section
+          id="login-page"
+          className="flex flex-col items-center justify-between w-full h-full gap-6 
+        sm:mt-5 lg:mt-0"
         >
-          {/* links */}
-          {links.map((link, i) => (
-            <Link
-              key={i}
-              id={link.id}
-              className="text-center truncate text-primary-color1 font-semibold
-            lg:text-base
-            md:text-sm
-            sm:text-xs"
-              to={link.url}
-            >
-              {link.text}
-            </Link>
-          ))}
-        </div>
-      </section>
-    </Layout1>
-  );
+          {/* login form */}
+          <Form lang={lang} QREmail={QREmail} />
+          {/* bottom links */}
+          <div
+            id="buttom-links"
+            className="links flex w-full justify-between"
+            dir={lang === "ar" && "rtl"}
+          >
+            {/* links */}
+            {links.map((link, i) => (
+              <Link
+                key={i}
+                id={link.id}
+                className="text-center truncate text-primary-color1 font-semibold
+              lg:text-base
+              md:text-sm
+              sm:text-xs"
+                to={link.url}
+              >
+                {link.text}
+              </Link>
+            ))}
+          </div>
+        </section>
+      </Layout1>
+    );
+  }
 }
 
 const Form = ({ lang, QREmail }) => {
