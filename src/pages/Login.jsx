@@ -25,7 +25,7 @@ export default function Login() {
   const [QREmail, setQREmail] = useState(null);
   const user_cookies = cookie.load("user_token");
   const [lang] = useLang();
-  console.log(id);
+
   const links = [
     {
       id: "about-us",
