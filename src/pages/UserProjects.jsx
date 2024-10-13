@@ -79,7 +79,7 @@ export default function UserProjects() {
         projectName,
         projectLoc,
         projectType,
-        consultant,
+        projectDate,
         projectArea,
         projectHei,
         projectDura,
@@ -96,8 +96,8 @@ export default function UserProjects() {
           val: projectType,
         },
         {
-          name: lang === "ar" ? "المستشار:" : `consultant:`,
-          val: consultant,
+          name: lang === "ar" ? "التاريخ:" : `date:`,
+          val: new Date(projectDate).toISOString().split("T")[0],
         },
         {
           name: lang === "ar" ? "المساحة:" : `  area:`,
