@@ -20,13 +20,13 @@ export function EditUser() {
     () => {
       return axios.get(`${serverPath}client/${cleintId}`, {
         refetchOnmount: false,
+        refetchOnmount: false,
+        refetchOnReconnect: false,
+        retry: false,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 60 * 24,
         headers: {
           token: `${userCookies}`,
-          refetchOnmount: false,
-          refetchOnReconnect: false,
-          retry: false,
-          refetchOnWindowFocus: false,
-          staleTime: 1000 * 60 * 60 * 24,
         },
       });
     },

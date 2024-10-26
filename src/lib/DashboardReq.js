@@ -21,6 +21,7 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
       projectDura: "",
       projectType: "",
       projectImg: { name: "", path: "" },
+      accessUser: [{ email: "" }],
     },
   ]);
 };
@@ -29,6 +30,31 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
 export const ProjectRem = ({ index, projectInfo, setProjectInfo }) => {
   const onRemove = [...projectInfo];
   onRemove.splice(index, 1);
+  setProjectInfo(onRemove);
+};
+// handle remove access email
+export const emailRemove = async ({
+  index,
+  projectInfo,
+  setProjectInfo,
+  a,
+  email,
+  userID,
+}) => {
+  // const header = { headers: { token: `${userCookies}` } };
+  // console.log(userID);
+  // await axios
+  //   .delete(`${serverPath}client/delete-access/${userID}`, {
+  //     email: email,
+  //     headers: { token: `${userCookies}` },
+  //   })
+  //   .then(() => {
+  //     window.location.reload();
+  //     setPopUp(false);
+  //   })
+  //   .catch((err) => console.log(err));
+  const onRemove = [...projectInfo];
+  onRemove[index]["accessUser"].splice(a, 1);
   setProjectInfo(onRemove);
 };
 

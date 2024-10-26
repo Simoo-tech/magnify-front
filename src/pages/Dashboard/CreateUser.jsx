@@ -1,6 +1,7 @@
 // components
 import {
   AddProject,
+  emailRemove,
   HandleSubmitCreate,
   HandleSubmitEdit,
   HandleUploadImg,
@@ -28,7 +29,7 @@ export function CreateUser({ userData }) {
       setProjectInfo(userData.projectInfo);
     }
     setAnimation(true);
-  }, [userData]);
+  }, []);
   // handle message from api
   const [msg, setMsg] = useState({});
   // context
@@ -87,7 +88,6 @@ const Form = ({
   const [uploading, setUploading] = useState();
   // styles
   const langDir = lang === "ar" && "rtl";
-
   // handle change user data
   const HandleChangeUser = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -101,6 +101,7 @@ const Form = ({
     setProjectInfo(onChange);
     setMsg({});
   };
+
   const HandleDeleteProjectImg = (e, i) => {
     const onChange = [...projectInfo];
     delete onChange[i].projectImg;
@@ -251,6 +252,55 @@ const Form = ({
         index,
       },
       {
+        name: "accessUser",
+        index,
+        emails: project.accessUser.map((email, a) => {
+          return (
+            <div className="relative">
+              <Input
+                name="access-user"
+                type={"email"}
+                inkey={a}
+                value={email.email}
+                placeholder={
+                  lang === "ar" ? "ادخل بريد الكتروني" : "Enter email address"
+                }
+                onChangeHandle={(e) => {
+                  const onChange = [...projectInfo];
+                  onChange[index]["accessUser"][a].userName = userData.userName;
+                  onChange[index]["accessUser"][a].email = e.target.value;
+                  setProjectInfo(onChange);
+                  setMsg({});
+                }}
+                containerStyle={`w-full col-span-full`}
+              />
+              <button
+                type="button"
+                className="absolute right-4 top-[50%] translate-y-[-50%]"
+                title="delete project"
+                onClick={() => {
+                  emailRemove({
+                    userID: userData._id,
+                    index,
+                    projectInfo,
+                    setProjectInfo,
+                    a,
+                    email: email.email,
+                  });
+                }}
+              >
+                <img
+                  loading="eager"
+                  src={deleteIcon}
+                  alt="delete-icon"
+                  className="sm:w-[18px] md:w-[25px]"
+                />
+              </button>
+            </div>
+          );
+        }),
+      },
+      {
         type: "file",
         name: "projectImg",
         accept: ".jpg, .png, .jpeg, .webp",
@@ -293,45 +343,89 @@ const Form = ({
             />
           </button>
         </div>
-        <div id="project-data" className="grid md:grid-cols-2 pl gap-8">
+        <div
+          id="project-data"
+          className="grid place-items-center md:grid-cols-2 pl gap-8"
+        >
           {InputFieldsProjectInfo.map((input, i) => {
-            return (
-              <Input
-                type={input.type}
-                inkey={i}
-                name={input.name}
-                value={input.value}
-                text={input.text}
-                accept={input.accept}
-                desc={input.desc}
-                uploading={uploading}
-                onChangeHandle={
-                  input.type === "file"
-                    ? (e) => {
-                        HandleUploadImg({
-                          e,
-                          i: input.index,
-                          projectInfo,
-                          setMsg,
-                          setProjectInfo,
-                          setUploading,
-                        });
-                      }
-                    : (e) => {
-                        {
-                          HandleChangeProject(e, input.index);
+            // add user access by email
+            if (input.name === "accessUser") {
+              return (
+                <div
+                  key={i}
+                  className="flex col-span-full flex-col w-full items-center py-4"
+                >
+                  <span className="border-t-2 border-lineColor-color1 mb-4 w-[90%]" />
+                  <h3
+                    className="font-semibold text-start w-full text-primary-color1 rounded-lg capitalize
+                    md:text-lg
+                    sm:text-base"
+                  >
+                    Add Access To New Users
+                  </h3>
+                  <div
+                    id="emails"
+                    className="w-full flex flex-col my-4 relative"
+                  >
+                    {input.emails}
+                  </div>
+                  <SecondaryBtn
+                    action={() => {
+                      const onChange = [...projectInfo];
+                      onChange[index]["accessUser"] = [
+                        ...onChange[index]["accessUser"],
+                        { email: "" },
+                      ];
+                      setProjectInfo(onChange);
+                    }}
+                    type="button"
+                    text="Add Another Email Address"
+                    style={`${
+                      input.emails.length >= 5 && "!hidden"
+                    } min-w-[60%] bg-white !text-darkGreen !py-2`}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <Input
+                  type={input.type}
+                  inkey={i}
+                  name={input.name}
+                  value={input.value}
+                  text={input.text}
+                  accept={input.accept}
+                  desc={input.desc}
+                  uploading={uploading}
+                  placeholder={input.placeHolder}
+                  onChangeHandle={
+                    input.type === "file"
+                      ? (e) => {
+                          HandleUploadImg({
+                            e,
+                            i: input.index,
+                            projectInfo,
+                            setMsg,
+                            setProjectInfo,
+                            setUploading,
+                          });
                         }
-                      }
-                }
-                containerStyle={`text-primary-color2 ${input.style}`}
-                labelStlye="sm:text-sm md:!font-[18px]"
-                chooses={input.chooses}
-                iconSize={50}
-                deleteImg={(e) => {
-                  HandleDeleteProjectImg(e, input.index);
-                }}
-              />
-            );
+                      : (e) => {
+                          {
+                            HandleChangeProject(e, input.index);
+                          }
+                        }
+                  }
+                  containerStyle={`text-primary-color2 ${input.style}`}
+                  labelStlye="sm:text-sm md:!font-[18px]"
+                  chooses={input.chooses}
+                  iconSize={50}
+                  deleteImg={(e) => {
+                    HandleDeleteProjectImg(e, input.index);
+                  }}
+                />
+              );
+            }
           })}
         </div>
       </div>

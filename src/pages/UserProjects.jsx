@@ -25,6 +25,7 @@ export default function UserProjects() {
   const [lang] = useLang();
   const [search, setSearch] = useState();
   const user_cookies = cookie.load("user_token");
+  const [acessProject, setAccessProjects] = useState();
   const [filter, setFilter] = useState([]);
   const { id } = useParams();
   const [listType, setListType] = useState(true);
@@ -35,6 +36,11 @@ export default function UserProjects() {
       return axios.get(`${serverPath}user/${user_cookies}`);
     },
     {
+      refetchOnmount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 24,
       onSuccess: (res) => setFilter(res.data),
     }
   );
@@ -85,6 +91,7 @@ export default function UserProjects() {
         projectDura,
         folderName,
         projectImg,
+        accessUser,
       } = project;
       const projectsInfoText = [
         {
@@ -97,7 +104,7 @@ export default function UserProjects() {
         },
         {
           name: lang === "ar" ? "التاريخ:" : `date:`,
-          val: new Date(projectDate).toISOString().split("T")[0],
+          val: projectDate && new Date(projectDate).toISOString().split("T")[0],
         },
         {
           name: lang === "ar" ? "المساحة:" : `  area:`,
@@ -118,12 +125,21 @@ export default function UserProjects() {
           <div
             id="project-info"
             className={`flex flex-col flex-wrap rounded-3xl bg-lightGreen relative        
-          xl:w-[30%]
+          xl:w-[28%]
           lg:w-[40%]
           md:w-5/12
           sm:w-full sm:mb-16 sm:flex
             ${!listType && "md:hidden lg:hidden"} `}
           >
+            {accessUser &&
+              accessUser.map((user) => (
+                <div
+                  className="absolute -top-[47px] w-[70%] max-w-[90%] text-center capitalize text-primary-color1 text-base
+                border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2 "
+                >
+                  <span className="font-bold">Owner:</span> {user.userName}
+                </div>
+              ))}
             {/* image holder */}
             <div
               id="project-image-holder "
@@ -138,7 +154,7 @@ export default function UserProjects() {
                   alt={`project-image-${projectImg?.name}`}
                 />
               ) : (
-                <div className="min-h-[240px] flex justify-center items-center w-full text-textColor">
+                <div className="md:h-[220px] lg:h-[240px] max-h-[240px] flex justify-center items-center w-full text-textColor">
                   No photos for your project
                 </div>
               )}
@@ -187,6 +203,15 @@ export default function UserProjects() {
             sm:hidden
           ${!listType && "md:flex lg:flex"} `}
           >
+            {accessUser &&
+              accessUser.map((user) => (
+                <div
+                  className="absolute -top-[47px] w-[30%] max-w-[90%] text-center capitalize text-primary-color1 text-base
+              border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2 "
+                >
+                  <span className="font-bold">Owner:</span> {user.userName}
+                </div>
+              ))}
             {/* image holder */}
             <div
               id="project-image-holder "
@@ -323,10 +348,10 @@ export default function UserProjects() {
         {UserProjects?.length >= 1 ? (
           <div
             id="projects"
-            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center
-            lg:gap-14
-            md:gap-12
-            sm:gap-10"
+            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center 
+            lg:gap-20
+            md:gap-20
+            sm:gap-20"
           >
             {UserProjects}
           </div>

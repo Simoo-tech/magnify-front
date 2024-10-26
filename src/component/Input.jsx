@@ -64,6 +64,7 @@ export const Input = ({
           className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[48px]`}
         >
           <input
+            
             minLength={minLen}
             maxLength={maxLen}
             onChange={onChangeHandle}
@@ -144,6 +145,9 @@ export const Input = ({
                 className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full"
               >
                 <FiUploadCloud size={iconSize} color={iconColor} />
+                <p className="capitalize text-base text-primary-color1 font-bold mt-2">
+                  Click to upload
+                </p>
                 <input
                   id={`${name}-input-img`}
                   ref={upload}
