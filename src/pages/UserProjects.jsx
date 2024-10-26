@@ -25,7 +25,6 @@ export default function UserProjects() {
   const [lang] = useLang();
   const [search, setSearch] = useState();
   const user_cookies = cookie.load("user_token");
-  const [acessProject, setAccessProjects] = useState();
   const [filter, setFilter] = useState([]);
   const { id } = useParams();
   const [listType, setListType] = useState(true);
@@ -348,7 +347,7 @@ export default function UserProjects() {
         {UserProjects?.length >= 1 ? (
           <div
             id="projects"
-            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center 
+            className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center mt-14
             lg:gap-20
             md:gap-20
             sm:gap-20"
