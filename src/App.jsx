@@ -45,7 +45,8 @@ function App() {
           <Route path=":cleintId/edit-user" element={<EditUser />} />
         </Route>
         <Route path="/:id/tour-projects" element={<UserProjects />}>
-          <Route path=":projectId" element={<Projects />} />
+          <Route path={":projectId/:access"} element={<Projects />} />
+          <Route path={":projectId"} element={<Projects />} />
         </Route>
         <Route path="/upload-files" element={<UploadFiles />}>
           <Route path="missing-photo" element={<MissingPhoto />} />

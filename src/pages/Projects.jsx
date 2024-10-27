@@ -11,9 +11,10 @@ const user_cookies = cookie.load("user_token");
 export default function Projects() {
   const [data] = useOutletContext();
   const [loading, setLoading] = useState(true);
-  const { projectId } = useParams();
+  const { projectId, access } = useParams();
   const projects = data.projectInfo;
   const [lang] = useLang();
+
   const folder = projects?.map((project) => {
     return project.folderName;
   });
@@ -25,6 +26,7 @@ export default function Projects() {
       window.location.assign("/");
     }
   }, []);
+
 
   return checkID ? (
     <>
@@ -51,7 +53,9 @@ export default function Projects() {
       )}
       <iframe
         title="3dvista-user"
-        src={`${folderName}${data?.userName}/${projectId}/index.htm`}
+        src={`${folderName}${
+          access ? access : data?.userName
+        }/${projectId}/index.htm`}
         name={data?.userName}
         onLoad={() => setLoading(false)}
         className="h-full w-full absolute top-0 z-50"

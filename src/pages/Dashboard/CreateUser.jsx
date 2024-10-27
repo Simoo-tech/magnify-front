@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
 
-export function CreateUser({ userData }) {
+export function CreateUser({ userData, dataDone }) {
   const [data, setData] = useState({});
   const [projectInfo, setProjectInfo] = useState([]);
   // animation
@@ -29,7 +29,7 @@ export function CreateUser({ userData }) {
       setProjectInfo(userData.projectInfo);
     }
     setAnimation(true);
-  }, []);
+  }, [userData]);
   // handle message from api
   const [msg, setMsg] = useState({});
   // context
@@ -267,7 +267,7 @@ const Form = ({
                 }
                 onChangeHandle={(e) => {
                   const onChange = [...projectInfo];
-                  onChange[index]["accessUser"][a].userName = userData.userName;
+                  onChange[index]["accessUser"][a].userName = data.userName;
                   onChange[index]["accessUser"][a].email = e.target.value;
                   setProjectInfo(onChange);
                   setMsg({});

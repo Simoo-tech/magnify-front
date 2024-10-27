@@ -183,17 +183,33 @@ export default function UserProjects() {
                 </p>
               ))}
             </div>
-            <Link
-              to={`${folderName}`}
-              className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
+            {accessUser.length >= 1 ? (
+              accessUser.map((user) => (
+                <Link
+                  to={`${folderName}/${user.userName}`}
+                  className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
+              text-white roundeda-xl duration-300
+              absolute left-[50%] translate-x-[-50%]
+              hover:bg-primary-color1/70
+              lg:-bottom-14
+              sm:-bottom-16"
+                >
+                  {lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                </Link>
+              ))
+            ) : (
+              <Link
+                to={folderName}
+                className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
             text-white roundeda-xl duration-300
             absolute left-[50%] translate-x-[-50%]
             hover:bg-primary-color1/70
             lg:-bottom-14
             sm:-bottom-16"
-            >
-              {lang === "ar" ? "مشاهدة المشروع" : "view project"}
-            </Link>
+              >
+                {lang === "ar" ? "مشاهدة المشروع" : "view project"}
+              </Link>
+            )}
           </div>
           {/* // gallery style */}
           <div

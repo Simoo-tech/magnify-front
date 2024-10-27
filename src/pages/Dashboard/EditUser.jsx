@@ -15,7 +15,7 @@ export function EditUser() {
   const [userData, setUserData] = useState(null);
 
   // fetch client data
-  const { isLoading } = useQuery(
+  const { isLoading, data } = useQuery(
     ["fetchClientEdit", { cleintId }],
     () => {
       return axios.get(`${serverPath}client/${cleintId}`, {
