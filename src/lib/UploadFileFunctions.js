@@ -10,18 +10,20 @@ export const UploadFiles = async ({
   setUploaded,
   images,
   setMsg,
-  msg,
+  projectName,
   setImages,
   setDone,
   path,
+  setProjectName,
 }) => {
   setUploading(true);
   const formData = new FormData();
   for (const file of images) {
     formData.append("file", file);
+    formData.append("project_name", projectName);
     setFileName(file.name);
     await axios
-      .post(`${serverPath}${path}`, formData, {
+      .post(`${serverPath}upload-files/${path}`, formData, {
         onUploadProgress: (e) => {
           setUploaded(parseInt((e.loaded / e.total) * 100));
         },
@@ -50,11 +52,11 @@ export const UploadFiles = async ({
             });
             setImages([]);
             setDone([]);
+            setProjectName("");
           }, 2000);
         }
       })
-      .catch((err) => console.log(err))
-      .finally(() => {});
+      .catch((err) => console.log(err));
   }
 };
 

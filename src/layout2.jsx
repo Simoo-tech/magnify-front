@@ -6,9 +6,7 @@ export default function Layout2({ children, type }) {
   return (
     <div
       className={`bg-no-repeat bg-origin-border bg-bottom w-full relative bg-white
-      h-full container max-w-full flex flex-col items-center py-3 justify-start
-      sm:gap-10
-      md:gap-10
+      h-full container max-w-full flex flex-col items-center py-3 justify-start gap-8
       ${
         type === "upload-files" &&
         `sm:!bg-[url('../public/assest/background5-res.svg')] sm:bg-[length:70%] sm:bg-right-bottom 

@@ -1,23 +1,20 @@
 // components
 import {
   AddProject,
-  emailRemove,
   HandleSubmitCreate,
   HandleSubmitEdit,
-  HandleUploadImg,
-  ProjectRem,
 } from "../../lib/DashboardReq";
 import { PrimaryBtn, SecondaryBtn } from "../../component/Btns";
-import { Input } from "../../component/Input";
 // icons
 import { IoIosClose } from "react-icons/io";
-import deleteIcon from "/assest/icon6.svg";
 // libraryies
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
+import UserInfo from "../../component/Create-Edit-ClientData/UserInfo";
+import ProjectInfo from "../../component/Create-Edit-ClientData/ProjectInfo";
 
-export function CreateUser({ userData, dataDone }) {
+export function CreateUser({ userData }) {
   const [data, setData] = useState({});
   const [projectInfo, setProjectInfo] = useState([]);
   // animation
@@ -85,352 +82,8 @@ const Form = ({
   lang,
 }) => {
   const navigate = useNavigate();
-  const [uploading, setUploading] = useState();
-  // styles
-  const langDir = lang === "ar" && "rtl";
-  // handle change user data
-  const HandleChangeUser = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-    setMsg({});
-  };
-  // handle change project
-  const HandleChangeProject = (e, i) => {
-    const { name, value } = e.target;
-    const onChange = [...projectInfo];
-    onChange[i][name] = value;
-    setProjectInfo(onChange);
-    setMsg({});
-  };
-
-  const HandleDeleteProjectImg = (e, i) => {
-    const onChange = [...projectInfo];
-    delete onChange[i].projectImg;
-    setProjectInfo(onChange);
-  };
-
   // loading spinner
   const [loading, setLoading] = useState(false);
-  // user info inputs
-  const InputFieldsUserInfo = [
-    {
-      type: "text",
-      name: "userName",
-      style: "col-span-full",
-      text: lang === "ar" ? "اسم المستخدم" : "User Name",
-      value: data.userName,
-      onChange: HandleChangeUser,
-    },
-    {
-      type: "text",
-      name: "fname",
-      text: lang === "ar" ? "الاسم الاول" : "First Name",
-      value: data.fname,
-      onChange: HandleChangeUser,
-    },
-    {
-      type: "text",
-      name: "lname",
-      text: lang === "ar" ? "الاسم الاخير" : "Last Name",
-      value: data.lname,
-      onChange: HandleChangeUser,
-    },
-    {
-      type: "text",
-      name: "email",
-      text: lang === "ar" ? "البريد الالكتروني " : "E-mail",
-      value: data.email,
-      onChange: (e) => {
-        const email = e.target.value.toLocaleLowerCase();
-        setData({ ...data, email });
-        setMsg({});
-      },
-    },
-    {
-      type: "phone",
-      text: lang === "ar" ? "رقم الهالتف" : "Phone Number",
-      value: `${data.phone}`,
-      onChange: (e) => {
-        setData({ ...data, phone: e });
-        setMsg({});
-      },
-    },
-  ];
-  // projects info inputs
-  const Projects = projectInfo.map((project, index) => {
-    // inputs fields
-    const InputFieldsProjectInfo = [
-      {
-        type: "text",
-        name: "projectNo",
-        text: lang === "ar" ? "رقم المشروع" : "Project Number",
-        value: project.projectNo,
-        index,
-      },
-      {
-        type: "text",
-        name: "projectName",
-        text: lang === "ar" ? "اسم المشروع " : "Project Name",
-        value: project.projectName,
-        index,
-      },
-      {
-        type: "text",
-        name: "projectLoc",
-        text: lang === "ar" ? "موقع المشروع" : "Project Location",
-        value: project.projectLoc,
-        index,
-      },
-      {
-        name: "projectType",
-        type: "select",
-        text: lang === "ar" ? "نوع المشروع" : "Project Type",
-        value: project.projectType,
-        index,
-        chooses: [
-          {
-            value: "",
-            text: lang === "ar" ? "...اختر النوع" : "select type...",
-          },
-          { value: "commercial", text: lang === "ar" ? "تجاري" : "Commercial" },
-          {
-            value: "residential",
-            text: lang === "ar" ? "سكني" : "Residential",
-          },
-          {
-            value: "industrial",
-            text: lang === "ar" ? "صناعي " : "Industrial",
-          },
-          {
-            value: "infrastructure",
-            text: lang === "ar" ? " بنية تحتية" : "Infrastructure",
-          },
-        ],
-        onChange: "",
-      },
-      {
-        type: "text",
-        name: "projectArea",
-        text: lang === "ar" ? "منطقة المشروع" : "Project Area",
-        value: project.projectArea,
-        index,
-      },
-      {
-        type: "text",
-        name: "projectHei",
-        text: lang === "ar" ? "ارتفاع المشروع" : "Project Height",
-        value: project.projectHei,
-        index,
-      },
-      {
-        type: "text",
-        name: "consultant",
-        text: lang === "ar" ? "مستشار" : "Consultant",
-        value: project.consultant,
-        index,
-      },
-      {
-        type: "text",
-        name: "projectDura",
-        text: lang === "ar" ? "مدة المشروع" : "Project Duration",
-        value: project.projectDura,
-        index,
-      },
-      {
-        type: "text",
-        name: "folderName",
-        text: lang === "ar" ? "ملف المشروع " : "Project Folder",
-        value: project.folderName,
-        index,
-      },
-      {
-        type: "date",
-        name: "projectDate",
-        text: lang === "ar" ? "تاريخ المشروع" : "Project Date",
-        value: project.projectDate
-          ? new Date(project?.projectDate).toISOString().split("T")[0]
-          : project.projectDate,
-        index,
-      },
-      {
-        name: "accessUser",
-        index,
-        emails: project.accessUser.map((email, a) => {
-          return (
-            <div className="relative">
-              <Input
-                name="access-user"
-                type={"email"}
-                inkey={a}
-                value={email.email}
-                placeholder={
-                  lang === "ar" ? "ادخل بريد الكتروني" : "Enter email address"
-                }
-                onChangeHandle={(e) => {
-                  const onChange = [...projectInfo];
-                  onChange[index]["accessUser"][a].userName = data.userName;
-                  onChange[index]["accessUser"][a].email = e.target.value;
-                  setProjectInfo(onChange);
-                  setMsg({});
-                }}
-                containerStyle={`w-full col-span-full`}
-              />
-              <button
-                type="button"
-                className="absolute right-4 top-[50%] translate-y-[-50%]"
-                title="delete project"
-                onClick={() => {
-                  emailRemove({
-                    userID: userData._id,
-                    index,
-                    projectInfo,
-                    setProjectInfo,
-                    a,
-                    email: email.email,
-                  });
-                }}
-              >
-                <img
-                  loading="eager"
-                  src={deleteIcon}
-                  alt="delete-icon"
-                  className="sm:w-[18px] md:w-[25px]"
-                />
-              </button>
-            </div>
-          );
-        }),
-      },
-      {
-        type: "file",
-        name: "projectImg",
-        accept: ".jpg, .png, .jpeg, .webp",
-        index,
-        value: project.projectImg,
-        style: "col-span-full min-h-[200px]",
-        desc: lang === "ar" ? "رفع صورة" : "Click to upload",
-      },
-    ];
-    return (
-      <div
-        key={index}
-        id="project-info"
-        dir={langDir}
-        className=" gap-7 flex flex-col border-t-2 border-lineColor-color1 pt-4
-        first-of-type:border-none first-of-type:p-0"
-      >
-        {/*  project number and delete */}
-        <div id="project-number" className="w-full justify-between flex ">
-          <h3
-            className="font-medium text-primary-color1 rounded-lg capitalize
-          md:text-xl
-          sm:text-lg "
-          >
-            {lang === "ar" ? "مشروع" : "project"}
-            <span className="mx-3">
-              {index + 1 < 10 ? "0" + (index + 1) : index + 1}
-            </span>
-          </h3>
-          <button
-            type="button"
-            title="delete project"
-            onClick={() => ProjectRem({ index, projectInfo, setProjectInfo })}
-          >
-            <img
-              loading="eager"
-              src={deleteIcon}
-              alt="delete-icon"
-              className="sm:w-[23px] md:w-[30px]"
-            />
-          </button>
-        </div>
-        <div
-          id="project-data"
-          className="grid place-items-center md:grid-cols-2 pl gap-8"
-        >
-          {InputFieldsProjectInfo.map((input, i) => {
-            // add user access by email
-            if (input.name === "accessUser") {
-              return (
-                <div
-                  key={i}
-                  className="flex col-span-full flex-col w-full items-center py-4"
-                >
-                  <span className="border-t-2 border-lineColor-color1 mb-4 w-[90%]" />
-                  <h3
-                    className="font-semibold text-start w-full text-primary-color1 rounded-lg capitalize
-                    md:text-lg
-                    sm:text-base"
-                  >
-                    Add Access To New Users
-                  </h3>
-                  <div
-                    id="emails"
-                    className="w-full flex flex-col my-4 relative"
-                  >
-                    {input.emails}
-                  </div>
-                  <SecondaryBtn
-                    action={() => {
-                      const onChange = [...projectInfo];
-                      onChange[index]["accessUser"] = [
-                        ...onChange[index]["accessUser"],
-                        { email: "" },
-                      ];
-                      setProjectInfo(onChange);
-                    }}
-                    type="button"
-                    text="Add Another Email Address"
-                    style={`${
-                      input.emails.length >= 5 && "!hidden"
-                    } min-w-[60%] bg-white !text-darkGreen !py-2`}
-                  />
-                </div>
-              );
-            } else {
-              return (
-                <Input
-                  type={input.type}
-                  inkey={i}
-                  name={input.name}
-                  value={input.value}
-                  text={input.text}
-                  accept={input.accept}
-                  desc={input.desc}
-                  uploading={uploading}
-                  placeholder={input.placeHolder}
-                  onChangeHandle={
-                    input.type === "file"
-                      ? (e) => {
-                          HandleUploadImg({
-                            e,
-                            i: input.index,
-                            projectInfo,
-                            setMsg,
-                            setProjectInfo,
-                            setUploading,
-                          });
-                        }
-                      : (e) => {
-                          {
-                            HandleChangeProject(e, input.index);
-                          }
-                        }
-                  }
-                  containerStyle={`text-primary-color2 ${input.style}`}
-                  labelStlye="sm:text-sm md:!font-[18px]"
-                  chooses={input.chooses}
-                  iconSize={50}
-                  deleteImg={(e) => {
-                    HandleDeleteProjectImg(e, input.index);
-                  }}
-                />
-              );
-            }
-          })}
-        </div>
-      </div>
-    );
-  });
 
   return (
     <form
@@ -475,56 +128,15 @@ const Form = ({
           : "create a new user"}
       </h1>
       {/* user info */}
-      <div
-        id="user-info"
-        className="pb-10 w-full flex flex-col gap-10 
-        md:px-10"
-      >
-        <h2
-          dir={langDir}
-          className="text-primary-color1 capitalize font-semibold 
-          md:text-xl
-          sm:text-lg"
-        >
-          {lang === "ar" ? "معلومات المستخدم" : "user information"}
-        </h2>
-        {/* inputs container */}
-        <div id="user-data" className="grid md:grid-cols-2 gap-5 ">
-          {InputFieldsUserInfo.map((input, i) => {
-            return (
-              <Input
-                type={input.type}
-                key={i}
-                name={input.name}
-                value={input.value}
-                text={input.text}
-                onChangeHandle={input.onChange}
-                containerStyle={`text-primary-color2 ${input.style}`}
-                inputContainerStyle="!px-6"
-                labelStlye="sm:text-sm md:!font-[18px]"
-              />
-            );
-          })}
-        </div>
-      </div>
+      <UserInfo data={data} setData={setData} setMsg={setMsg} />
       {/* projects info */}
-      {projectInfo.length > 0 && (
-        <div
-          id="projects-info"
-          className="pt-16 w-full flex flex-col gap-10 border-t-2 border-lineColor-color1
-          md:px-10"
-        >
-          <h2
-            dir={langDir}
-            className="text-primary-color1 capitalize font-semibold mb-3
-            md:text-xl
-            sm:text-lg"
-          >
-            {lang === "ar" ? "معلومات المشروع" : "project information"}
-          </h2>
-          {Projects}
-        </div>
-      )}
+      <ProjectInfo
+        projectInfo={projectInfo}
+        setProjectInfo={setProjectInfo}
+        userData={userData}
+        setMsg={setMsg}
+        data={data}
+      />
       {/* add project btn */}
       <div
         id="buttons"

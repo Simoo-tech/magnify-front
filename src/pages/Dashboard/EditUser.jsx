@@ -6,7 +6,6 @@ import cookie from "react-cookies";
 import { CreateUser } from "./CreateUser.jsx";
 import { Loading } from "../../component/Loading.jsx";
 
-// const CreateUser = lazy(() => import("./CreateUser.jsx"));
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
 
@@ -15,26 +14,22 @@ export function EditUser() {
   const [userData, setUserData] = useState(null);
 
   // fetch client data
-  const { isLoading, data } = useQuery(
+  const { isLoading } = useQuery(
     ["fetchClientEdit", { cleintId }],
     () => {
       return axios.get(`${serverPath}client/${cleintId}`, {
-        refetchOnmount: false,
-        refetchOnmount: false,
-        refetchOnReconnect: false,
-        retry: false,
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 60 * 24,
         headers: {
           token: `${userCookies}`,
         },
       });
     },
     {
+      refetchOnWindowFocus: false, // Corrected: Placed in the options object
       onSuccess: (res) => setUserData(res.data),
     }
   );
 
+  
   if (isLoading) {
     return <Loading />;
   }

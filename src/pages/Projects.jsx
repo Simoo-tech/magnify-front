@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import video1 from "/assest/logo animation.mp4";
 import { useLang } from "../context/LangContext";
 
-const folderName = import.meta.env.VITE_APP_PROJECTS_FOLDER;
+const ServerUrl = import.meta.env.VITE_APP_PROJECTS_FOLDER;
 const user_cookies = cookie.load("user_token");
 
 export default function Projects() {
   const [data] = useOutletContext();
   const [loading, setLoading] = useState(true);
-  const { projectId, access } = useParams();
+  const { projectName, access, date } = useParams();
   const projects = data.projectInfo;
   const [lang] = useLang();
 
@@ -19,7 +19,7 @@ export default function Projects() {
     return project.folderName;
   });
 
-  const checkID = folder?.includes(projectId);
+  const checkID = folder?.includes(projectName);
 
   useEffect(() => {
     if (!user_cookies) {
@@ -27,11 +27,13 @@ export default function Projects() {
     }
   }, []);
 
+  const projectFolder_Date = window.location.href.split("/").slice(5).join("/");
 
-  return checkID ? (
+
+  return (
     <>
       {/* loading screen */}
-      {loading ? (
+      {loading && (
         <div className="absolute top-0 left-0 container max-w-full bg-white w-full h-full gap-10 z-50 justify-center items-center flex flex-col-reverse">
           <span className="sm:text-sm md:text-base lg:text-lg text-primary-color1 text-center">
             {lang === "ar"
@@ -48,20 +50,14 @@ export default function Projects() {
             <source src={video1} type="video/mp4" />
           </video>
         </div>
-      ) : (
-        <></>
       )}
       <iframe
         title="3dvista-user"
-        src={`${folderName}${
-          access ? access : data?.userName
-        }/${projectId}/index.htm`}
+        src={`${ServerUrl}${projectFolder_Date}/index.htm`}
         name={data?.userName}
         onLoad={() => setLoading(false)}
         className="h-full w-full absolute top-0 z-50"
       />
     </>
-  ) : (
-    <Navigate to="/" replace />
   );
 }

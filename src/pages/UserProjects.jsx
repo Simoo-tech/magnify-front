@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
@@ -8,6 +8,7 @@ import { Loading } from "../component/Loading";
 import { useLang } from "../context/LangContext";
 import { InputSearch } from "../component/inputSearch";
 import { NotFound } from "../component/NotFound";
+import { Input } from "../component/Input";
 import { NotFoundInList } from "../component/NotFoundInList";
 import { QR } from "../component/Qr";
 /////// layout
@@ -15,19 +16,24 @@ import MainLayout from "../MainLayout";
 /////// assest
 import BackgroundImg from "/assest/background6.svg";
 /////// icons
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdViewList, MdViewModule } from "react-icons/md";
+import { SecondaryBtn } from "../component/Btns";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
-const projectSrc = import.meta.env.VITE_APP_PROJECTS_FOLDER;
 
 export default function UserProjects() {
   // user cookies
+
   const [lang] = useLang();
   const [search, setSearch] = useState();
   const user_cookies = cookie.load("user_token");
   const [filter, setFilter] = useState([]);
   const { id } = useParams();
   const [listType, setListType] = useState(true);
+  const [projectShowDates, setProjectShowDates] = useState([]);
+  const [date, setDate] = useState();
+  const navigate = useNavigate();
   // fetch user projects data
   const { isLoading, error } = useQuery(
     "fetchUserProjects",
@@ -47,25 +53,9 @@ export default function UserProjects() {
     return <Loading />;
   }
 
-  const { projectInfo, userName, isAdmin } = filter;
+  const { projectInfo, isAdmin, userName } = filter;
   if (error || id !== user_cookies || isAdmin) {
     return <NotFound />;
-  }
-
-  // if user has one project
-  if (projectInfo?.length === 1) {
-    return (
-      <>
-        <iframe
-          title="3dvista-user"
-          src={`${projectSrc}${userName}/${projectInfo[0].folderName}/index.htm`}
-          name={userName}
-          allowFullScreen
-          className="h-full w-full "
-        />
-        {filter && <QR />}
-      </>
-    );
   }
 
   const langDir = lang === "ar" && "rtl";
@@ -91,6 +81,7 @@ export default function UserProjects() {
         folderName,
         projectImg,
         accessUser,
+        projectSubDate,
       } = project;
       const projectsInfoText = [
         {
@@ -123,7 +114,7 @@ export default function UserProjects() {
           {/* // list style */}
           <div
             id="project-info"
-            className={`flex flex-col flex-wrap rounded-3xl bg-lightGreen relative        
+            className={`flex flex-col flex-wrap rounded-3xl bg-lightGreen relative justify-between items-center pb-4      
           xl:w-[28%]
           lg:w-[40%]
           md:w-5/12
@@ -142,7 +133,8 @@ export default function UserProjects() {
             {/* image holder */}
             <div
               id="project-image-holder "
-              className="flex relative justify-between text-white capitalize rounded-3xl "
+              className="flex relative justify-between text-white capitalize rounded-3xl w-full
+              sm:h-[220px] lg:h-[240px] max-h-[240px]"
             >
               {projectImg?.path ? (
                 <img
@@ -153,7 +145,7 @@ export default function UserProjects() {
                   alt={`project-image-${projectImg?.name}`}
                 />
               ) : (
-                <div className="md:h-[220px] lg:h-[240px] max-h-[240px] flex justify-center items-center w-full text-textColor">
+                <div className=" flex justify-center items-center w-full text-textColor">
                   No photos for your project
                 </div>
               )}
@@ -184,22 +176,58 @@ export default function UserProjects() {
               ))}
             </div>
             {accessUser.length >= 1 ? (
-              accessUser.map((user) => (
-                <Link
-                  to={`${folderName}/${user.userName}`}
-                  className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
+              accessUser.map((user) =>
+                projectSubDate.length >= 1 ? (
+                  <SecondaryBtn
+                    text="show projects date"
+                    style="!bottom text-base capitalize truncate !bg-primary-color1 !py-2 !px-10 gap-2 rounded-3xl
+                  !text-white !roundeda-xl duration-300 !border-none
+                  !absolute !left-[50%] !translate-x-[-50%]
+                  hover:!bg-primary-color1/70
+                  lg:-bottom-14
+                  sm:-bottom-16"
+                    action={() => {
+                      setProjectShowDates({
+                        folderName: folderName,
+                        projectSubDate: projectSubDate,
+                        userName: user ? user.userName : userName,
+                      });
+                    }}
+                  />
+                ) : (
+                  <Link
+                    to={`${user.userName}/${folderName}`}
+                    className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
               text-white roundeda-xl duration-300
               absolute left-[50%] translate-x-[-50%]
               hover:bg-primary-color1/70
               lg:-bottom-14
               sm:-bottom-16"
-                >
-                  {lang === "ar" ? "مشاهدة المشروع" : "view project"}
-                </Link>
-              ))
+                  >
+                    {lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                  </Link>
+                )
+              )
+            ) : projectSubDate.length >= 1 ? (
+              <SecondaryBtn
+                text="show projects date"
+                style="!bottom text-base capitalize truncate !bg-primary-color1 !py-2 !px-10 gap-2 rounded-3xl
+              !text-white !roundeda-xl duration-300 !border-none
+              !absolute !left-[50%] !translate-x-[-50%]
+              hover:!bg-primary-color1/70
+              lg:-bottom-14
+              sm:-bottom-16"
+                action={() => {
+                  setProjectShowDates({
+                    folderName: folderName,
+                    projectSubDate: projectSubDate,
+                    userName: userName,
+                  });
+                }}
+              />
             ) : (
               <Link
-                to={folderName}
+                to={`${userName + "/" + folderName}`}
                 className="bottom text-base capitalize truncate bg-primary-color1 py-2 px-10 gap-2 rounded-3xl
             text-white roundeda-xl duration-300
             absolute left-[50%] translate-x-[-50%]
@@ -246,14 +274,41 @@ export default function UserProjects() {
                   No photos for your project
                 </div>
               )}
-              <Link
-                to={`${folderName}`}
-                className="absolute bottom-3 left-[50%] translate-x-[-50%] truncate
+              {/* project date choose */}
+              {projectSubDate.length >= 1 ? (
+                <SecondaryBtn
+                  text="show project dates"
+                  style=" border-none absolute bottom-3 left-[50%] translate-x-[-50%] truncate
+              text-sm capitalize bg-primary-color1 !py-2 !px-16 gap-2 rounded-3xl duration-300
+              hover:bg-primary-color1/70"
+                  action={() => {
+                    setProjectShowDates({
+                      folderName: folderName,
+                      projectSubDate: projectSubDate,
+                    });
+                  }}
+                />
+              ) : accessUser.length >= 1 ? (
+                accessUser.map((user) => (
+                  <Link
+                    to={`${folderName}/${user.userName}`}
+                    className="absolute bottom-3 left-[50%] translate-x-[-50%] truncate
               text-sm capitalize bg-primary-color1 py-2 px-16 gap-2 rounded-3xl duration-300
               hover:bg-primary-color1/70"
-              >
-                {lang === "ar" ? "مشاهدة المشروع" : "view project"}
-              </Link>
+                  >
+                    {lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                  </Link>
+                ))
+              ) : (
+                <Link
+                  to={folderName}
+                  className="absolute bottom-3 left-[50%] translate-x-[-50%] truncate
+              text-sm capitalize bg-primary-color1 py-2 px-16 gap-2 rounded-3xl duration-300
+              hover:bg-primary-color1/70"
+                >
+                  {lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                </Link>
+              )}
             </div>
             {/* project info */}
             <div className="middle flex flex-col p-10 py-5 gap-10 justify-center w-8/12">
@@ -293,7 +348,7 @@ export default function UserProjects() {
         style={{ backgroundImage: `url(${BackgroundImg})` }}
         id="projects-page"
         dir={langDir}
-        className="flex flex-col container max-w-full bg-center
+        className="flex flex-col container max-w-full bg-center 
       items-center justify-start relative gap-8 h-full min-h-fit py-10   
       lg:bg-cover
       sm:bg-[length:100%]"
@@ -379,6 +434,83 @@ export default function UserProjects() {
           />
         )}
         {filter && <QR />}
+        {/* show project dates  */}
+        {projectShowDates.projectSubDate?.length >= 1 && (
+          <div
+            id="projects-date"
+            className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex justify-center items-center
+        w-full h-full bg-black/40 z-50"
+          >
+            <div
+              id="dates"
+              className="border-2 shadow-2xl rounded-xl border-primary-color2 bg-lightGreen text-primary-color1 flex flex-col 
+              justify-center items-center gap-10 py-6 px-10 relative
+              sm:w-full sm:h-full
+              md:w-8/12 md:h-4/5
+              lg:w-5/12 "
+            >
+              <IoIosCloseCircleOutline
+                className="absolute top-3 right-3"
+                size={35}
+                color="red"
+                onClick={() => {
+                  setProjectShowDates([]);
+                  setDate();
+                }}
+              />
+              <p
+                className="font-semibold capitalize text-center 
+              sm:text-base
+              md:text-lg "
+              >
+                choose project date to show
+              </p>
+              {/* select date */}
+              <div className=" bg-lightGreen w-full gap-8 flex items-center py-10 px-2 rounded-lg flex-col">
+                <select
+                  className="w-full h-full bg-transparent outline-none px-4 py-3 border-2 
+                  border-primary-color1 rounded-[48px] "
+                  onChange={(e) => setDate(e.target.value)}
+                  value={date}
+                >
+                  <option
+                    className="capitalize text-primary-color2/50 opacity-65"
+                    value=""
+                  >
+                    Choose Project Date
+                  </option>
+                  {projectShowDates.projectSubDate?.map((Showdate, i) => (
+                    <option
+                      className="capitalize text-primary-color2"
+                      key={i}
+                      value={Showdate}
+                    >
+                      {new Date(Showdate).toISOString().split("T")[0]}
+                    </option>
+                  ))}
+                </select>
+                {/* view project button */}
+                {date && (
+                  <SecondaryBtn
+                    action={() => {
+                      navigate(
+                        projectShowDates.userName +
+                          "/" +
+                          projectShowDates.folderName +
+                          "/" +
+                          new Date(date).toISOString().split("T")[0]
+                      );
+                      setProjectShowDates([]);
+                      setDate();
+                    }}
+                    style="w-10/12 !py-2"
+                    text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </section>
       <Suspense fallback={<Loading />}>
         <Outlet context={[filter]} />

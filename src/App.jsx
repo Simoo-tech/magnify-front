@@ -19,7 +19,6 @@ import SessionData from "./pages/Upload files/SessionData";
 import UploadFiles from "./pages/Upload files/UploadFiles";
 import Logout from "./pages/Logout";
 import CheckEmail from "./pages/checkEmail";
-import { Loading } from "./component/Loading";
 
 function App() {
   // set language
@@ -45,8 +44,9 @@ function App() {
           <Route path=":cleintId/edit-user" element={<EditUser />} />
         </Route>
         <Route path="/:id/tour-projects" element={<UserProjects />}>
-          <Route path={":projectId/:access"} element={<Projects />} />
-          <Route path={":projectId"} element={<Projects />} />
+          <Route path={":projectName"} element={<Projects />} />
+          <Route path={":access/:projectName/:date"} element={<Projects />} />
+          <Route path={":projectName/:date"} element={<Projects />} />
         </Route>
         <Route path="/upload-files" element={<UploadFiles />}>
           <Route path="missing-photo" element={<MissingPhoto />} />

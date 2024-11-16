@@ -29,12 +29,14 @@ export const Input = ({
   uploading,
   deleteImg,
   inkey,
+  require,
 }) => {
   const [lang] = useLang();
 
   const [showPass, setShowPass] = useState(false);
   const langDir = lang === "ar" && "rtl";
   const upload = useRef(null);
+
 
   return (
     <label
@@ -64,7 +66,7 @@ export const Input = ({
           className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[48px]`}
         >
           <input
-            
+            required={require}
             minLength={minLen}
             maxLength={maxLen}
             onChange={onChangeHandle}
@@ -129,9 +131,9 @@ export const Input = ({
               </>
             )}
             {uploading && !value?.path && (
-              <div className="w-9/12 relative flex gap-5 items-center flex-col justify-center ">
+              <div className="w-9/12 h-[350px] relative flex gap-5 items-center flex-col justify-center ">
                 <Oval />
-                <p className="absolute left-[50%] top-[30%] translate-x-[-50%] translate-y-[-30%]">
+                <p className="absolute left-[50%] top-[40%] translate-x-[-50%]">
                   {uploading}%
                 </p>
                 <span className="text-primary-color1 capitalize truncate sm:text-xs md:text-sm">
@@ -142,7 +144,7 @@ export const Input = ({
             {!value?.name && !uploading && (
               <label
                 htmlFor={`${name}-input-img`}
-                className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full"
+                className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full h-[350px] "
               >
                 <FiUploadCloud size={iconSize} color={iconColor} />
                 <p className="capitalize text-base text-primary-color1 font-bold mt-2">
@@ -185,7 +187,7 @@ export const Input = ({
             name={name}
           >
             {chooses.map((option, i) => (
-              <option key={i} value={option.value}>
+              <option className="text-black" key={i} value={option.value}>
                 {option.text}
               </option>
             ))}

@@ -14,6 +14,7 @@ import icon6 from "/assest/icon6.svg";
 import icon9 from "/assest/icon9.svg";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineError } from "react-icons/md";
+import { Input } from "../../component/Input";
 
 export default function SessionData() {
   const [images, setImages] = useState([]);
@@ -24,7 +25,7 @@ export default function SessionData() {
   const [done, setDone] = useState([]);
   const [lang] = useLang();
   const [animation, setAnimation] = useState(false);
-
+  const [projectName, setProjectName] = useState("");
   let Newimg = [];
 
   const HandleChange = (e) => {
@@ -140,6 +141,7 @@ export default function SessionData() {
     window.addEventListener("beforeunload", unloadCallback);
     return () => window.removeEventListener("beforeunload", unloadCallback);
   }, []);
+
   const handleUploadBtnSession = (e) => {
     e.preventDefault();
     UploadFiles({
@@ -148,12 +150,14 @@ export default function SessionData() {
       setUploaded,
       images,
       setMsg,
-      msg,
       setImages,
       setDone,
       path: "session-upload",
+      projectName,
+      setProjectName,
     });
   };
+
   const langDir = lang === "ar" && "rtl";
 
   return (
@@ -270,9 +274,10 @@ export default function SessionData() {
           )}
           {/* upload buttom */}
           {images && images.length > 0 && (
-            <div
+            <form
+              onSubmit={uploading ? null : handleUploadBtnSession}
               id="upload-files"
-              className="flex gap-5 items-center w-7/12 justify-center flex-col"
+              className="flex gap-5 items-center sm:w-10/12 md:w-7/12 justify-center flex-col"
             >
               {fileName && (
                 <span className="w-full truncate text-center">{fileName}</span>
@@ -292,11 +297,20 @@ export default function SessionData() {
                 </span>
               )}
               {/* upload button */}
-              <div className="full gap-3 flex items-center flex-col ">
+              <div className="full gap-3 flex items-center flex-col w-full ">
+                {!uploading && (
+                  <Input
+                    require={true}
+                    type="text"
+                    placeholder="project name"
+                    containerStyle="sm:!w-full md:!w-7/12"
+                    onChangeHandle={(e) => setProjectName(e.target.value)}
+                    value={projectName}
+                  />
+                )}
                 <SecondaryBtn
                   type="submit"
                   style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 truncate"
-                  action={uploading ? null : handleUploadBtnSession}
                   text={lang === "ar" ? "رفع الصور" : "upload files"}
                   loading={uploading}
                   disabled={uploading}
@@ -311,7 +325,7 @@ export default function SessionData() {
                   {lang === "ar" ? "عدد الصورة " : "files choosen"}
                 </span>
               </div>
-            </div>
+            </form>
           )}
         </div>
       </Layout2>

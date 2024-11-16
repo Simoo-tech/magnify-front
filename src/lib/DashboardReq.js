@@ -21,7 +21,7 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
       projectDura: "",
       projectType: "",
       projectImg: { name: "", path: "" },
-      accessUser: [{ email: "" }],
+      accessUser: [],
     },
   ]);
 };

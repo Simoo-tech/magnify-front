@@ -14,6 +14,7 @@ import icon6 from "/assest/icon6.svg";
 import icon9 from "/assest/icon9.svg";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineError } from "react-icons/md";
+import { Input } from "../../component/Input";
 
 export default function MissingPhoto() {
   const [images, setImages] = useState([]);
@@ -24,6 +25,8 @@ export default function MissingPhoto() {
   const [done, setDone] = useState([]);
   const [lang] = useLang();
   const [animation, setAnimation] = useState(false);
+  const [projectName, setProjectName] = useState("");
+
   let Newimg = [];
 
   const HandleChange = (e) => {
@@ -156,6 +159,8 @@ export default function MissingPhoto() {
       setImages,
       setDone,
       path: "missing-upload",
+      projectName,
+      setProjectName,
     });
   };
   const langDir = lang === "ar" && "rtl";
@@ -273,9 +278,10 @@ export default function MissingPhoto() {
           )}
           {/* upload buttom */}
           {images && images.length > 0 && (
-            <div
+            <form
+              onSubmit={uploading ? null : handleUploadBtnMissing}
               id="upload-files"
-              className="flex gap-5 items-center w-7/12 justify-center flex-col"
+              className="flex gap-5 items-center sm:w-10/12 md:w-7/12 justify-center flex-col"
             >
               {fileName && (
                 <span className="w-full truncate text-center">{fileName}</span>
@@ -295,10 +301,20 @@ export default function MissingPhoto() {
                 </span>
               )}
               {/* upload button */}
-              <div className="full gap-5 flex items-center flex-col ">
+              <div className="full gap-5 flex items-center flex-col w-full ">
+                {!uploading && (
+                  <Input
+                    require={true}
+                    type="text"
+                    placeholder="project name"
+                    containerStyle="sm:!w-full md:!w-7/12"
+                    onChangeHandle={(e) => setProjectName(e.target.value)}
+                    value={projectName}
+                  />
+                )}
                 <SecondaryBtn
+                  type="submit"
                   style="sm:!px-10 sm:!text-sm md:!py-2 md:!px-16 truncate"
-                  action={uploading ? null : handleUploadBtnMissing}
                   text={lang === "ar" ? "رفع الصور" : "upload files"}
                   loading={uploading}
                   disabled={uploading}
@@ -313,7 +329,7 @@ export default function MissingPhoto() {
                   {lang === "ar" ? "عدد الصورة " : "files choosen"}
                 </span>
               </div>
-            </div>
+            </form>
           )}
         </div>
       </Layout2>
