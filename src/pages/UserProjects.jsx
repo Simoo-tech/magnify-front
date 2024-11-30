@@ -231,7 +231,9 @@ export default function UserProjects() {
               )
             ) : projectSubDate.length >= 1 ? (
               <SecondaryBtn
-                text="show projects date"
+                text={
+                  lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"
+                }
                 style={`truncate !absolute 
                   sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                   ${
@@ -424,7 +426,7 @@ border-primary-color1 rounded-[48px] "
         value={date}
       >
         <option disabled selected className="capitalize " value="">
-          Choose Project Date
+          {lang === "ar" ? "اختر تاريخ المشروع" : "choose project date to show"}
         </option>
         {projectShowDates.projectSubDate?.map((Showdate, i) => (
           <option

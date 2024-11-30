@@ -74,10 +74,11 @@ export const QR = () => {
           action={DownloadQR}
           type="button"
           text={lang === "ar" ? "تحميل" : "Download"}
-          style="!px-7 !py-1
+          style="
           lg:!text-xs
           md:!text-[13px]
-          sm:!text-[11px]"
+          sm:!text-[11px]
+          !min-w-[100px]"
         />
       </div>
     </div>
