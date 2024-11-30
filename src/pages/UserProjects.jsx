@@ -199,7 +199,11 @@ export default function UserProjects() {
               accessUser.map((user) =>
                 projectSubDate.length >= 1 ? (
                   <SecondaryBtn
-                    text="show projects date"
+                    text={
+                      lang === "ar"
+                        ? "عرض تواريخ المشروع"
+                        : "show projects date"
+                    }
                     style={`truncate !absolute 
                       sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                       ${
