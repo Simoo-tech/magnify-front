@@ -61,7 +61,7 @@ export function Dashboard() {
           yesAction={() => HandleDelete({ deleteUser, setPopUp })}
         >
           <div className="w-full text-center lowercase rounded-xl gap-4 flex flex-col relative">
-            <p className="text-[20px]">
+            <p>
               <b>{fname}</b>
               {lang === "ar"
                 ? "هل أنت متأكد أنك تريد الحذف؟"

@@ -15,7 +15,6 @@ import icon9 from "/assets/icon9.svg";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineError } from "react-icons/md";
 import { Input } from "../../components/Input";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function SessionData() {
   const [images, setImages] = useState([]);
@@ -121,7 +120,12 @@ export default function SessionData() {
               HandleDeleteFile({ i, images, setImages, setUploaded })
             }
           >
-            <LazyLoadImage src={icon6} alt="delete-photo-icon" width={25} />
+            <img
+              loading="eager"
+              src={icon6}
+              alt="delete-photo-icon"
+              width={25}
+            />
           </button>
         )}
       </div>
@@ -179,16 +183,12 @@ export default function SessionData() {
           {/* alert message */}
           {msg?.active && (
             <span
-              className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
+              className={` rounded-lg font-normal  ${
                 msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
-              }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate
-            sm:text-[12px] sm:w-fit sm:px-2 sm:top-16
-            md:text-[16px] md:px-4 md:top-8`}
+              }  z-50 py-3 max-w-full flex items-center text-black justify-between gap-2 
+            sm:text-[12px] sm:w-fit sm:px-2 
+            md:text-[16px] md:px-4 `}
             >
-              <msg.icon
-                color={msg.type === "success" ? "497B62" : "BD5151"}
-                size={25}
-              />
               {msg.text}
               <button className="ml-2" onClick={() => setMsg({})}>
                 <IoIosClose size={22} />
@@ -202,10 +202,7 @@ export default function SessionData() {
               className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
             >
-              <LazyLoadImage
-                src={icon9}
-                className="sm:w-[100px] md:w-[150px]"
-              />
+              <img src={icon9} className="sm:w-[100px] md:w-[150px]" />
               <input
                 accept=".3gp,.mp4, .webm, .mkv, .mov"
                 onChange={uploading ? null : HandleChange}
@@ -231,6 +228,7 @@ export default function SessionData() {
               />
             </div>
           )}
+
           {/* show files chosen */}
           {images && images.length > 0 && (
             <div

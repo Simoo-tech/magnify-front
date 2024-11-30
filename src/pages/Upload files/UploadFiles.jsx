@@ -4,7 +4,6 @@ import Layout2 from "../../layout2";
 import icon7 from "/assets/icon7.svg";
 import icon8 from "/assets/icon8.svg";
 import { SecondaryBtn } from "../../components/Btns";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function UploadFiles() {
   const navigate = useNavigate();
@@ -26,7 +25,7 @@ export default function UploadFiles() {
             sm:w-full
             md:w-6/12"
           >
-            <LazyLoadImage 
+            <img
               src={icon8}
               alt="photo-session-data"
               className="sm:w-[70px] md:w-[80px] lg:w-[120px]"
@@ -43,7 +42,7 @@ export default function UploadFiles() {
             sm:w-full
             md:w-6/12"
           >
-            <LazyLoadImage 
+            <img
               src={icon7}
               alt="Missing-Photo"
               className="sm:w-[120px] md:w-[160px] lg:w-[240px]"

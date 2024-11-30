@@ -38,17 +38,21 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img loading="lazy" src={logo} alt="logo" />
+        <img src={logo} alt="logo" />
         {iconImage && (
           <img
-            loading="lazy"
             src={iconImage}
             alt="icon-reset-submit"
-            width={120}
+            className="sm:w-[100px] md:w-[110px] lg:w-[120px]"
           />
         )}
         {icon && icon}
-        <div className="text-primary-color1 w-full text-center">
+        <div
+          className="text-primary-color1 w-full text-center
+        sm:text-sm
+        md:text-base
+        lg:text-lg"
+        >
           {children || text}
         </div>
         {type === "yes-no" ? (
@@ -58,7 +62,7 @@ export const PopUp = ({
               text={lang === "ar" ? "الغاء" : "cancel"}
               action={noAction}
               type="button"
-              style="!py-2 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white w-6/12 !px-0
+              style="!py-2 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white w-6/12 !px-0 sm:!px-0 !min-w-fit
               md:!text-sm 
               sm:!text-xs "
             />
@@ -66,7 +70,7 @@ export const PopUp = ({
               text={btnText ? btnText : lang === "ar" ? "نعم" : "yes"}
               action={yesAction}
               type="button"
-              style="!py-2 md:!text-sm w-6/12 !px-0
+              style="!py-2 md:!text-sm w-6/12 sm:!px-0 !min-w-fit
               sm:!text-xs "
               disabled={hidden}
             />

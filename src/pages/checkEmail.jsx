@@ -56,7 +56,7 @@ export default function CheckEmail() {
       >
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-10">
-          <LazyLoadImage 
+          <LazyLoadImage
             src={icon1}
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"

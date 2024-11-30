@@ -127,11 +127,7 @@ export default function MissingPhoto() {
               HandleDeleteFile({ i, images, setImages, setUploaded })
             }
           >
-            <LazyLoadImage 
-              src={icon6}
-              alt="delete-photo-icon"
-              width={25}
-            />
+            <LazyLoadImage src={icon6} alt="delete-photo-icon" width={25} />
           </button>
         )}
       </div>
@@ -188,16 +184,12 @@ export default function MissingPhoto() {
           {/* alert message */}
           {msg?.active && (
             <span
-              className={`fixed  left-[50%] translate-x-[-50%] rounded-lg font-normal  ${
+              className={` rounded-lg font-normal  ${
                 msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
-              }  z-50 py-3  flex items-center text-black justify-center gap-2 truncate 
-          sm:text-[12px] sm:w-fit sm:px-2 sm:top-16
-          md:text-[16px] md:px-4 md:top-8`}
+              }  z-50 py-3 max-w-full flex items-center text-black justify-between gap-2 
+            sm:text-[12px] sm:w-fit sm:px-2 
+            md:text-[16px] md:px-4 `}
             >
-              <msg.icon
-                color={msg.type === "success" ? "497B62" : "BD5151"}
-                size={25}
-              />
               {msg.text}
               <button className="ml-2" onClick={() => setMsg({})}>
                 <IoIosClose size={22} />
@@ -211,7 +203,7 @@ export default function MissingPhoto() {
               className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
             >
-              <LazyLoadImage 
+              <LazyLoadImage
                 src={icon9}
                 className="sm:w-[100px] md:w-[150px]"
               />

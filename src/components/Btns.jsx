@@ -30,7 +30,7 @@ export const SecondaryBtn = ({
     <button
       disabled={disabled}
       id="focus-btn"
-      className={`btn px-10 capitalize py-3 rounded-[48px] bg-darkGreen text-white border-none 
+      className={`btn px-10 capitalize py-3 rounded-[48px] bg-darkGreen text-white border-none min-w-[250px]
       ${style} flex justify-center sm:text-xs md:text-sm lg:text-base  
     hover:bg-white hover:text-darkGreen duration-300
     disabled:bg-darkGreen/50 disabled:text-white `}
