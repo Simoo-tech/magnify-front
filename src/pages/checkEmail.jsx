@@ -6,14 +6,15 @@ import { useLang } from "../context/LangContext";
 /////// functions
 import { HandleSendReset, HandleSendVerify } from "../lib/Verify&ResetReq";
 /////// components
-import { Loading } from "../component/Loading";
-import { NotFound } from "../component/NotFound";
-import { SecondaryBtn } from "../component/Btns";
-import { Line } from "../component/Line";
+import { Loading } from "../components/Loading";
+import { NotFound } from "../components/NotFound";
+import { SecondaryBtn } from "../components/Btns";
+import { Line } from "../components/Line";
 /////// layout
 import Layout2 from "../layout2";
 /////// icons
-import icon1 from "/assest/icon1.svg";
+import icon1 from "/assets/icon1.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
@@ -49,14 +50,13 @@ export default function CheckEmail() {
       <section
         id="check-email"
         className="flex flex-col items-center justify-center h-full
-        lg:w-3/6
+        lg:w-6/12
         md:w-4/6 md:gap-14
-        sm:w-full sm:gap-8 "
+        sm:w-11/12 sm:gap-8 "
       >
         {/* text */}
-        <div id="text" className="flex flex-col items-center gap-5">
-          <img
-            loading="eager"
+        <div id="text" className="flex flex-col items-center gap-10">
+          <LazyLoadImage 
             src={icon1}
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"
@@ -66,23 +66,23 @@ export default function CheckEmail() {
             className="font-semibold text-primary-color1
               xl:text-2xl
               md:text-xl
-              sm:text-[24px]"
+              sm:text-lg"
           >
             {lang === "ar" ? "تحقق من بريدك الإلكتروني" : "Check your email"}
           </h1>
         </div>
         <p
           className="text-primary-color1 font-normal text-center
-          lg:text-[18px]
-          md:text-base
-          sm:text-sm"
+          lg:text-base
+          md:text-sm
+          sm:text-xs"
         >
           {lang === "ar"
             ? "لقد أرسلنا لك رسالة تأكيد بالبريد الإلكتروني تفيد بأنك أنت، وسيتم تسليم الرسالة خلال 10 دقائق"
             : "We sent you a confirmation email that it is you, The message will be delivered within 10 minutes"}
         </p>
         {/* line */}
-        <Line w="full" h="2px" />
+        <Line w="100%" h="2px" />
         {/* button */}
         <div
           id="buttons"
@@ -103,9 +103,6 @@ export default function CheckEmail() {
           </span>
           <SecondaryBtn
             type={"button"}
-            style="lg:text-base !py-2 truncate
-              md:text-sm md:min-w-[310px] md:w-fit
-              sm:text-xs sm:min-w-[250px] sm:w-full"
             action={
               !verified
                 ? (e) => {

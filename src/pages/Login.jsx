@@ -1,294 +1,251 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-// components
 import { HandleSubmit } from "../lib/LoginReq";
 import { useLang } from "../context/LangContext";
-import { Loading } from "../component/Loading";
-// icons
+import { Loading } from "../components/Loading";
 import { MdErrorOutline } from "react-icons/md";
-import { PrimaryBtn } from "../component/Btns";
+import { PrimaryBtn } from "../components/Btns";
 import Layout1 from "../Layout1";
-// assest
-import logo from "/assest/logo/mainLogo.svg";
-import { Input } from "../component/Input";
+import logo from "/assets/logo/mainLogo.svg";
+import { Input } from "../components/Input";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { NotFound } from "../component/NotFound";
+import { NotFound } from "../components/NotFound";
 import cookie from "react-cookies";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
-export default function Login() {
-  // login user with qr code
-  const url = window.location.href.split("/");
-  const id = url[3];
-  const [QREmail, setQREmail] = useState(null);
-  const user_cookies = cookie.load("user_token");
+const Login = () => {
   const [lang] = useLang();
+  const [QREmail, setQREmail] = useState(null);
+  const userCookies = cookie.load("user_token");
+  const userEmail = window.location.href.split("/")[3];
 
-  const links = [
-    {
-      id: "about-us",
-      url: "https://magnify-vt.com/",
-      text: lang === "en" || lang === null ? "About magnify " : "  عن magnify",
-    },
-    {
-      id: "privacy terms",
-      url: "https://magnify-vt.com/privacy-policy/",
-      text: lang === "en" || lang === null ? "Privacy Terms" : "شروط الخصوصية",
-    },
-    {
-      id: "contact us",
-      url: "https://magnify-vt.com/contact/",
-      text: lang === "en" || lang === null ? "Contact Us" : "تواصل معنا !",
-    },
-  ];
-  // if user loged
-  if (user_cookies) {
+  // Check if the user is already logged in
+  if (userCookies) {
     const { isLoading, data } = useQuery(
-      "checkUserLoged",
-      () => {
-        return axios.get(`${serverPath}user/${user_cookies}`);
-      },
+      "checkUserLogged",
+      () => axios.get(`${serverPath}user/${userCookies}`),
       {
-        refetchOnmount: false,
-        refetchOnReconnect: false,
+        refetchOnMount: false,
         retry: false,
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60 * 60 * 24,
+        staleTime: 1000 * 60 * 60 * 24, // Cache for 24 hours
       }
     );
-    if (isLoading) {
-      return <Loading />;
-    }
+
+    if (isLoading) return <Loading />;
+
     if (data?.data?.isAdmin) {
-      return <Navigate to={`/${user_cookies}/dashboard`} replace />;
+      return <Navigate to={`/${userCookies}/dashboard`} replace />;
     } else {
-      return <Navigate to={`/${user_cookies}/tour-projects`} replace />;
+      return <Navigate to={`/${userCookies}/tour-projects`} replace />;
     }
   }
-  // fetch data for email login
-  if (id) {
+
+  // Fetch QR login email if available
+  if (userEmail) {
     const { isLoading, error } = useQuery(
       "emailLogin",
-      () => {
-        return axios.get(`${serverPath}user/${id}`);
-      },
-      { onSuccess: (res) => setQREmail(res?.data?.email) }
+      () => axios.get(`${serverPath}user/${userEmail}`),
+      {
+        onSuccess: (res) => setQREmail(res?.data?.email),
+      }
     );
-    if (isLoading) {
-      return <Loading />;
-    }
-    if (error) {
-      return <NotFound />;
-    }
+
+    if (isLoading) return <Loading />;
+    if (error) return <NotFound />;
   }
 
   return (
     <Layout1 logoStyle="hidden">
-      <section
-        id="login-page"
-        className="flex flex-col items-center justify-between w-full h-full gap-6 
-      sm:mt-5 lg:mt-0"
-      >
-        {/* login form */}
-        <Form lang={lang} QREmail={QREmail} />
-        {/* bottom links */}
-        <div
-          id="buttom-links"
-          className="links flex w-full justify-between"
-          dir={lang === "ar" && "rtl"}
-        >
-          {/* links */}
-          {links.map((link, i) => (
-            <Link
-              key={i}
-              id={link.id}
-              className="text-center truncate text-primary-color1 font-semibold
-            lg:text-base
-            md:text-sm
-            sm:text-xs"
-              to={link.url}
-            >
-              {link.text}
-            </Link>
-          ))}
-        </div>
-      </section>
+      <Form lang={lang} QREmail={QREmail} />
+      <FooterLinks lang={lang} />
     </Layout1>
   );
-}
+};
 
 const Form = ({ lang, QREmail }) => {
   const navigate = useNavigate();
-
-  // login by QR
-  const [authData, setAuthData] = useState(
-    QREmail ? { email: QREmail, password: "" } : { email: "", password: "" }
-  );
-  // error msg
-  const [error, setError] = useState();
-  // loading spinner
+  const [authData, setAuthData] = useState({
+    email: QREmail || "",
+    password: "",
+  });
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // handle change
-  const HandleChange = (e) => {
-    if (QREmail) {
-      setAuthData({
-        ...authData,
-        email: `${QREmail}`,
-        password: e.target.value,
-      });
-    } else {
-      setAuthData({ ...authData, [e.target.name]: e.target.value });
-    }
-    setError(null);
-  };
+  // Handle text based on language
+  const getText = useMemo(
+    () => (enText, arText) => lang === "en" || !lang ? enText : arText,
+    [lang]
+  );
+
+  // Input change handler
+  const handleChange = useCallback((e) => {
+    setAuthData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+    setError(""); // Reset error on input change
+  }, []);
+
+  // Form submission handler
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      HandleSubmit({ setLoading, authData, setError, navigate });
+    },
+    [authData, navigate]
+  );
 
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        HandleSubmit({ setLoading, authData, setError, navigate });
-      }}
+      onSubmit={handleSubmit}
       id="login-form"
-      className="w-full h-full flex flex-col items-center justify-center"
+      className="w-full row-span-11 flex flex-col items-center justify-center"
     >
       <div
-        className="w-full h-full bg-darkGreen flex flex-col rounded-3xl items-center justify-between 
-        xl:w-[420px]
-        lg:w-[400px] lg:py-14 lg:max-h-[600px]
-        md:w-[500px] md:max-w-full md:max-h-[700px] md:py-10 md:px-8
-        sm:w-[90%] sm:max-w-[460px] sm:py-10 sm:px-4 sm:max-h-[650px]"
+        className="gap-8 bg-darkGreen flex flex-col rounded-3xl items-center justify-between 
+        md:w-[400px] md:py-10 md:px-8 
+        sm:w-full sm:max-w-[85%] sm:py-10 sm:px-4"
       >
-        {/* top-form */}
-        <div className="w-full flex flex-col gap-5 items-center">
+        {/* Top form group */}
+        <div className="w-full h-full flex flex-col gap-3 items-center">
           <img
-            loading="eager"
             src={logo}
-            alt="magnify-logo"
-            className="sm:w-[180px] md:w-[330px] lg:w-[230px]"
+            alt="Company logo"
+            className="sm:w-[150px] md:w-[250px] lg:w-[200px]"
           />
-          <div className="w-full flex flex-col items-center gap-3">
-            <h2
-              className="capitalize w-full font-light text-lightGreen text-center
-          lg:text-xl
-          md:text-2xl
-          sm:text-lg "
-            >
-              {lang === "en" || lang === null ? "log in" : "تسجيل الدخول "}
-            </h2>
-            {/* error messaage */}
-            {error && (
-              <span
-                className="text-center text-white flex items-center gap-3 justify-center w-full
-              bg-red-500 
-              py-2 rounded-lg text-xs "
-              >
-                <MdErrorOutline size={18} />
-                {error}
-              </span>
-            )}
-          </div>
+          <h2
+            className="capitalize w-full font-light text-lightGreen text-center 
+            xl:text-2xl lg:text-xl md:text-2xl sm:text-lg"
+          >
+            {getText("Log in", "تسجيل الدخول")}
+          </h2>
+          <span
+            className={`${
+              error ? "visible" : "invisible"
+            } text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 py-2 rounded-lg text-xs`}
+          >
+            <MdErrorOutline size={18} />
+            {error}
+          </span>
         </div>
-        {/* inputs container */}
-        <div className="w-full flex flex-col sm:gap-6 md:gap-10 lg:gap-6">
-          {/* email input */}
+        {/* Input fields */}
+        <div className="w-full flex flex-col sm:gap-6 md:gap-7 ">
           <Input
-            labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-base"
-            inputStyle="sm:!text-xs md:!text-auto"
-            name={"email"}
-            text={lang === "ar" ? "البريد الالكتروني" : "E-mail"}
+            name="email"
+            text={getText("E-mail", "البريد الالكتروني")}
             value={authData.email}
-            placeholder={
-              lang === "en" || lang === null
-                ? "Enter your email address......"
-                : "ادخل البريد الالكتروني......"
+            placeholder={getText(
+              "Enter your email address...",
+              "ادخل البريد الالكتروني..."
+            )}
+            onChangeHandle={(e) =>
+              setAuthData((prevData) => ({
+                ...prevData,
+                email: e.target.value.toLowerCase(),
+              }))
             }
-            onChangeHandle={(e) => {
-              const email = e.target.value.toLocaleLowerCase();
-              setAuthData({ ...authData, email });
-              setError(null);
-            }}
-            type={"email"}
-            autoFocus={true}
+            type="email"
+            autoFocus
+            require={true}
           />
-          <div className="flex flex-col gap-2">
-            {/* password input */}
-            <Input
-              labelStlye="sm:!text-[17px] md:!text-[20px] lg:!text-base"
-              inputStyle="sm:!text-xs md:!text-auto"
-              name={"password"}
-              text={lang === "ar" ? "كلمة المرور" : "Password"}
-              value={authData.password}
-              placeholder={
-                lang === "en" || lang === null
-                  ? "Enter your password......"
-                  : "ادخل كلمة المرور......"
-              }
-              onChangeHandle={HandleChange}
-              type={"password"}
-              required={true}
-              minLen={8}
-              maxLen={16}
-            />
-            <div
-              className={`${
-                lang === "ar" && "flex-row-reverse"
-              } flex justify-between px-2`}
+          <Input
+            name="password"
+            text={getText("Password", "كلمة المرور")}
+            value={authData.password}
+            placeholder={getText(
+              "Enter your password...",
+              "ادخل كلمة المرور..."
+            )}
+            onChangeHandle={handleChange}
+            type="password"
+            required
+          />
+          {/* Remember Me and Forgot Password */}
+          <div className="flex justify-between px-2">
+            <label
+              htmlFor="remember-me"
+              className="cursor-pointer text-textColor2 capitalize flex items-center gap-1 sm:text-xs md:text-sm "
             >
-              {/* remember me */}
-              <label
-                htmlFor="remember-me"
-                id="remember"
-                className="cursor-pointer text-textColor2 capitalize flex items-center gap-1
-              sm:text-[12px]
-              md:text-sm
-              lg:text-xs "
+              <input
+                type="checkbox"
+                id="remember-me"
+                className="appearance-none w-3 h-3 peer relative bg-lightGreen text-primary-color1"
+              />
+              {getText("Remember me", "تذكرني")}
+              <svg
+                className="stroke-primary-color1 absolute w-3 h-3 peer-checked:block hidden"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <input
-                  type="checkbox"
-                  name="remember"
-                  className="appearance-none w-3 h-3 peer relative checked:border-0 bg-lightGreen text-primary-color1"
-                  id="remember-me"
-                />
-                {lang === "en" || lang === null ? "Remember me" : "تذكرني"}
-                <svg
-                  className="stroke-primary-color1 absolute w-3 h-3 peer-checked:block hidden "
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </label>
-              {/* forgot pass */}
-              <Link
-                to={"/forgot-password"}
-                id="forgot-password"
-                className=" underline text-textColor2 
-              sm:text-[12px]
-              md:text-sm
-              lg:text-xs  "
-              >
-                {lang === "en" || lang === null
-                  ? "forgot password?"
-                  : "نسيت كلمة المرور؟"}
-              </Link>
-            </div>
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </label>
+            <Link
+              to="/forgot-password"
+              className="text-textColor2 hover:text-primary-color4 duration-300 sm:text-xs md:text-sm  "
+            >
+              {getText("Forgot password?", "نسيت كلمة المرور؟")}
+            </Link>
           </div>
         </div>
-        {/* sign in btn */}
+        {/* Submit Button */}
         <PrimaryBtn
-          text={lang === "en" || lang === null ? "log in" : "تسجيل  "}
+          text={getText("Log in", "تسجيل")}
           loading={loading}
-          style="sm:!text-sm md:!text-lg lg:!text-base sm:!py-2 "
-          type={"submit"}
+          type="submit"
         />
       </div>
     </form>
   );
 };
+
+const FooterLinks = ({ lang }) => {
+  const getText = (enText, arText) =>
+    lang === "en" || !lang ? enText : arText;
+
+  const links = [
+    {
+      id: "about-us",
+      url: "https://magnify-vt.com/",
+      text: getText("About Magnify", "عن Magnify"),
+    },
+    {
+      id: "privacy-terms",
+      url: "https://magnify-vt.com/privacy-policy/",
+      text: getText("Privacy Terms", "شروط الخصوصية"),
+    },
+    {
+      id: "contact-us",
+      url: "https://magnify-vt.com/contact/",
+      text: getText("Contact Us", "تواصل معنا"),
+    },
+  ];
+
+  return (
+    <footer
+      id="bottom-links"
+      className="footer flex flex-row justify-between w-full bg-transparent gap-2 "
+      dir={lang === "ar" ? "rtl" : "ltr"}
+    >
+      {links.map((link) => (
+        <Link
+          key={link.id}
+          id={link.id}
+          to={link.url}
+          className="text-center text-primary-color2 font-semibold w-fit lg:text-base md:text-sm sm:text-[12px]
+    hover:text-primary-color1 "
+        >
+          {link.text}
+        </Link>
+      ))}
+    </footer>
+  );
+};
+
+export default Login;

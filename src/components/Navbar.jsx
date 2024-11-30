@@ -1,8 +1,8 @@
 import React from "react";
 import { useLang } from "../context/LangContext";
 import cookie from "react-cookies";
-/////// assest
-import logo from "/assest/logo/mainLogo.svg";
+/////// assets
+import logo from "/assets/logo/mainLogo.svg";
 /////// icons
 import { GrLanguage } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
@@ -30,19 +30,15 @@ export const Navbar = ({ setPopUp }) => {
   const langDir = lang === "ar" && "rtl";
 
   return (
-    <nav
-      dir={langDir ? langDir : undefined}
-      className="logo py-3 max-w-full container flex justify-between h-fit top-0 bg-primary-color1 sticky z-50 "
-    >
+    <nav className="py-3 items-center flex justify-between bg-primary-color1 container max-w-full ">
       <img
-        loading="eager"
         src={logo}
         alt="magnify-logo"
-        className="sm:w-[85px] md:w-[110px]"
+        className="sm:w-[90px] md:w-[100px]"
       />
       {user ? (
         <div
-          className=" flex items-center
+          className="flex justify-center items-center   
         md:gap-5
         sm:gap-2"
           dir={langDir}
@@ -51,10 +47,8 @@ export const Navbar = ({ setPopUp }) => {
             id="focus-btn"
             dir={langDir}
             onClick={Logout}
-            className="text-primary-color1 font-normal bg-lightGreen/70 py-1 px-3 rounded-2xl flex items-center gap-1
-            hover:bg-lightGreen duration-200
-            md:text-sm
-            sm:text-xs"
+            className="text-primary-color1 font-normal btn btn-sm border-none bg-lightGreen/70 flex items-center gap-1
+            hover:bg-lightGreen duration-200"
           >
             <LuLogOut />
             <span>{lang === "ar" ? "تسجيل خروج" : "Log out"}</span>
@@ -63,9 +57,7 @@ export const Navbar = ({ setPopUp }) => {
           <button
             id="focus-btn"
             onClick={handleChangeLang}
-            className="uppercase flex gap-2 items-center text-lightGreen font-normal
-              md:text-sm
-            sm:text-xs"
+            className="uppercase flex gap-2 items-center btn-ghost btn btn-sm text-lightGreen font-normal"
           >
             <GrLanguage size={20} />
             {lang === "ar" ? "en" : "ar"}

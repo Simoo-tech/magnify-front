@@ -1,18 +1,20 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: ["./src/**/**/**/*.{js,jsx}"],
+
   theme: {
     extend: {
       fontSize: {
-        xs: "14px",
-        sm: "16px",
-        base: "18px",
-        lg: "25px",
-        xl: "29px",
-        "2xl": "33px",
+        xs: "12px",
+        sm: "14px",
+        base: "16px",
+        lg: "20px",
+        xl: "25px",
+        "2xl": "30px",
         "3xl": "35px",
-        "4xl": "80px",
-        "5xl": "100px",
+        "4xl": "50px",
+        "5xl": "60px",
       },
       colors: {
         primary: {
@@ -28,7 +30,6 @@ module.exports = {
         lineColor: { color1: "#939393", color2: "#A9A9A9" },
         errorContainer: "#EDBBBB",
         errorIcon: "#BD5151",
-
         darkGrey: "#647d68",
         color1: "#d9b693",
         color2: "#8cccf0",
@@ -50,5 +51,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+
+  daisyui: { themes: ["light"], base: false },
 };

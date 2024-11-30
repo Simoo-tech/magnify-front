@@ -21,6 +21,7 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
       projectDura: "",
       projectType: "",
       projectImg: { name: "", path: "" },
+      projectOwner: true,
       accessUser: [],
     },
   ]);
@@ -38,8 +39,6 @@ export const emailRemove = async ({
   projectInfo,
   setProjectInfo,
   a,
-  email,
-  userID,
 }) => {
   // const header = { headers: { token: `${userCookies}` } };
   // console.log(userID);

@@ -1,6 +1,6 @@
 import React from "react";
 import Layout1 from "../Layout1";
-import image from "/assest/not-found.svg";
+import image from "/assets/not-found.svg";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -38,7 +38,6 @@ export function NotFound() {
       >
         {/* image */}
         <img
-          loading="eager"
           src={image}
           className="sm:w-[180px] md:w-[200px] lg:w-[250px]"
           alt="not-found-image"
@@ -56,8 +55,9 @@ export function NotFound() {
           </h5>
           <div
             className="text-center flex flex-col text-primary-color1 gap-1
-            sm:text-[17px]
-            md:text-base"
+            sm:text-sm
+            md:text-base
+            lg:text-lg"
           >
             {lang === "ar"
               ? "لم يتم العثور على هذه الصفحة أو سيتم العثور عليها قريبًا."
@@ -70,8 +70,9 @@ export function NotFound() {
           </div>
           <Link
             className="underline text-primary-color1 capitalize font-medium
-              sm:text-sm 
-              md:text-base "
+              sm:text-sm
+            md:text-base
+            lg:text-lg "
             to={"/"}
           >
             {lang === "ar" ? "الرجوع إلى الصفحة الرئيسية" : "Go to home page"}

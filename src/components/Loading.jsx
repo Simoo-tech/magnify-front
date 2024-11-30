@@ -1,5 +1,5 @@
 import React from "react";
-import video1 from "/assest/logo animation.mp4";
+import video1 from "/assets/logo animation.mp4";
 
 export const Loading = () => {
   return (

@@ -3,11 +3,11 @@ import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLang } from "./context/LangContext";
 // pages
-import { NotFound } from "./component/NotFound";
+import { NotFound } from "./components/NotFound";
 import Login from "./pages/Login";
 // import CreatePass from "./pages/CreatePass";
 import { CreateUser } from "./pages/Dashboard/CreateUser";
-import { Dashbaord } from "./pages/Dashboard/Dashbaord";
+import { Dashboard } from "./pages/Dashboard/Dashbaord";
 import { EditUser } from "./pages/Dashboard/EditUser";
 import CreatePass from "./pages/CreatePass";
 import UserProjects from "./pages/UserProjects";
@@ -31,23 +31,35 @@ function App() {
 
   return (
     <main
-      id={lang === "ar" && "arabic"}
-      className="App h-dvh overflow-hidden relative flex 
-          items-center flex-col"
+      id={lang === "ar" ? "arabic" : "english"}
+      className="App relative flex h-dvh
+      items-center flex-col"
     >
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/:id" element={<Login />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/:id/dashboard" element={<Dashbaord />}>
-          <Route path="create-user" element={<CreateUser />} />
-          <Route path=":cleintId/edit-user" element={<EditUser />} />
-        </Route>
-        <Route path="/:id/tour-projects" element={<UserProjects />}>
-          <Route path={":projectName"} element={<Projects />} />
-          <Route path={":access/:projectName/:date"} element={<Projects />} />
-          <Route path={":projectName/:date"} element={<Projects />} />
-        </Route>
+        <Route path="/:id/dashboard" element={<Dashboard />} />
+        <Route path="/:id/dashboard/create-user" element={<CreateUser />} />
+        <Route
+          path="/:id/dashboard/:cleintId/edit-user"
+          element={<EditUser />}
+        />
+
+        <Route path="/:id/tour-projects" element={<UserProjects />} />
+        <Route
+          path={"/:id/tour-projects/:projectName"}
+          element={<Projects />}
+        />
+        <Route
+          path={"/:id/tour-projects/:access/:projectName/:date"}
+          element={<Projects />}
+        />
+        <Route
+          path={"/:id/tour-projects/:projectName/:date"}
+          element={<Projects />}
+        />
+
         <Route path="/upload-files" element={<UploadFiles />}>
           <Route path="missing-photo" element={<MissingPhoto />} />
           <Route path="session-data" element={<SessionData />} />

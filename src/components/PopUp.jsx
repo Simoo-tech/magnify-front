@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { SecondaryBtn } from "./Btns";
-import logo from "/assest/logo/mainLogo2.svg";
+import logo from "/assets/logo/mainLogo2.svg";
 import { useLang } from "../context/LangContext";
 
 export const PopUp = ({
   iconImage,
-  text,
+  children,
   action,
   yesAction,
   noAction,
   type,
+  text,
+  icon,
+  btnText,
+  hidden,
 }) => {
   const [show, setShow] = useState(false);
   const [lang] = useLang();
@@ -34,20 +38,19 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img loading="eager" src={logo} alt="logo" />
-        <img
-          loading="eager"
-          src={iconImage}
-          alt="icon-reset-submit"
-          width={120}
-        />
-        <p
-          className="text-primary-color1 w-full text-center 
-        lg:text-[20px]
-        sm:text-sm"
-        >
-          {text}
-        </p>
+        <img loading="lazy" src={logo} alt="logo" />
+        {iconImage && (
+          <img
+            loading="lazy"
+            src={iconImage}
+            alt="icon-reset-submit"
+            width={120}
+          />
+        )}
+        {icon && icon}
+        <div className="text-primary-color1 w-full text-center">
+          {children || text}
+        </div>
         {type === "yes-no" ? (
           //  logout popUp
           <div className="flex gap-5 justify-center w-full">
@@ -55,16 +58,17 @@ export const PopUp = ({
               text={lang === "ar" ? "الغاء" : "cancel"}
               action={noAction}
               type="button"
-              style="!py-1 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white
-              md:!text-sm md:!px-11 
-              sm:!text-xs sm:!px-6"
+              style="!py-2 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white w-6/12 !px-0
+              md:!text-sm 
+              sm:!text-xs "
             />
             <SecondaryBtn
-              text={lang === "ar" ? "نعم" : "yes"}
+              text={btnText ? btnText : lang === "ar" ? "نعم" : "yes"}
               action={yesAction}
               type="button"
-              style="!py-1 md:!text-sm md:!px-11 
-              sm:!text-xs sm:!px-11"
+              style="!py-2 md:!text-sm w-6/12 !px-0
+              sm:!text-xs "
+              disabled={hidden}
             />
           </div>
         ) : (

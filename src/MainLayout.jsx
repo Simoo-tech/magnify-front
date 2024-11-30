@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { Navbar } from "./component/Navbar";
-import { PopUp } from "./component/PopUp";
-import icon3 from "/assest/icon3.svg";
-import { Footer } from "./component/Footer";
+import { Navbar } from "./components/Navbar";
+import { PopUp } from "./components/PopUp";
+import icon3 from "/assets/icon3.svg";
+import { CopyRight } from "./components/CopyRight";
 import { useLang } from "./context/LangContext";
 
-function Layout({ children, overFlow }) {
+function MainLayout({ children, overFlow, noGap }) {
   const [popUp, setPopUp] = useState(false);
   const [lang] = useLang();
   return (
-    <div
+    <section
       dir={lang === "ar" && "rtl"}
-      className="w-full h-full flex flex-col justify-between sm:overflow-y-scroll lg:overflow-hidden"
+      className={`w-full relative bg-white
+      h-dvh flex flex-col items-center justify-start overflow-y-auto ${
+        !noGap && "gap-5"
+      } `}
       style={{ overflowY: overFlow }}
     >
       <Navbar setPopUp={setPopUp} />
@@ -32,9 +35,9 @@ function Layout({ children, overFlow }) {
         />
       )}
       {children}
-      <Footer />
-    </div>
+      <CopyRight />
+    </section>
   );
 }
 
-export default Layout;
+export default MainLayout;

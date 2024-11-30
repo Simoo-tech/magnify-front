@@ -1,8 +1,8 @@
 import React from "react";
-import logo from "/assest/logo/mainLogo2.svg";
+import logo from "/assets/logo/mainLogo2.svg";
 import LogoutReq from "../lib/LogoutReq";
 import Layout1 from "../Layout1";
-import { Line } from "../component/Line";
+import { Line } from "../components/Line";
 import { Navigate } from "react-router-dom";
 import { useLang } from "../context/LangContext";
 
@@ -22,7 +22,6 @@ export default function Logout() {
         className="flex flex-col justify-center h-full items-center gap-20 container max-w-full"
       >
         <img
-          loading="eager"
           src={logo}
           className="sm:w-[100%] sm:max-w-[300px] md:max-w-full md:w-[350px] lg:w-[450px] xl:w-[550px]"
           alt="logo-logout"

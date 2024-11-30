@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useLang } from "../context/LangContext";
 // layout
 import Layout2 from "../layout2";
-// component
-import { Input } from "../component/Input";
-import { SecondaryBtn } from "../component/Btns";
+// components
+import { Input } from "../components/Input";
+import { SecondaryBtn } from "../components/Btns";
 // icons
 import { MdErrorOutline } from "react-icons/md";
 // Api functions
@@ -26,9 +26,10 @@ export default function SendReset() {
           e.preventDefault();
           HandleSendReset({ setSending, email, setErr });
         }}
-        className="flex h-full flex-col items-center sm:gap-10 md:gap-20 justify-center 
-        lg:w-6/12 
-        sm:w-full"
+        className="flex h-full flex-col items-center justify-center 
+        lg:w-6/12
+        md:w-4/6 md:gap-14 
+        sm:w-11/12 sm:gap-10"
       >
         {/* top text form */}
         <div className="flex w-full flex-col sm:gap-8 md:gap-10" id="top-form">
@@ -37,14 +38,14 @@ export default function SendReset() {
           xl:text-3xl
           lg:text-2xl
           md:text-xl
-          sm:text-[22px]"
+          sm:text-lg"
           >
             {lang === "ar" ? "نسيت كلمة السر ؟" : `Forgot your password?`}
           </h2>
           <h3
             className="font-normal text-primary-color1 capitalize text-center flex flex-col gap-5 items-center
-          xl:text-lg
-          lg:text-[22px]
+          xl:text-xl
+          lg:text-lg
           md:text-base
           sm:text-sm"
           >
@@ -71,8 +72,8 @@ export default function SendReset() {
           id="input-group"
           className="flex flex-col items-center px-3 w-full
           sm:gap-8 sm:max-w-[450px]
-          md:gap-14 md:max-w-[550px]
-          lg:gap-14 "
+          md:gap-14 md:max-w-[550px
+          lg:gap-14"
         >
           <Input
             labelStlye="text-primary-color1 font-normal mb-1"
@@ -92,14 +93,12 @@ export default function SendReset() {
           <div id="submit-btn" className="flex flex-col gap-4 w-fit px-3">
             <SecondaryBtn
               loading={sending}
+              disabled={!email}
               type={"submit"}
               text={
                 lang === "ar" ? "إرسال رابط التحقق" : "Send verification link"
               }
-              style="bg-darkGreen text-white truncate border-none 
-              lg:text-base 
-              md:text-sm md:min-w-[310px] md:w-fit
-              sm:text-xs sm:min-w-[250px] sm:w-full"
+              style=""
             />
             <button
               type="button"

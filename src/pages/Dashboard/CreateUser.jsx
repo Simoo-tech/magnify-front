@@ -4,28 +4,25 @@ import {
   HandleSubmitCreate,
   HandleSubmitEdit,
 } from "../../lib/DashboardReq";
-import { PrimaryBtn, SecondaryBtn } from "../../component/Btns";
+import { SecondaryBtn } from "../../components/Btns";
 // icons
 import { IoIosClose } from "react-icons/io";
 // libraryies
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
-import UserInfo from "../../component/Create-Edit-ClientData/UserInfo";
-import ProjectInfo from "../../component/Create-Edit-ClientData/ProjectInfo";
+import UserInfo from "./Create-Edit-ClientData/UserInfo";
+import ProjectInfo from "./Create-Edit-ClientData/ProjectInfo";
 
 export function CreateUser({ userData }) {
   const [data, setData] = useState({});
   const [projectInfo, setProjectInfo] = useState([]);
-  // animation
-  const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
     if (userData) {
       setData(userData);
       setProjectInfo(userData.projectInfo);
     }
-    setAnimation(true);
   }, [userData]);
   // handle message from api
   const [msg, setMsg] = useState({});
@@ -35,16 +32,14 @@ export function CreateUser({ userData }) {
   return (
     <section
       id="create-user"
-      className={`absolute z-30 container max-w-full ${
-        animation ? "top-14" : "top-96"
-      } left-0 duration-200 ease-in-out bg-center w-full h-full z-30 bg-white overflow-y-scroll`}
+      className="container max-w-full bg-center w-full h-dvh z-30 bg-white"
     >
       {/* alert message */}
       {msg.active && (
         <span
-          className={`fixed top-16 left-[50%] translate-x-[-50%] rounded-lg font-normal  truncate ${
+          className={`rounded-lg font-normal truncate ${
             msg.type === "success" ? "bg-lightGreen" : "bg-errorContainer"
-          } z-40  px-4 flex items-center text-black justify-center gap-2 
+          } z-40 absolute top-5 left-[50%] translate-x-[-50%] px-4 flex items-center text-black justify-center gap-2 
           md:text-[16px] md:py-3
           sm:text-xs sm:py-2`}
         >
@@ -66,7 +61,6 @@ export function CreateUser({ userData }) {
         setMsg={setMsg}
         userData={userData}
         lang={lang}
-        animation={animation}
       />
     </section>
   );
@@ -87,7 +81,7 @@ const Form = ({
 
   return (
     <form
-      className="flex flex-col w-full pt-12 pb-24 items-center gap-16 lg:px-28"
+      className="flex flex-col w-full h-full overflow-hidden gap-5"
       onSubmit={
         userData
           ? (e) => {
@@ -114,39 +108,43 @@ const Form = ({
       }
       autoComplete="off"
     >
-      <h1
-        className="truncate capitalize text-center font-bold text-primary-color1 
-      md:text-2xl
-      sm:text-xl"
-      >
-        {userData
-          ? lang === "ar"
-            ? "تعديل علي مستخدم "
-            : "edit user"
-          : lang === "ar"
-          ? "انشاء مستخدم جديد"
-          : "create a new user"}
-      </h1>
-      {/* user info */}
-      <UserInfo data={data} setData={setData} setMsg={setMsg} />
-      {/* projects info */}
-      <ProjectInfo
-        projectInfo={projectInfo}
-        setProjectInfo={setProjectInfo}
-        userData={userData}
-        setMsg={setMsg}
-        data={data}
-      />
+      <div className="w-full h-full overflow-y-auto max-h-full gap-16 flex items-center flex-col pt-10">
+        <h2 className="text-2xl text-center text-primary-color2 capitalize font-semibold">
+          {userData
+            ? lang === "ar"
+              ? "تعديل بيانات مستخدم"
+              : "edit user"
+            : lang === "ar"
+            ? "انشاء مستخدم جديد"
+            : "create new user"}
+        </h2>
+        {/* user info */}
+        <UserInfo data={data} setData={setData} setMsg={setMsg} />
+        {/* projects info */}
+        <ProjectInfo
+          projectInfo={projectInfo}
+          setProjectInfo={setProjectInfo}
+          userData={userData}
+          setMsg={setMsg}
+          data={data}
+        />
+      </div>
       {/* add project btn */}
       <div
         id="buttons"
-        className=" w-full flex justify-center items-center gap-8 border-t-2 border-lineColor-color1 pt-10
+        className=" w-full flex justify-center items-center gap-8 border-t-2 py-5
         md:flex-row
         sm:flex-col"
       >
-        <PrimaryBtn
-          style="!text-primary-color1 !border-primary-color1 !py-2 !px-12 text-base
-          hover:!bg-primary-color1 hover:!text-white "
+        {/* cancel btn */}
+        <SecondaryBtn
+          name="cancel-btn"
+          style="!px-20 !py-2 text-base"
+          text={lang === "en" || lang === null ? "cancel" : "الغاء"}
+          type="button"
+          action={() => navigate(-1)}
+        />
+        <SecondaryBtn
           action={() => {
             AddProject({ setProjectInfo, projectInfo });
           }}

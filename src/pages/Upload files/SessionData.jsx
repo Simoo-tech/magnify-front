@@ -7,14 +7,15 @@ import { HandleDeleteFile, UploadFiles } from "../../lib/UploadFileFunctions";
 // Layout
 import Layout2 from "../../layout2";
 //  components
-import { SecondaryBtn } from "../../component/Btns";
+import { SecondaryBtn } from "../../components/Btns";
 // icons
 import { FaCheckCircle } from "react-icons/fa";
-import icon6 from "/assest/icon6.svg";
-import icon9 from "/assest/icon9.svg";
+import icon6 from "/assets/icon6.svg";
+import icon9 from "/assets/icon9.svg";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineError } from "react-icons/md";
-import { Input } from "../../component/Input";
+import { Input } from "../../components/Input";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function SessionData() {
   const [images, setImages] = useState([]);
@@ -120,12 +121,7 @@ export default function SessionData() {
               HandleDeleteFile({ i, images, setImages, setUploaded })
             }
           >
-            <img
-              loading="eager"
-              src={icon6}
-              alt="delete-photo-icon"
-              width={25}
-            />
+            <LazyLoadImage src={icon6} alt="delete-photo-icon" width={25} />
           </button>
         )}
       </div>
@@ -206,8 +202,7 @@ export default function SessionData() {
               className="md:w-7/12 flex flex-col items-center py-10 rounded-xl
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
             >
-              <img
-                loading="eager"
+              <LazyLoadImage
                 src={icon9}
                 className="sm:w-[100px] md:w-[150px]"
               />

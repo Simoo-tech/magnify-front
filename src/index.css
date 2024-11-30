@@ -2,7 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "bold";
+  /*Can be any text*/
+  src: local("pnu"), url("./fonts/PNU-Regular.ttf") format("truetype");
+}
 
+@font-face {
+  font-family: "en";
+  /*Can be any text*/
+  src: local("pnu"), url("./fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+}
+
+
+#english {
+  font-family: "en", sans-serif !important;
+  font-size: larger;
+}
+
+#arabic {
+  font-family: "bold", sans-serif !important;
+  font-size: larger;
+}
 
 * {
   margin: 0;
@@ -27,7 +48,6 @@ h6 {
 body {
   -webkit-overflow-scrolling: touch;
   margin: 0;
-  font-family: "Montserrat", sans-serif;
   scroll-behavior: smooth;
   box-sizing: border-box;
 }

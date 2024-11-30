@@ -17,7 +17,7 @@ export const InputSearch = ({
       dir={langDir ? langDir : undefined}
       className=" relative focus-within:border-black flex w-full justify-between border-2 border-[#656565]
   px-5 py-2 rounded-3xl items-center bg-white
-  md:w-3/6 md:order-3 md:max-w-full
+  md:w-3/6 md:order-3 md:max-w-ful
   lg:w-3/6 lg:order-2"
     >
       <input
@@ -28,8 +28,9 @@ export const InputSearch = ({
         placeholder={placeholder}
         onChange={onChangeHandle}
         className=" w-full outline-none text-[#6B6B6B] placeholder:text-[#6B6B6B]
-        md:text-sm
-        sm:text-[12px] "
+        lg:text-base
+        md:text-md
+        sm:text-sm "
       />
       {search ? (
         <IoCloseOutline
