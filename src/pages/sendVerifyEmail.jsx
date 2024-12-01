@@ -46,7 +46,7 @@ export default function SendVerifyEmail() {
       >
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-5 w-full">
-          <LazyLoadImage 
+          <img
             src={icon4}
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[120px] lg:w-[120px] xl:w-[140px]"
