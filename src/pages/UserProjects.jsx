@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 /////// components
 import { Loading } from "../components/Loading";
 import { useLang } from "../context/LangContext";
@@ -118,7 +119,7 @@ export default function UserProjects() {
           <div
             id="project-info"
             className={`grid place-items-center rounded-3xl bg-lightGreen relative mb-20 max-w-[400px]
-              xl:w-[28%] lg:w-[40%] md:w-5/12 sm:w-full grid-flow-row`}
+              xl:w-[28%] lg:w-[40%] md:w-5/12 sm:w-full grid-flow-row gap-6`}
           >
             {accessUser &&
               accessUser.map((user) => {
@@ -138,14 +139,16 @@ export default function UserProjects() {
             {/* image holder */}
             <div
               id="project-image-holder "
-              className={` w-full min-h-[250px] max-h-[250px] max-w-[400px] flex relative justify-between text-white capitalize rounded-3xl 
+              className={`w-full min-h-[250px] max-h-[250px] max-w-[400px] flex relative justify-between text-white capitalize rounded-3xl 
               before:top-0 before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent
-              before:to-transparent before:bg-gradient-to-t before:from-black/70
+              before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-40
               `}
             >
               {projectImg?.path ? (
                 <LazyLoadImage
-                  className="rounded-3xl object-cover max-w-full max-h-full "
+                  placeholder={<div className="skeleton h-32 w-32"></div>}
+                  effect="blur"
+                  className="rounded-3xl object-cover min-h-full min-w-full"
                   src={projectImg?.path}
                   alt={`project-image-${projectImg?.name}`}
                 />
@@ -158,7 +161,7 @@ export default function UserProjects() {
                 </div>
               )}
               <span
-                className={`absolute top-0 left-0 flex justify-center items-end pb-4
+                className={`absolute top-0 left-0 flex justify-center items-end pb-4 z-50
                 w-full h-full font-semibold rounded-b-3xl
             xl:lg
             lg:md
@@ -171,7 +174,7 @@ export default function UserProjects() {
             </div>
             <Line h="1px" w="80%" />
             {/* project info */}
-            <div className="flex flex-col w-full gap-4 justify-center items-center p-8">
+            <div className="flex flex-col w-full gap-4 justify-center items-center px-5 pb-6">
               <span
                 className={`flex w-full text-primary-color1 capitalize font-semibold rounded-b-3xl sm:hidden
             lg:text-lg

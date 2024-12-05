@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import cookie from "react-cookies";
 import axios from "axios";
@@ -31,6 +31,7 @@ export function Dashboard() {
   const [nextPage, setNextPage] = useState(false);
   const [result, setResult] = useState();
   const { id } = useParams();
+
   // context
   const [lang] = useLang();
   const navigate = useNavigate();
@@ -50,7 +51,6 @@ export function Dashboard() {
     return <NotFound />;
   }
   const langDir = lang === "ar" && "rtl";
-
   return (
     <MainLayout>
       {popUp && (
@@ -77,7 +77,7 @@ export function Dashboard() {
         </PopUp>
       )}
       <section
-        dir={langDir}
+        dir={langDir.toString()}
         className="container h-full max-w-full relative w-full justify-between flex flex-col items-center 
       gap-5"
       >

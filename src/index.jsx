@@ -6,6 +6,7 @@ import { LangProvider } from "./context/LangContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "./fonts/PNU-Regular.ttf";
+import { UserDataProvider } from "./context/UserDataContext";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,11 @@ root.render(
   <React.StrictMode>
     <Router>
       <QueryClientProvider client={queryClient}>
-        <LangProvider>
-          <App />
-        </LangProvider>
+        <UserDataProvider>
+          <LangProvider>
+            <App />
+          </LangProvider>
+        </UserDataProvider>
       </QueryClientProvider>
     </Router>
   </React.StrictMode>

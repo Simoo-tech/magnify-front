@@ -173,7 +173,7 @@ export const HandleSubmitEdit = async ({
   setLoading,
   data,
   projectInfo,
-  userData,
+  cleintData,
   setMsg,
 }) => {
   setLoading(true);
@@ -183,7 +183,7 @@ export const HandleSubmitEdit = async ({
 
   await axios
     .put(
-      `${serverPath}client/${userData._id}`,
+      `${serverPath}client/${cleintData._id}`,
       { ...userNewData },
       {
         headers: { token: `${userCookies}` },

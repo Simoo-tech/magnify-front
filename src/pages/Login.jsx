@@ -124,7 +124,9 @@ const Form = ({ lang, QREmail }) => {
           <span
             className={`${
               error ? "visible" : "invisible"
-            } text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 py-2 rounded-lg text-xs`}
+            } text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 py-2 rounded-lg
+            sm:text-xs
+            md:text-sm`}
           >
             <MdErrorOutline size={18} />
             {error}

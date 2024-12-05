@@ -9,6 +9,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Oval } from "react-loader-spinner";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/opacity.css";
 
 export const Input = ({
   name,
@@ -154,14 +155,17 @@ const FileInput = ({
 }) => (
   <div
     dir={langDir}
-    className={`${inputContainerStyle} h-full sm:w-full md:w-8/12 bg-lightGreen rounded-3xl relative group overflow-hidden
-  flex justify-center items-center `}
+    className={`${inputContainerStyle} bg-lightGreen rounded-3xl relative group overflow-hidden
+  flex justify-center items-center w-[700px] max-w-[700px] sm:h-full md:h-[350px] md:max-h-[350px]`}
   >
     {value?.path && (
       <>
         <LazyLoadImage
+          effect="opacity"
           src={value?.path}
-          className="w-full sm:h-full md:max-h-[350px] object-cover rounded-3xl"
+          width={"100%"}
+          height={"100%"}
+          className="object-cover rounded-3xl"
         />
         <div
           id="tools"
@@ -192,7 +196,7 @@ const FileInput = ({
         </span>
       </div>
     )}
-    {!value?.name && !uploading && (
+    {!value?.path && !uploading && (
       <label
         htmlFor={`${name}-input-img`}
         className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full h-[350px] "

@@ -45,7 +45,6 @@ function App() {
           path="/:id/dashboard/:cleintId/edit-user"
           element={<EditUser />}
         />
-
         <Route path="/:id/tour-projects" element={<UserProjects />} />
         <Route
           path={"/:id/tour-projects/:projectName"}

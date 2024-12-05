@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -13,7 +12,7 @@ export function EditUser() {
   const { cleintId } = useParams();
 
   // fetch client data
-  const { isLoading, data: userData } = useQuery(
+  const { isLoading, data: cleintData } = useQuery(
     ["fetchClientEdit", { cleintId }],
     () => {
       return axios
@@ -25,7 +24,7 @@ export function EditUser() {
         .then((res) => res.data);
     },
     {
-      refetchOnWindowFocus: false, // Corrected: Placed in the options object
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -33,5 +32,5 @@ export function EditUser() {
     return <Loading />;
   }
 
-  return <CreateUser userData={userData} />;
+  return <CreateUser cleintData={cleintData} />;
 }

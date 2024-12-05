@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useLang } from "../../../context/LangContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 // components
 import {
   emailRemove,
@@ -233,8 +235,7 @@ export default function ProjectInfo({
               title="delete project"
               onClick={() => ProjectRem({ index, projectInfo, setProjectInfo })}
             >
-              <img
-                loading="eager"
+              <LazyLoadImage
                 src={deleteIcon}
                 alt="delete-icon"
                 className="sm:w-[23px] md:w-[30px]"
@@ -310,8 +311,7 @@ export default function ProjectInfo({
                                 });
                               }}
                             >
-                              <img
-                                loading="eager"
+                              <LazyLoadImage
                                 src={deleteIcon}
                                 alt="delete-icon"
                                 className="sm:w-[18px] md:w-[25px]"
@@ -425,7 +425,7 @@ export default function ProjectInfo({
                                     HandleDeleteDates(index, dateIndex);
                                   }}
                                 >
-                                  <img
+                                  <LazyLoadImage
                                     src={deleteIcon}
                                     alt="delete-icon"
                                     className="sm:w-[18px] md:w-[25px]"

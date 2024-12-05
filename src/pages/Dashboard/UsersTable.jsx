@@ -31,23 +31,26 @@ const UsersTable = ({
 }) => {
   const [sort, setSort] = useState({ type: "" });
   const langDir = lang === "ar" ? "rtl" : "ltr";
-  const [users, setUsers] = useState();
 
   // Fetch user data
-  const { isLoading } = useQuery(
+  const { isLoading, data: fetchUsers } = useQuery(
     ["fetchClients", page],
-    () => axios.get(`${serverPath}user?page=${page}`, axiosHeader),
+    () =>
+      axios
+        .get(`${serverPath}user?page=${page}`, axiosHeader)
+        .then((res) => res.data),
     {
       refetchOnmount: false,
       refetchOnReconnect: false,
       retry: false,
       refetchOnWindowFocus: false,
       onSuccess: (res) => {
-        setUsers(res.data.users);
-        setNextPage(res.data.next);
+        setNextPage(res.next);
       },
     }
   );
+
+  const users = fetchUsers?.users;
   // Filter and sort users with useMemo
   const ShowUsers = useMemo(() => {
     return users
@@ -147,10 +150,7 @@ const UsersTable = ({
       id="users-table"
       className="w-full flex items-start flex-col justify-start overflow-y-auto min-h-[440px] max-h-[440px] overflow-x-auto"
     >
-      <table
-        dir={langDir}
-        className="table border-2 table-lg border-primary-color2"
-      >
+      <table className="table border-2 table-lg border-primary-color2">
         <thead>
           <tr className="bg-primary-color1 w-full text-lightGreen sticky top-0">
             {tableHead.map((list, i) => (
