@@ -57,15 +57,14 @@ export default function UserProjects() {
     return <Loading />;
   }
 
-  const { projectInfo, isAdmin, userName } = filter;
-  if (error || id !== user_cookies || isAdmin) {
+  if (error || id !== user_cookies || filter?.isAdmin) {
     return <NotFound />;
   }
 
   const langDir = lang === "ar" && "rtl";
 
   // user project filter and map
-  const UserProjects = projectInfo
+  const UserProjects = filter?.projectInfo
     ?.filter((project) => {
       if (search) {
         return project?.projectName?.toLowerCase().includes(search);
@@ -220,7 +219,7 @@ export default function UserProjects() {
                       setProjectShowDates({
                         folderName: folderName,
                         projectSubDate: projectSubDate,
-                        userName: user ? user.userName : userName,
+                        userName: user ? user.userName : filter?.userName,
                       });
                     }}
                   />
@@ -254,7 +253,7 @@ export default function UserProjects() {
                   setProjectShowDates({
                     folderName: folderName,
                     projectSubDate: projectSubDate,
-                    userName: userName,
+                    userName: filter?.userName,
                   });
                 }}
               />
@@ -267,7 +266,7 @@ export default function UserProjects() {
                     ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                     : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                 }`}
-                linkTo={`${userName + "/" + folderName}`}
+                linkTo={`${filter?.userName + "/" + folderName}`}
                 text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
               />
             )}
