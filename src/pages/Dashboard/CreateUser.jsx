@@ -42,7 +42,7 @@ export function CreateUser({ cleintData }) {
   // fetch data
   const { isLoading, data: checkAdmin } = useQuery("checkIfAdmin", () =>
     axios
-      .get(`${serverPath}user/${user_cookies}`)
+      .get(`${serverPath}user/fetchAdmin/${user_cookies}`)
       .then((res) => res.data.isAdmin)
   );
 

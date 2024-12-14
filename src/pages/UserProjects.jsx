@@ -43,7 +43,9 @@ export default function UserProjects() {
   } = useQuery(
     "fetchUserProjects",
     () =>
-      axios.get(`${serverPath}user/${user_cookies}`).then((res) => res.data),
+      axios
+        .get(`${serverPath}user/fetchClient/${user_cookies}`)
+        .then((res) => res.data),
     {
       refetchOnmount: false,
       refetchOnReconnect: false,
