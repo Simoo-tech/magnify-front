@@ -107,6 +107,7 @@ export function Dashboard() {
           page={page}
           result={result}
           setPage={setPage}
+          isLoading={isLoading}
         />
         {userData && <QR />}
       </section>
@@ -156,10 +157,10 @@ const AdminTools = ({ fname, lang, navigate, setSearch, search }) => (
   </div>
 );
 
-const Pagination = ({ setPage, nextPage, page }) => (
+const Pagination = ({ setPage, nextPage, page, isLoading }) => (
   <div className="join">
     <button
-      disabled={page === 0}
+      disabled={isLoading || page === 0}
       onClick={() => setPage((prev) => prev - 1)}
       className="join-item btn !bg-primary-color1 !text-primary-color4 disabled:!bg-primary-color1/50"
     >
@@ -169,7 +170,7 @@ const Pagination = ({ setPage, nextPage, page }) => (
       {page + 1}
     </button>
     <button
-      disabled={!nextPage}
+      disabled={isLoading || !nextPage}
       onClick={() => setPage((prev) => prev + 1)}
       className="join-item btn !bg-primary-color1 !text-primary-color4 disabled:!bg-primary-color1/50 "
     >
