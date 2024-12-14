@@ -141,7 +141,7 @@ export default function UserProjects() {
               id="project-image-holder "
               className={`w-full min-h-[250px] max-h-[250px] max-w-[400px] flex relative justify-between text-white capitalize rounded-3xl 
               before:top-0 before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent
-              before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-40
+              before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-10
               `}
             >
               {projectImg?.path ? (
@@ -161,7 +161,7 @@ export default function UserProjects() {
                 </div>
               )}
               <span
-                className={`absolute top-0 left-0 flex justify-center items-end pb-4 z-50
+                className={`absolute top-0 left-0 flex justify-center items-end pb-4 z-20
                 w-full h-full font-semibold rounded-b-3xl
             xl:lg
             lg:md

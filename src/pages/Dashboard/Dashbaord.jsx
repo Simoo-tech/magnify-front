@@ -44,10 +44,8 @@ export function Dashboard() {
   if (isLoading) {
     return <Loading />;
   }
-  // user data
-  const { fname, isAdmin } = userData;
   // check user
-  if (id !== user_cookies || !isAdmin) {
+  if (id !== user_cookies || !userData?.isAdmin) {
     return <NotFound />;
   }
   const langDir = lang === "ar" && "rtl";
@@ -62,7 +60,7 @@ export function Dashboard() {
         >
           <div className="w-full text-center lowercase rounded-xl gap-4 flex flex-col relative">
             <p>
-              <b>{fname}</b>
+              <b>{userData?.fname}</b>
               {lang === "ar"
                 ? "هل أنت متأكد أنك تريد الحذف؟"
                 : " Are you sure you want to delete "}
@@ -82,7 +80,7 @@ export function Dashboard() {
       gap-5"
       >
         <AdminTools
-          fname={fname}
+          fname={userData?.fname}
           lang={lang}
           navigate={navigate}
           search={search}
