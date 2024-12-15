@@ -159,7 +159,7 @@ const Form = ({
         >
           <Input
             labelStlye="sm:!text-[16px] md:!text-auto text-primary-color1"
-            inputStyle="sm:!text-xs lg:!text-auto"
+            inputStyle=""
             maxLen={16}
             minLen={8}
             name="password"
@@ -171,7 +171,7 @@ const Form = ({
           />
           <Input
             labelStlye="sm:!text-[16px] md:!text-auto text-primary-color1"
-            inputStyle="sm:!text-xs md:!text-auto"
+            inputStyle=""
             maxLen={16}
             minLen={8}
             name="passwordcon"
@@ -183,7 +183,7 @@ const Form = ({
           />
           <SecondaryBtn
             type="submit"
-            style="sm:flex sm:text-xs sm:min-w-full sm:!py-2 md:hidden"
+            style="sm:min-w-full sm:!py-2 md:hidden"
             text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
             loading={loading}
             disabled={!userPass.password || !userPass.passwordcon}

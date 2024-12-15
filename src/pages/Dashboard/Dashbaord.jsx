@@ -39,7 +39,7 @@ export function Dashboard() {
   // fetch data
   const { isLoading, data: userData } = useQuery("fetchAdminUser", () =>
     axios
-      .get(`${serverPath}user/fetchAdmin/${user_cookies}`)
+      .get(`${serverPath}user/fetchUser/${user_cookies}`)
       .then((res) => res.data)
   );
 

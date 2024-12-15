@@ -156,7 +156,7 @@ const FileInput = ({
   <div
     dir={langDir}
     className={`${inputContainerStyle} bg-lightGreen rounded-3xl relative group overflow-hidden
-  flex justify-center items-center w-[700px] max-w-[700px] sm:h-full md:h-[350px] md:max-h-[350px]`}
+  flex justify-center items-center w-full max-w-[700px] sm:h-full md:h-[350px] md:max-h-[350px]`}
   >
     {value?.path && (
       <>

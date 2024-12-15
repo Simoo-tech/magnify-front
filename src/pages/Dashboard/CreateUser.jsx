@@ -42,7 +42,7 @@ export function CreateUser({ cleintData }) {
   // fetch data
   const { isLoading, data: checkAdmin } = useQuery("checkIfAdmin", () =>
     axios
-      .get(`${serverPath}user/fetchAdmin/${user_cookies}`)
+      .get(`${serverPath}user/fetchUser/${user_cookies}`)
       .then((res) => res.data.isAdmin)
   );
 
@@ -134,7 +134,7 @@ const Form = ({
       }
       autoComplete="off"
     >
-      <div className="w-full h-full overflow-y-auto max-h-full gap-16 flex items-center flex-col pt-10">
+      <div className="w-full h-full overflow-y-auto max-h-full gap-16 flex items-center flex-col pt-10 p-5">
         <h2 className="text-2xl text-center text-primary-color2 capitalize font-semibold">
           {cleintData
             ? lang === "ar"
@@ -158,14 +158,14 @@ const Form = ({
       {/* add project btn */}
       <div
         id="buttons"
-        className=" w-full flex justify-center items-center gap-8 border-t-2 py-5
+        className=" w-full flex justify-center items-center gap-8 border-t-2 py-5 flex-wrap
         md:flex-row
         sm:flex-col"
       >
         {/* cancel btn */}
         <SecondaryBtn
           name="cancel-btn"
-          style="!px-20 !py-2 text-base"
+          style="sm:order-3 md:order-3 lg:order-1"
           text={lang === "en" || lang === null ? "cancel" : "الغاء"}
           type="button"
           action={() => navigate(-1)}
@@ -176,12 +176,13 @@ const Form = ({
           }}
           text={lang === "ar" ? "اضف مشروع جديد" : "Add New Project"}
           type="button"
+          style="sm:order-1 md:order-1 lg:order-2"
         />
         {/* create user btn */}
         <SecondaryBtn
           loading={loading}
           name="submit-btn"
-          style="!px-20 !py-2 text-base"
+          style="sm:order-2 md:order-2 lg:order-3"
           text={
             cleintData
               ? lang === "en" || lang === null

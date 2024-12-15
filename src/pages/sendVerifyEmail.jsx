@@ -22,7 +22,7 @@ export default function SendVerifyEmail() {
   const [sending, setSending] = useState(false);
 
   const { isLoading, error, data } = useQuery("fetchVerifyEmail", () => {
-    return axios.get(`${serverPath}user/${id}`);
+    return axios.get(`${serverPath}user/fetchUser/${id}`);
   });
 
   if (isLoading) {
