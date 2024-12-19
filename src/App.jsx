@@ -40,9 +40,8 @@ function App() {
       items-center flex-col"
     >
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/login/:id" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/:id" element={<Login />} />
         <Route path="/phone-login" element={<PhoneLogin />} />
         <Route path="/phone-login/:id" element={<VerifyOtp />} />
         <Route path="*" element={<NotFound />} />
