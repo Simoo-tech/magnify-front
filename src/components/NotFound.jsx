@@ -70,7 +70,7 @@ export function NotFound() {
               sm:text-sm
             md:text-base
             lg:text-lg "
-            to="/login"
+            to="/"
           >
             {lang === "ar" ? "الرجوع إلى الصفحة الرئيسية" : "Go to home page"}
           </Link>
