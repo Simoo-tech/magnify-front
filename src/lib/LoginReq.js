@@ -7,7 +7,7 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 export const HandleSubmit = async ({ setLoading, authData, setError }) => {
   setLoading(true);
   await axios
-    .post(`${serverPath}auth/email-login`, authData)
+    .post(`${serverPath}auth/email`, authData)
     .then((res) => {
       const userLink = res.data.token;
 
