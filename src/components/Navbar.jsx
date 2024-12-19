@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useLang } from "../context/LangContext";
 import cookie from "react-cookies";
 /////// assets
@@ -17,25 +17,17 @@ export const Navbar = ({ setPopUp }) => {
     setPopUp(true);
   };
   // handle change languagepng
-  const handleChangeLang = () => {
-    if (lang === "ar") {
-      setLang("en");
-      window.localStorage.setItem("lang", "en");
-    } else {
-      setLang("ar");
-      window.localStorage.setItem("lang", "ar");
-    }
-  };
+  const handleChangeLang = useCallback(() => {
+    const newLang = lang === "ar" ? "en" : "ar";
+    window.localStorage.setItem("lang", newLang);
+    window.location.reload();
+  }, [setLang, lang]);
 
-  const langDir = lang === "ar" && "rtl";
+  const langDir = lang === "ar" ? "rtl" : "ltr";
 
   return (
     <nav className="py-3 items-center flex justify-between bg-primary-color1 container max-w-full ">
-      <img
-        src={logo}
-        alt="magnify-logo"
-        className="sm:w-[90px] md:w-[100px]"
-      />
+      <img src={logo} alt="magnify-logo" className="sm:w-[90px] md:w-[100px]" />
       {user ? (
         <div
           className="flex justify-center items-center   

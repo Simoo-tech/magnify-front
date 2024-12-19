@@ -1,5 +1,10 @@
-import React, { useCallback, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useQuery } from "react-query";
 import cookie from "react-cookies";
 import axios from "axios";
@@ -25,16 +30,40 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export function Dashboard() {
   const [deleteUser, setDeleteUser] = useState({});
+  const [page, setPage] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState();
   const [popUp, setPopUp] = useState(false);
-  const [page, setPage] = useState(0);
   const [nextPage, setNextPage] = useState(false);
   const [result, setResult] = useState();
   const { id } = useParams();
+  const savedPage = searchParams.get("page") || 0;
 
   // context
   const [lang] = useLang();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Helper function to set a specific parameter
+  const setPageParam = useCallback(
+    (page) => {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("page", page);
+      setSearchParams(newParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  useEffect(() => {
+    // Ensure the URL always includes the `page` parameter
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set("page", savedPage);
+      return newParams;
+    });
+
+    setPage(parseInt(searchParams.get("page")));
+  }, [location.pathname, searchParams, setPageParam, savedPage]);
 
   // fetch data
   const { isLoading, data: userData } = useQuery("fetchAdminUser", () =>
@@ -50,7 +79,9 @@ export function Dashboard() {
   if (id !== user_cookies || !userData?.isAdmin) {
     return <NotFound />;
   }
+
   const langDir = lang === "ar" && "rtl";
+
   return (
     <MainLayout>
       {popUp && (
@@ -106,8 +137,9 @@ export function Dashboard() {
           nextPage={nextPage}
           page={page}
           result={result}
-          setPage={setPage}
           isLoading={isLoading}
+          setPageParam={setPageParam}
+          searchParams={searchParams}
         />
         {userData && <QR />}
       </section>
@@ -157,11 +189,19 @@ const AdminTools = ({ fname, lang, navigate, setSearch, search }) => (
   </div>
 );
 
-const Pagination = ({ setPage, nextPage, page, isLoading }) => (
+const Pagination = ({
+  nextPage,
+  page,
+  isLoading,
+  setPageParam,
+  searchParams,
+}) => (
   <div className="join">
     <button
       disabled={isLoading || page === 0}
-      onClick={() => setPage((prev) => prev - 1)}
+      onClick={() => {
+        setPageParam(parseInt(searchParams.get("page")) - 1);
+      }}
       className="join-item btn !bg-primary-color1 !text-primary-color4 disabled:!bg-primary-color1/50"
     >
       «
@@ -171,7 +211,9 @@ const Pagination = ({ setPage, nextPage, page, isLoading }) => (
     </button>
     <button
       disabled={isLoading || !nextPage}
-      onClick={() => setPage((prev) => prev + 1)}
+      onClick={() => {
+        setPageParam(parseInt(searchParams.get("page")) + 1);
+      }}
       className="join-item btn !bg-primary-color1 !text-primary-color4 disabled:!bg-primary-color1/50 "
     >
       »

@@ -7,7 +7,7 @@ const userCookies = cookie.load("user_token");
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 // handle add new project
-export const AddProject = ({ setProjectInfo, projectInfo }) => {
+export const AddProject = ({ setProjectInfo, projectInfo, ownerUser }) => {
   setProjectInfo([
     ...projectInfo,
     {
@@ -21,7 +21,8 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
       projectDura: "",
       projectType: "",
       projectImg: { name: "", path: "" },
-      projectOwner: true,
+      projectOwner: ownerUser,
+      projectStatus: "done",
       accessUser: [],
     },
   ]);
@@ -31,29 +32,6 @@ export const AddProject = ({ setProjectInfo, projectInfo }) => {
 export const ProjectRem = ({ index, projectInfo, setProjectInfo }) => {
   const onRemove = [...projectInfo];
   onRemove.splice(index, 1);
-  setProjectInfo(onRemove);
-};
-// handle remove access email
-export const emailRemove = async ({
-  index,
-  projectInfo,
-  setProjectInfo,
-  a,
-}) => {
-  // const header = { headers: { token: `${userCookies}` } };
-  // console.log(userID);
-  // await axios
-  //   .delete(`${serverPath}client/delete-access/${userID}`, {
-  //     email: email,
-  //     headers: { token: `${userCookies}` },
-  //   })
-  //   .then(() => {
-  //     window.location.reload();
-  //     setPopUp(false);
-  //   })
-  //   .catch((err) => console.log(err));
-  const onRemove = [...projectInfo];
-  onRemove[index]["accessUser"].splice(a, 1);
   setProjectInfo(onRemove);
 };
 
@@ -78,18 +56,14 @@ export const HandleUploadImg = async ({
   ) {
     // check file size
     if (img.size < 5000000) {
-      const onChange = [...projectInfo];
+      let onChange = [...projectInfo];
       const file = new FormData();
       file.append("project-img", img);
+
       await axios
         .put(`${serverPath}user-project-upload`, file, {
           onUploadProgress: (e) => {
             setUploading(parseInt((e.loaded / e.total) * 100));
-            onChange[i].projectImg = {
-              path: false,
-              name: false,
-            };
-            setProjectInfo(onChange);
           },
           headers: { token: `${userCookies}` },
         })
@@ -98,18 +72,21 @@ export const HandleUploadImg = async ({
             path: res.data.path,
             name: res.data.name,
           };
-          setProjectInfo(onChange);
           setMsg({
             active: true,
             text: res.data.message,
             type: "success",
             icon: FaCheckCircle,
           });
+          setProjectInfo(onChange);
+          setUploading();
+        })
+        .catch((err) => console.log(err))
+        .finally(() =>
           setTimeout(() => {
             setMsg({});
-            setUploading();
-          }, 2000);
-        });
+          }, 2000)
+        );
     } else {
       setMsg({
         active: true,
@@ -178,12 +155,10 @@ export const HandleSubmitEdit = async ({
 }) => {
   setLoading(true);
   const userNewData = { ...data, projectInfo: projectInfo };
-  delete userNewData._id;
-  delete userNewData.verifyLink;
 
   await axios
     .put(
-      `${serverPath}client/${cleintData._id}`,
+      `${serverPath}client/${cleintData.userName}`,
       { ...userNewData },
       {
         headers: { token: `${userCookies}` },
@@ -212,6 +187,89 @@ export const HandleSubmitEdit = async ({
     .finally(() => {
       setLoading(false);
     });
+};
+
+// handle add project acces
+export const HandleAddAccess = async ({
+  projectOwner,
+  projectID,
+  accessEmail,
+  setMsg,
+  setProjectInfo,
+}) => {
+  await axios
+    .post(
+      `${serverPath}client/add-access-email`,
+      {
+        projectOwner,
+        email: accessEmail,
+        projectID,
+      },
+      {
+        headers: { token: `${userCookies}` },
+      }
+    )
+    .then((res) => {
+      setProjectInfo(res.data.userOwner.projectInfo);
+      setMsg({
+        active: true,
+        text: res.data.message,
+        type: "success",
+        icon: FaCheck,
+      });
+      setTimeout(() => {
+        setMsg({});
+      }, 1000);
+    })
+    .catch((err) => {
+      setMsg({
+        active: true,
+        text: err.response.data.message,
+        type: "failed",
+        icon: MdOutlineError,
+      });
+      setTimeout(() => {
+        setMsg({});
+      }, 2000);
+    });
+};
+
+// handle remove access email
+export const HandleRemoveAccess = async ({
+  projectID,
+  accessEmail,
+  index,
+  projectInfo,
+  setProjectInfo,
+  a,
+  setMsg,
+}) => {
+  await axios
+    .post(
+      `${serverPath}client/delete-access-email`,
+      {
+        email: accessEmail,
+        projectID,
+      },
+      {
+        headers: { token: `${userCookies}` },
+      }
+    )
+    .then((res) => {
+      const onRemove = [...projectInfo];
+      onRemove[index]["accessUser"].splice(a, 1);
+      setProjectInfo(onRemove);
+      setMsg({
+        active: true,
+        text: res.data.message,
+        type: "success",
+        icon: FaCheck,
+      });
+      setTimeout(() => {
+        setMsg({});
+      }, 1000);
+    })
+    .catch((err) => console.log(err.response.data.message));
 };
 
 // delete user

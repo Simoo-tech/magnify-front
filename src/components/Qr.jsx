@@ -64,7 +64,7 @@ export const QR = () => {
             : "Download your QR to login without your email"}
         </h6>
         <QRCode
-          value={`${webPath}${user}`}
+          value={`${webPath}login/${user}/`}
           title="QRcode"
           id="QRCode"
           ref={Qr}

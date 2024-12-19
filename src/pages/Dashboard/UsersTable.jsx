@@ -40,13 +40,13 @@ const UsersTable = ({
         .get(`${serverPath}user?page=${page}`, axiosHeader)
         .then((res) => res.data),
     {
+      onSuccess: (res) => {
+        setNextPage(res.next);
+      },
       refetchOnmount: false,
       refetchOnReconnect: false,
       retry: false,
       refetchOnWindowFocus: false,
-      onSuccess: (res) => {
-        setNextPage(res.next);
-      },
     }
   );
 
@@ -61,7 +61,7 @@ const UsersTable = ({
       )
       .sort((a, b) => {
         if (sort.type === "number") {
-          return a.projectInfo.length < b.projectInfo.length ? 1 : -1;
+          return a.projectInfo?.length < b.projectInfo?.length ? 1 : -1;
         } else if (sort.type === "name") {
           return a.fname > b.fname ? 1 : -1;
         }
@@ -84,14 +84,26 @@ const UsersTable = ({
           >
             {user.phone ? `+${user.phone}` : ""}
           </td>
+
           <td className="p-3 text-center border-primary-color2 border-2">
-            {user.projectInfo.length}
+            {
+              user.projectInfo.filter(
+                (proj) => proj.projectOwner === user.userName
+              ).length
+            }
+          </td>
+          <td className="p-3 text-center border-primary-color2 border-2">
+            {
+              user.projectInfo.filter(
+                (proj) => proj.projectOwner !== user.userName
+              ).length
+            }
           </td>
           <td className="border-primary-color2 py-2 flex justify-center gap-5 sm:px-3 lg:px-0">
             <button
               title="edit"
               className="py-2 px-3 bg-primary-color3 text-white flex justify-center items-center hover:bg-white hover:text-primary-color3 duration-200 rounded-lg"
-              onClick={() => navigate(`${user._id}/edit-user`)}
+              onClick={() => navigate(`${user.userName}/edit-user`)}
             >
               <MdOutlineModeEditOutline title="edit" />
             </button>
@@ -136,7 +148,12 @@ const UsersTable = ({
       text: lang === "ar" ? "رقم الهاتف" : "Phone No",
     },
     {
-      text: lang === "ar" ? "عدد المشاريع" : "No of projects",
+      text: lang === "ar" ? "مشاريعك" : "Owned projects",
+      sort: () => handleSort("number"),
+      icon: <BiSortAlt2 color="black" />,
+    },
+    {
+      text: lang === "ar" ? "مشاريع اخري" : "Access projects",
       sort: () => handleSort("number"),
       icon: <BiSortAlt2 color="black" />,
     },
@@ -150,13 +167,13 @@ const UsersTable = ({
       id="users-table"
       className="w-full flex items-start flex-col justify-start overflow-y-auto min-h-[440px] max-h-[440px] overflow-x-auto"
     >
-      <table className="table border-2 table-lg border-primary-color2">
+      <table className="table border-2 sm:table-sm md:table-md lg:table-md border-primary-color2">
         <thead>
           <tr className="bg-primary-color1 w-full text-lightGreen sticky top-0">
             {tableHead.map((list, i) => (
               <th
                 key={i}
-                className="font-normal border-2 border-primary-color2 "
+                className="font-normal border-2 border-primary-color2 lg:text-[14px]"
               >
                 <div className="flex items-center justify-center gap-3">
                   <span className="w-full truncate">{list.text}</span>

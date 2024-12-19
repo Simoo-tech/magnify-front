@@ -31,10 +31,6 @@ select:-webkit-autofill:focus {
   color: #878787;
 }
 
-table {
-  width: 100%;
-}
-
 ::-webkit-scrollbar,
 ::-webkit-scrollbar:horizontal {
   width: 5px !important;

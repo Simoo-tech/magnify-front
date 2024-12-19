@@ -9,14 +9,14 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
 
 export function EditUser() {
-  const { cleintId } = useParams();
+  const { cleintUserName } = useParams();
 
   // fetch client data
   const { isLoading, data: cleintData } = useQuery(
-    ["fetchClientEdit", { cleintId }],
+    ["fetchClientEdit", { cleintUserName }],
     () => {
       return axios
-        .get(`${serverPath}client/${cleintId}`, {
+        .get(`${serverPath}client/${cleintUserName}`, {
           headers: {
             token: `${userCookies}`,
           },

@@ -20,9 +20,6 @@ export function NotFound() {
       return axios.get(`${serverPath}user/${user_cookies}`);
     },
     {
-      refetchOnmount: false,
-      refetchOnReconnect: false,
-      retry: false,
       refetchOnWindowFocus: false,
     }
   );
@@ -73,7 +70,7 @@ export function NotFound() {
               sm:text-sm
             md:text-base
             lg:text-lg "
-            to={"/"}
+            to="/login"
           >
             {lang === "ar" ? "الرجوع إلى الصفحة الرئيسية" : "Go to home page"}
           </Link>

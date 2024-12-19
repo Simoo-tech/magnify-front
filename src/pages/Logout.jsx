@@ -5,8 +5,8 @@ import Layout1 from "../Layout1";
 import { Line } from "../components/Line";
 import { Navigate } from "react-router-dom";
 import { useLang } from "../context/LangContext";
-
 import cookie from "react-cookies";
+
 export default function Logout() {
   const [lang] = useLang();
 

@@ -23,28 +23,28 @@ export default function UserInfo({ data, setData, setMsg }) {
         name: "userName",
         style: "col-span-full",
         text: lang === "ar" ? "اسم المستخدم" : "User Name",
-        value: userName,
+        value: userName || "",
         onChange: HandleChangeUser,
       },
       {
         type: "text",
         name: "fname",
         text: lang === "ar" ? "الاسم الاول" : "First Name",
-        value: fname,
+        value: fname || "",
         onChange: HandleChangeUser,
       },
       {
         type: "text",
         name: "lname",
         text: lang === "ar" ? "الاسم الاخير" : "Last Name",
-        value: lname,
+        value: lname || "",
         onChange: HandleChangeUser,
       },
       {
         type: "email",
         name: "email",
         text: lang === "ar" ? "البريد الالكتروني" : "E-mail",
-        value: email,
+        value: email || "",
         onChange: (e) => {
           const emailCap = e.target.value.toLowerCase();
           setData((prev) => ({ ...prev, email: emailCap }));
@@ -54,7 +54,7 @@ export default function UserInfo({ data, setData, setMsg }) {
       {
         type: "phone",
         text: lang === "ar" ? "رقم الهاتف" : "Phone Number",
-        value: `${phone}`,
+        value: `${phone || ""}`,
         onChange: (e) => {
           setData((prev) => ({ ...prev, phone: e }));
           setMsg({});
@@ -78,7 +78,7 @@ export default function UserInfo({ data, setData, setMsg }) {
         {InputFieldsUserInfo.map((input, i) => (
           <Input
             require={true}
-            inkey={i}
+            key={i}
             type={input.type}
             name={input.name}
             value={input.value}

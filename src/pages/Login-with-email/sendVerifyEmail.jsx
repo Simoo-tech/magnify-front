@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useLang } from "../context/LangContext";
+import { useLang } from "../../context/LangContext";
 /////// layout
-import Layout2 from "../layout2";
+import Layout2 from "../../layout2";
 /////// icons
 import icon4 from "/assets/icon4.svg";
 /////// functions
-import { HandleSendVerify } from "../lib/Verify&ResetReq";
+import { HandleSendVerify } from "../../lib/Verify&ResetReq";
 /////// components
-import { Loading } from "../components/Loading";
-import { NotFound } from "../components/NotFound";
-import { SecondaryBtn } from "../components/Btns";
+import { Loading } from "../../components/Loading";
+import { NotFound } from "../../components/NotFound";
+import { SecondaryBtn } from "../../components/Btns";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 

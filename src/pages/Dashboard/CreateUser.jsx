@@ -9,7 +9,7 @@ import { SecondaryBtn } from "../../components/Btns";
 import { IoIosClose } from "react-icons/io";
 // libraryies
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
 import UserInfo from "./Create-Edit-ClientData/UserInfo";
 import ProjectInfo from "./Create-Edit-ClientData/ProjectInfo";
@@ -172,7 +172,11 @@ const Form = ({
         />
         <SecondaryBtn
           action={() => {
-            AddProject({ setProjectInfo, projectInfo });
+            AddProject({
+              setProjectInfo,
+              projectInfo,
+              ownerUser: data.userName,
+            });
           }}
           text={lang === "ar" ? "اضف مشروع جديد" : "Add New Project"}
           type="button"

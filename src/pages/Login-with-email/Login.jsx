@@ -1,16 +1,15 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { HandleSubmit } from "../lib/LoginReq";
-import { useLang } from "../context/LangContext";
-import { Loading } from "../components/Loading";
-import { MdErrorOutline } from "react-icons/md";
-import { PrimaryBtn } from "../components/Btns";
-import Layout1 from "../Layout1";
+import { HandleSubmit } from "../../lib/LoginReq";
+import { useLang } from "../../context/LangContext";
+import { Loading } from "../../components/Loading";
+import { PrimaryBtn } from "../../components/Btns";
+import Layout1 from "../../Layout1";
 import logo from "/assets/logo/mainLogo.svg";
-import { Input } from "../components/Input";
+import { Input } from "../../components/Input";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { NotFound } from "../components/NotFound";
+import { NotFound } from "../../components/NotFound";
 import cookie from "react-cookies";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -19,13 +18,13 @@ const Login = () => {
   const [lang] = useLang();
   const [QREmail, setQREmail] = useState(null);
   const userCookies = cookie.load("user_token");
-  const userEmail = window.location.href.split("/")[3];
+  const userEmail = window.location.href.split("/")[4];
 
   // Check if the user is already logged in
   if (userCookies) {
     const { isLoading, data } = useQuery(
       "checkUserLogged",
-      () => axios.get(`${serverPath}user/${userCookies}`),
+      () => axios.get(`${serverPath}user/fetchUser/${userCookies}`),
       {
         refetchOnMount: false,
         retry: false,
@@ -132,7 +131,7 @@ const Form = ({ lang, QREmail }) => {
           </span>
         </div>
         {/* Input fields */}
-        <div className="w-full flex flex-col sm:gap-6 md:gap-7 ">
+        <div className="w-full flex flex-col gap-3 ">
           <Input
             name="email"
             text={getText("E-mail", "البريد الالكتروني")}
@@ -195,12 +194,32 @@ const Form = ({ lang, QREmail }) => {
             </Link>
           </div>
         </div>
-        {/* Submit Button */}
-        <PrimaryBtn
-          text={getText("Log in", "تسجيل")}
-          loading={loading}
-          type="submit"
-        />
+        <div id="btns" className="flex flex-col items-center gap-3">
+          {/* Submit Button */}
+          <PrimaryBtn
+            text={getText("Log in", "تسجيل")}
+            loading={loading}
+            type="submit"
+          />
+          {/* <span
+            className="text-lightGreen capitalize
+          sm:text-xs md:text-md lg:text-base"
+          >
+            {getText("or", "او")}
+          </span>
+          <p
+            className="text-lightGreen capitalize
+          sm:text-xs md:text-md lg:text-base"
+          >
+            {getText("Sign Up With", "التسجيل عبر")}
+            <Link
+              to="/phone-login"
+              className="underline hover:text-primary-color1 duration-200 mx-1"
+            >
+              {getText("Phone Number", "رقم الهاتف")}
+            </Link>
+          </p> */}
+        </div>
       </div>
     </form>
   );

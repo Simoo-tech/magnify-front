@@ -6,11 +6,12 @@ import logo from "/assets/logo/mainLogo2.svg";
 const Nav2 = ({ logoStyle }) => {
   // handle change languagepng
   const [lang, setLang] = useLang();
+
   const handleChangeLang = useCallback(() => {
     const newLang = lang === "ar" ? "en" : "ar";
-    setLang(newLang);
     window.localStorage.setItem("lang", newLang);
-  }, [lang, setLang]);
+    window.location.reload();
+  }, [setLang, lang]);
 
   // languages container style
   const langDir = lang === "ar" ? "rtl" : "ltr";

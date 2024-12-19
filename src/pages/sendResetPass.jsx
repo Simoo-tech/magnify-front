@@ -102,7 +102,7 @@ export default function SendReset() {
             />
             <button
               type="button"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/login")}
               className="text-darkGreen rounded-lg capitalize font-semibold 
               md:text-sm
               sm:text-xs"

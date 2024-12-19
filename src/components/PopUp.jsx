@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SecondaryBtn } from "./Btns";
 import logo from "/assets/logo/mainLogo2.svg";
 import { useLang } from "../context/LangContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const PopUp = ({
   iconImage,
@@ -40,7 +41,7 @@ export const PopUp = ({
       >
         <img src={logo} alt="logo" />
         {iconImage && (
-          <img
+          <LazyLoadImage 
             src={iconImage}
             alt="icon-reset-submit"
             className="sm:w-[100px] md:w-[110px] lg:w-[120px]"

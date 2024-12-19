@@ -6,9 +6,9 @@ import { ContactUsLink } from "./components/contactUsLink";
 export default function Layout1({ children, logoStyle, footer }) {
   return (
     <section
-      style={{ backgroundImage: `url("${BackgroundImg}")` }}
-      className="bg-cover bg-local bg-origin-border	bg-center w-full h-dvh overflow-y-auto container max-w-full 
-      flex flex-col items-center justify-between gap-5 pb-3"
+      className="bg-cover bg-center w-full h-dvh overflow-y-auto container max-w-full 
+      bg-[url('../public/assets/background1.svg')]
+      flex flex-col items-center justify-between pb-3"
     >
       <Nav2 logoStyle={logoStyle} />
       {children}

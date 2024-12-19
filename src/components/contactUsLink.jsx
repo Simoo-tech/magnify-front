@@ -7,6 +7,7 @@ export const ContactUsLink = ({ visible }) => {
 
   return (
     <footer
+      dir={lang === "ar" ? "rtl" : "ltr"}
       className={`${
         !visible && "sm:invisible"
       } footer flex justify-center items-center text-primary-color1 gap-1

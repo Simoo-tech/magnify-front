@@ -11,9 +11,9 @@
 @font-face {
   font-family: "en";
   /*Can be any text*/
-  src: local("pnu"), url("./fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+  src: local("pnu"),
+    url("./fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
 }
-
 
 #english {
   font-family: "en", sans-serif !important;
@@ -27,6 +27,7 @@
 
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 
 p,

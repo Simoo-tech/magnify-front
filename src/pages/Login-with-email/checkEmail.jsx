@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { useLang } from "../context/LangContext";
+import { useLang } from "../../context/LangContext";
 /////// functions
-import { HandleSendReset, HandleSendVerify } from "../lib/Verify&ResetReq";
+import { HandleSendReset, HandleSendVerify } from "../../lib/Verify&ResetReq";
 /////// components
-import { Loading } from "../components/Loading";
-import { NotFound } from "../components/NotFound";
-import { SecondaryBtn } from "../components/Btns";
-import { Line } from "../components/Line";
+import { Loading } from "../../components/Loading";
+import { NotFound } from "../../components/NotFound";
+import { SecondaryBtn } from "../../components/Btns";
+import { Line } from "../../components/Line";
 /////// layout
-import Layout2 from "../layout2";
+import Layout2 from "../../layout2";
 /////// icons
 import icon1 from "/assets/icon1.svg";
 import { LazyLoadImage } from "react-lazy-load-image-component";

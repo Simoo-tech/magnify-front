@@ -10,7 +10,7 @@ function MainLayout({ children, overFlow, noGap }) {
   const [lang] = useLang();
   return (
     <section
-      dir={lang === "ar" && "rtl"}
+      dir={lang === "ar" ? "rtl" : "ltr"}
       className={`w-full relative bg-white
       h-dvh flex flex-col items-center justify-start overflow-y-auto ${
         !noGap && "gap-5"

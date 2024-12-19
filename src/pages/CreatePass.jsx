@@ -13,6 +13,7 @@ import { PopUp } from "../components/PopUp";
 import icon2 from "/assets/icon2.svg";
 import { MdErrorOutline } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import cookie from "react-cookies";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
@@ -103,7 +104,13 @@ export default function CreatePass() {
                 : "Your password has been changed successfully"
             }
             iconImage={icon2}
-            action={() => window.location.replace("/")}
+            action={() => {
+              window.location.replace("/");
+              cookie.remove("user_token", {
+                path: "/",
+                secure: true,
+              });
+            }}
           />
         )}
         <h2 className="text-center text-primary-color1 capitalize font-bold flex flex-col items-center gap-2 truncate sm:text-lg md:text-xl lg:text-2xl">
@@ -158,8 +165,7 @@ const Form = ({
           className="flex flex-col items-center gap-5 sm:w-full md:w-5/12 xl:pr-20"
         >
           <Input
-            labelStlye="sm:!text-[16px] md:!text-auto text-primary-color1"
-            inputStyle=""
+            labelStlye="text-primary-color1"
             maxLen={16}
             minLen={8}
             name="password"
@@ -170,8 +176,7 @@ const Form = ({
             text={lang === "ar" ? "كلمة مرور" : "Password"}
           />
           <Input
-            labelStlye="sm:!text-[16px] md:!text-auto text-primary-color1"
-            inputStyle=""
+            labelStlye=" text-primary-color1"
             maxLen={16}
             minLen={8}
             name="passwordcon"

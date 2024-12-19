@@ -10,7 +10,7 @@ const LogoutReq = () => {
       secure: true,
     });
     window.localStorage.removeItem("session_time");
-    window.location.replace("/");
+    window.location.replace("/login");
   }, 1500);
 };
 

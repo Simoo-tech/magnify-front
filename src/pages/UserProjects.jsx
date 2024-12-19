@@ -37,14 +37,14 @@ export default function UserProjects() {
   const navigate = useNavigate();
   // fetch user projects data
   const {
+    isError,
     isLoading,
-    error,
     data: filter,
   } = useQuery(
     "fetchUserProjects",
     () =>
       axios
-        .get(`${serverPath}user/fetchClient/${user_cookies}`)
+        .get(`${serverPath}user/fetchUser/${user_cookies}`)
         .then((res) => res.data),
     {
       refetchOnmount: false,
@@ -57,11 +57,11 @@ export default function UserProjects() {
     return <Loading />;
   }
 
-  if (error || id !== user_cookies || filter?.isAdmin) {
+  if (isError || id !== user_cookies || filter?.isAdmin) {
     return <NotFound />;
   }
 
-  const langDir = lang === "ar" && "rtl";
+  const langDir = lang === "ar" ? "rtl" : "ltr";
 
   // user project filter and map
   const UserProjects = filter?.projectInfo
@@ -122,21 +122,18 @@ export default function UserProjects() {
             className={`grid place-items-center rounded-3xl bg-lightGreen relative mb-20 max-w-[400px]
               xl:w-[28%] lg:w-[40%] md:w-5/12 sm:w-full grid-flow-row gap-6`}
           >
-            {accessUser &&
-              accessUser.map((user) => {
-                return (
-                  !projectOwner && (
-                    <div
-                      className="absolute -top-[47px] text-center capitalize text-primary-color1 text-base
+            {/* project owner shape  */}
+            {projectOwner !== filter.userName && (
+              <div
+                className="absolute -top-[47px] text-center capitalize text-primary-color1 text-base
                       border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2
                       w-[70%] max-w-[90%]"
-                    >
-                      <span className="font-bold">Owner : </span>
-                      {user.userName}
-                    </div>
-                  )
-                );
-              })}
+              >
+                <span className="font-bold">Owner : </span>
+                {projectOwner}
+              </div>
+            )}
+
             {/* image holder */}
             <div
               id="project-image-holder "
@@ -147,8 +144,6 @@ export default function UserProjects() {
             >
               {projectImg?.path ? (
                 <LazyLoadImage
-                  placeholder={<div className="skeleton h-32 w-32"></div>}
-                  effect="blur"
                   className="rounded-3xl object-cover min-h-full min-w-full"
                   src={projectImg?.path}
                   alt={`project-image-${projectImg?.name}`}
@@ -219,7 +214,7 @@ export default function UserProjects() {
                       setProjectShowDates({
                         folderName: folderName,
                         projectSubDate: projectSubDate,
-                        userName: user ? user.userName : filter?.userName,
+                        userName: projectOwner,
                       });
                     }}
                   />
@@ -232,7 +227,7 @@ export default function UserProjects() {
                         ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                         : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                     }`}
-                    linkTo={`${user.userName}/${folderName}`}
+                    linkTo={`${projectOwner}/${folderName}`}
                     text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
                   />
                 )
