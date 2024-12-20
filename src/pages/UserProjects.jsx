@@ -144,6 +144,7 @@ export default function UserProjects() {
             >
               {projectImg?.path ? (
                 <LazyLoadImage
+                  effect="opacity"
                   className="rounded-3xl object-cover min-h-full min-w-full"
                   src={projectImg?.path}
                   alt={`project-image-${projectImg?.name}`}

@@ -1,7 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useLang } from "../../../context/LangContext";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
+import "react-lazy-load-image-component/src/effects/opacity.css";
+import placeHolderImg from "/assets/logo/mainLogo.png";
 // components
 import {
   HandleAddAccess,
@@ -217,9 +218,9 @@ export default function ProjectInfo({
             id="project-access"
             className="collapse collapse-arrow bg-primary-color1 "
           >
-            <input type="checkbox" />
+            <input type="checkbox" className="peer" />
             <h3
-              className="collapse-title font-medium text-lightGreen rounded-lg capitalize text-ellipsis
+              className="collapse-title font-medium text-lightGreen rounded-lg capitalize text-ellipsis 
             sm:text-xs
             md:text-md
             lg:text-base"
@@ -228,14 +229,25 @@ export default function ProjectInfo({
                 ? "مشروع"
                 : ` ${project.projectOwner} is the owner for project ${project.projectName} `}
             </h3>
-            <div className="collapse-content flex sm:flex-col lg:flex-row ">
-              <LazyLoadImage
-                className="rounded-2xl object-cover
-                sm:w-full md:max-w-full lg:max-w-[400px] max-h-[200px]"
-                src={project.projectImg.path}
-                alt={project.projectImg.name}
-              />
-              <div className="grid md:grid-cols-2 w-full bg-white p-4 rounded-2xl place-content-center gap-3 ">
+            <div className="collapse-content border-2 flex sm:flex-col lg:flex-row items-center justify-center bg-white peer-checked:pt-3">
+              {project?.projectImg?.path ? (
+                <LazyLoadImage
+                  placeholderSrc={placeHolderImg}
+                  effect="opacity"
+                  className="object-cover rounded-2xl sm:max-w-full lg:max-w-[300px]"
+                  src={project?.projectImg?.path}
+                  alt={`${project?.projectImg?.name}`}
+                />
+              ) : (
+                <div
+                  className="sm:w-full sm:h-[200px] lg:max-w-[300px] h-[300px] max-h-[300px]
+                flex justify-center items-center border-2 rounded-2xl capitalize font-light "
+                >
+                  project image
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 w-full bg-white p-4 rounded-2xl  gap-3 ">
                 {InputFields.filter(
                   (input) =>
                     input.name === "projectNo" ||

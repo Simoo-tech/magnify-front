@@ -1,12 +1,5 @@
 import "./App.css";
-import { useEffect, useMemo } from "react";
-import {
-  Routes,
-  Route,
-  Navigate,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useLang } from "./context/LangContext";
 // pages
 import { NotFound } from "./components/NotFound";
