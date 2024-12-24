@@ -1,17 +1,24 @@
 import React from "react";
 import { useLang } from "../context/LangContext";
+import cookie from "react-cookies";
+
 export const CopyRight = () => {
-  const [lang] = useLang();
+  const user = cookie.load("user_token");
+
+  const { lang } = useLang();
+
   return (
-    <footer
-      className="footer-center footer bg-primary-color3 py-4 text-white 
+    user && (
+      <footer
+        className="footer-center footer bg-primary-color3 py-4 text-white 
     lg:text-md
     md:text-sm
     sm:text-xs"
-    >
-      {lang === "ar"
-        ? "Copyrights@2024 magnify جميع الحقوق محفوظة   ."
-        : "Copyrights@2024 magnify All rights reserved ."}
-    </footer>
+      >
+        {lang === "ar"
+          ? "Copyrights@2024 magnify جميع الحقوق محفوظة   ."
+          : "Copyrights@2024 magnify All rights reserved ."}
+      </footer>
+    )
   );
 };

@@ -14,14 +14,14 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <Router>
-      <QueryClientProvider client={queryClient}>
-        <UserDataProvider>
-          <LangProvider>
+    <UserDataProvider>
+      <LangProvider>
+        <Router>
+          <QueryClientProvider client={queryClient}>
             <App />
-          </LangProvider>
-        </UserDataProvider>
-      </QueryClientProvider>
-    </Router>
+          </QueryClientProvider>
+        </Router>
+      </LangProvider>
+    </UserDataProvider>
   </React.StrictMode>
 );

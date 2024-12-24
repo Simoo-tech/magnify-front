@@ -8,27 +8,28 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 /////// components
 import { Loading } from "../components/Loading";
 import { useLang } from "../context/LangContext";
-import { NotFound } from "../components/NotFound";
+import { NotFound } from "../pages/NotFound";
 import { NotFoundInList } from "../components/NotFoundInList";
 import { QR } from "../components/Qr";
 import { InputSearch } from "../components/inputSearch";
 import { Line } from "../components/Line";
 /////// layout
-import MainLayout from "../MainLayout";
+import MainLayout from "../Layout/MainLayout";
 /////// assets
 import BackgroundImg from "/assets/background6.svg";
 import icon10 from "/assets/icon10.svg";
 /////// icons
 import { SecondaryBtn, SecondaryLink } from "../components/Btns";
 import { PopUp } from "../components/PopUp";
+import { CopyRight } from "../components/CopyRight";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function UserProjects() {
   // user cookies
 
-  const [lang] = useLang();
-  const [search, setSearch] = useState();
+  const { lang } = useLang();
+  const [search, setSearch] = useState("");
   const user_cookies = cookie.load("user_token");
   const { id } = useParams();
   const [listType, setListType] = useState(true);
@@ -60,8 +61,6 @@ export default function UserProjects() {
   if (isError || id !== user_cookies || filter?.isAdmin) {
     return <NotFound />;
   }
-
-  const langDir = lang === "ar" ? "rtl" : "ltr";
 
   // user project filter and map
   const UserProjects = filter?.projectInfo
@@ -113,176 +112,159 @@ export default function UserProjects() {
           val: projectDura,
         },
       ];
-
       return (
-        <>
-          {/* // list style */}
+        <div
+          key={i}
+          id="project-info"
+          className={`grid w-full max-w-[350px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 lg:mb-36 grid-flow-row gap-6 group`}
+        >
+          {/* project owner shape  */}
+          {projectOwner !== filter.userName && (
+            <div
+              className="absolute -top-[40px] text-center capitalize text-primary-color1 text-base
+              border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2
+              w-[70%] max-w-[90%]
+              lg:text-md
+              md:text-sm
+              sm:text-xs"
+            >
+              <span className="font-bold">Owner : </span>
+              {projectOwner}
+            </div>
+          )}
+          {/* image holder */}
           <div
-            id="project-info"
-            className={`grid place-items-center rounded-3xl bg-lightGreen relative mb-20 max-w-[400px]
-              xl:w-[28%] lg:w-[40%] md:w-5/12 sm:w-full grid-flow-row gap-6`}
+            id="project-image-holder "
+            className={`w-full h-full min-h-[200px] max-h-[350px] max-w-[350px] flex relative justify-between text-white capitalize rounded-3xl 
+              before:top-0 before:invisible before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent before:ease-in-out
+              before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-10 before:duration-300 before:opacity-0
+              group-hover:before:visible group-hover:before:opacity-100
+              `}
           >
-            {/* project owner shape  */}
-            {projectOwner !== filter.userName && (
+            {projectImg?.path ? (
+              <LazyLoadImage
+                placeholderSrc={BackgroundImg}
+                effect="opacity"
+                className="rounded-3xl h-full w-full object-cover"
+                src={projectImg?.path}
+                alt={`project-image-${projectImg?.name}`}
+              />
+            ) : (
               <div
-                className="absolute -top-[47px] text-center capitalize text-primary-color1 text-base
-                      border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2
-                      w-[70%] max-w-[90%]"
+                className={`h-[150px] w-full bg-primary-color2 flex rounded-3xl justify-center items-center text-primary-color4 relative
+              `}
               >
-                <span className="font-bold">Owner : </span>
-                {projectOwner}
+                No image to show
               </div>
             )}
-
-            {/* image holder */}
-            <div
-              id="project-image-holder "
-              className={`w-full min-h-[250px] max-h-[250px] max-w-[400px] flex relative justify-between text-white capitalize rounded-3xl 
-              before:top-0 before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent
-              before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-10
-              `}
-            >
-              {projectImg?.path ? (
-                <LazyLoadImage
-                  effect="opacity"
-                  className="rounded-3xl object-cover min-h-full min-w-full"
-                  src={projectImg?.path}
-                  alt={`project-image-${projectImg?.name}`}
-                />
-              ) : (
-                <div
-                  className={`min-h-[250px] max-h-[250px] w-full bg-primary-color2 flex rounded-3xl justify-center items-center text-primary-color4 relative
-              `}
-                >
-                  No image to show
-                </div>
-              )}
-              <span
-                className={`absolute top-0 left-0 flex justify-center items-end pb-4 z-20
-                w-full h-full font-semibold rounded-b-3xl
+            <span
+              className={`absolute top-0 opacity-0 invisible duration-300 group-hover:visible group-hover:opacity-100 flex justify-center items-end pb-4 z-20 
+            w-full h-full font-semibold rounded-b-3xl
             xl:lg
             lg:md
             md:text-sm
-            sm:text-xs
-            ${listType ? "visible" : "md:invisible sm:visible"}`}
-              >
-                {projectName}
-              </span>
-            </div>
-            <Line h="1px" w="80%" />
-            {/* project info */}
-            <div className="flex flex-col w-full gap-4 justify-center items-center px-5 pb-6">
-              <span
-                className={`flex w-full text-primary-color1 capitalize font-semibold rounded-b-3xl sm:hidden
-            lg:text-lg
-            md:text-base
-            ${!listType && "md:block"}`}
-              >
-                {projectName}
-              </span>
-              <div className="w-full grid grid-cols-2 place-items-center place-content-center gap-3">
-                {projectsInfoText.map((project, li) => (
-                  <p
-                    key={`${li}-list-info`}
-                    className="gap-1 w-full font-semibold capitalize text-primary-color1 truncate
-              lg:text-base
+            sm:text-xs`}
+            >
+              {projectName}
+            </span>
+          </div>
+          <Line h="1px" w="80%" />
+          {/* project info */}
+          <div className="flex flex-col w-full gap-4 justify-center items-center px-5 pb-6">
+            <div className="w-full grid grid-cols-2 place-items-center place-content-center gap-3">
+              {projectsInfoText.map((project, li) => (
+                <p
+                  key={`${li}-list-info`}
+                  className="gap-1 w-full font-semibold capitalize text-primary-color1 truncate
+              lg:text-md
               md:text-sm
               sm:text-xs"
-                  >
-                    {project.name}
-                    <span className="font-normal ml-1 ">{project.val}</span>
-                  </p>
-                ))}
-              </div>
+                >
+                  {project.name}
+                  <span className="font-normal ml-1 ">{project.val}</span>
+                </p>
+              ))}
             </div>
-            {accessUser.length >= 1 ? (
-              accessUser.map((user) =>
-                projectSubDate.length >= 1 ? (
-                  <SecondaryBtn
-                    text={
-                      lang === "ar"
-                        ? "عرض تواريخ المشروع"
-                        : "show projects date"
-                    }
-                    style={`truncate !absolute 
+          </div>
+          {accessUser.length >= 1 ? (
+            accessUser.map((user, a) =>
+              projectSubDate.length >= 1 ? (
+                <SecondaryBtn
+                  key={a}
+                  text={
+                    lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"
+                  }
+                  style={`truncate !absolute 
                       sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                       ${
                         listType
                           ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                           : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                       }`}
-                    action={() => {
-                      setProjectShowDates({
-                        folderName: folderName,
-                        projectSubDate: projectSubDate,
-                        userName: projectOwner,
-                      });
-                    }}
-                  />
-                ) : (
-                  <SecondaryLink
-                    style={`truncate !absolute 
+                  action={() => {
+                    setProjectShowDates({
+                      folderName: folderName,
+                      projectSubDate: projectSubDate,
+                      userName: projectOwner,
+                    });
+                  }}
+                />
+              ) : (
+                <SecondaryLink
+                  key={a}
+                  style={`truncate !absolute 
                     sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                     ${
                       listType
                         ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                         : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                     }`}
-                    linkTo={`${projectOwner}/${folderName}`}
-                    text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
-                  />
-                )
+                  linkTo={`${projectOwner}/${folderName}`}
+                  text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+                />
               )
-            ) : projectSubDate.length >= 1 ? (
-              <SecondaryBtn
-                text={
-                  lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"
-                }
-                style={`truncate !absolute 
+            )
+          ) : projectSubDate.length >= 1 ? (
+            <SecondaryBtn
+              text={lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"}
+              style={`truncate !absolute 
                   sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                   ${
                     listType
                       ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                       : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                   }`}
-                action={() => {
-                  setProjectShowDates({
-                    folderName: folderName,
-                    projectSubDate: projectSubDate,
-                    userName: filter?.userName,
-                  });
-                }}
-              />
-            ) : (
-              <SecondaryLink
-                style={`truncate !absolute 
+              action={() => {
+                setProjectShowDates({
+                  folderName: folderName,
+                  projectSubDate: projectSubDate,
+                  userName: filter?.userName,
+                });
+              }}
+            />
+          ) : (
+            <SecondaryLink
+              style={`truncate !absolute 
                 sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16
                 ${
                   listType
                     ? "!bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16"
                     : " md:bottom-3 md:left-[15%] md:translate-x-[-15%]"
                 }`}
-                linkTo={`${filter?.userName + "/" + folderName}`}
-                text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
-              />
-            )}
-          </div>
-        </>
+              linkTo={`${filter?.userName + "/" + folderName}`}
+              text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+            />
+          )}
+        </div>
       );
     });
 
-  return !user_cookies ? (
-    <Navigate to="/" replace />
-  ) : (
-    <MainLayout overFlow="scroll" noGap={true}>
+  return (
+    <MainLayout overFlow="scroll" type="user-projects">
       <section
-        style={{ backgroundImage: `url(${BackgroundImg})` }}
         id="projects-page"
-        dir={langDir}
-        className="flex flex-col container max-w-full bg-center w-full
-      items-center justify-start relative gap-5 h-full min-h-fit py-5   
-      lg:bg-cover 
-      sm:bg-[length:100%]"
+        className="flex flex-col w-full  py-4 container max-w-full
+      items-center justify-start relative gap-8 "
       >
         <h3
           id="user-welcome"
@@ -295,9 +277,9 @@ export default function UserProjects() {
         >
           {lang === "ar" ? "المشاريع" : "Your Projects "}
         </h3>
-        <div id="content" className="flex flex-col gap-20 w-full">
+        <div id="content" className="grid place-items-start gap-16 w-full ">
           {/* search by name */}
-          <div className=" flex w-full items-center justify-start ">
+          <div className=" flex w-full items-center justify-start">
             {/* list  */}
             {/* <div
               id="list-type"
@@ -354,8 +336,8 @@ export default function UserProjects() {
           {UserProjects?.length && !isLoading >= 1 ? (
             <div
               id="projects"
-              className="w-full flex flex-wrap min-h-[426px] h-fit justify-center items-center 
-            gap-16"
+              className="w-full gap-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 place-items-center items-center content-center place-content-center
+            "
             >
               {UserProjects}
             </div>
@@ -364,7 +346,6 @@ export default function UserProjects() {
               text="no project found"
               color="#497B62"
               textStyle="text-primary-color1"
-              height="h-full sm:max-h-full lg:max-h-[400px]"
             />
           )}
         </div>
@@ -381,6 +362,7 @@ export default function UserProjects() {
           />
         )}
       </section>
+      <CopyRight />
     </MainLayout>
   );
 }

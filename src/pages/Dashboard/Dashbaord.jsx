@@ -18,10 +18,11 @@ import { SecondaryBtn } from "../../components/Btns";
 import { PopUp } from "../../components/PopUp";
 import { HandleDelete } from "../../lib/DashboardReq";
 import { InputSearch } from "../../components/inputSearch";
-import { NotFound } from "../../components/NotFound";
+import { NotFound } from "../../pages/NotFound";
 /////// layout
-import MainLayout from "../../MainLayout";
+import MainLayout from "../../Layout/MainLayout";
 import UsersTable from "./UsersTable";
+import { CopyRight } from "../../components/CopyRight";
 
 const user_cookies = cookie.load("user_token");
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -32,7 +33,7 @@ export function Dashboard() {
   const [deleteUser, setDeleteUser] = useState({});
   const [page, setPage] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [popUp, setPopUp] = useState(false);
   const [nextPage, setNextPage] = useState(false);
   const [result, setResult] = useState();
@@ -40,7 +41,7 @@ export function Dashboard() {
   const savedPage = searchParams.get("page") || 0;
 
   // context
-  const [lang] = useLang();
+  const { lang } = useLang();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -66,10 +67,18 @@ export function Dashboard() {
   }, [location.pathname, searchParams, setPageParam, savedPage]);
 
   // fetch data
-  const { isLoading, data: userData } = useQuery("fetchAdminUser", () =>
-    axios
-      .get(`${serverPath}user/fetchUser/${user_cookies}`)
-      .then((res) => res.data)
+  const { isLoading, data: userData } = useQuery(
+    "fetchAdminUser",
+    () =>
+      axios
+        .get(`${serverPath}user/fetchUser/${user_cookies}`)
+        .then((res) => res.data),
+    {
+      refetchOnmount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
   );
 
   if (isLoading) {
@@ -80,10 +89,8 @@ export function Dashboard() {
     return <NotFound />;
   }
 
-  const langDir = lang === "ar" && "rtl";
-
   return (
-    <MainLayout>
+    <MainLayout overFlow="hidden">
       {popUp && (
         <PopUp
           iconImage={icon5}
@@ -108,8 +115,7 @@ export function Dashboard() {
         </PopUp>
       )}
       <section
-        dir={langDir.toString()}
-        className="container h-full max-w-full relative w-full justify-between flex flex-col items-center 
+        className="h-[92%] relative w-full justify-start flex flex-col items-center container max-w-full  py-4
       gap-5"
       >
         <AdminTools
@@ -143,6 +149,7 @@ export function Dashboard() {
         />
         {userData && <QR />}
       </section>
+      <CopyRight />
     </MainLayout>
   );
 }

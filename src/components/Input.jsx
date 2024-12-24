@@ -28,7 +28,7 @@ export const Input = ({
   require,
   forLabel,
 }) => {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [showPass, setShowPass] = useState(false);
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
@@ -36,18 +36,20 @@ export const Input = ({
     <label
       htmlFor={forLabel}
       dir={langDir}
-      className={`${containerStyle} text-lightGreen w-full font-medium flex items-center flex-col gap-1`}
+      className={`${containerStyle} text-lightGreen w-full font-medium flex items-center flex-col gap-1 sm:text-xs md:text-sm lg:text-base rounded-[48px]`}
     >
-      <span
-        className={`px-4 ${labelStlye} flex self-start
+      {text && (
+        <span
+          className={`px-4 ${labelStlye} flex self-start
       sm:text-xs md:text-sm lg:text-base`}
-      >
-        {text}
-      </span>
+        >
+          {text}
+        </span>
+      )}
       {type !== "phone" && type !== "select" && (
         <div
           dir={langDir}
-          className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[48px]`}
+          className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-[10px] px-4 rounded-[48px]`}
         >
           <input
             autoComplete="email"
@@ -60,7 +62,7 @@ export const Input = ({
             value={value}
             dir={langDir}
             type={type === "password" ? (showPass ? "text" : "password") : type}
-            className={`${inputStyle} w-full text-textColor bg-transparent outline-none sm:text-xs md:text-sm lg:text-base`}
+            className={`${inputStyle} w-full text-textColor bg-transparent outline-none `}
             placeholder={placeholder}
           />
           {/* show password */}

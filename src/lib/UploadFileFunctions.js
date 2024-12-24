@@ -12,51 +12,65 @@ export const UploadFiles = async ({
   setMsg,
   projectName,
   setImages,
-  setDone,
   path,
   setProjectName,
 }) => {
   setUploading(true);
   const formData = new FormData();
-  for (const file of images) {
+
+  // Append all files to FormData
+  images.forEach((file) => {
     formData.append("file", file);
-    formData.append("project_name", projectName);
-    setFileName(file.name);
-    await axios
-      .post(`${serverPath}upload-files/${path}`, formData, {
+  });
+
+  // Add project name to FormData
+  formData.append("project_name", projectName);
+
+  try {
+    // Send the files in a single request
+    const response = await axios.post(
+      `${serverPath}upload-files/${path}`,
+      formData,
+      {
         onUploadProgress: (e) => {
           setUploaded(parseInt((e.loaded / e.total) * 100));
         },
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then((res) => {
-        setDone((prev) => [...prev, images.indexOf(file)]);
-        // if all images finish
-        if (images.lastIndexOf(file) + 1 === images.length) {
-          setMsg({
-            active: true,
-            text: `${res.data.message}`,
-            type: "success",
-            icon: FaCheck,
-          });
-          setUploading(false);
-          setFileName();
-          setTimeout(() => {
-            setMsg({
-              active: false,
-              text: res.data.message,
-              type: "success",
-              icon: FaCheck,
-            });
-            setImages([]);
-            setDone([]);
-            setProjectName("");
-          }, 2000);
-        }
-      })
-      .catch((err) => console.log(err));
+      }
+    );
+    // If upload is successful, handle the response
+    setMsg({
+      active: true,
+      text: `${response.data.message}`,
+      type: "success",
+      icon: FaCheck,
+    });
+
+    setUploading(false);
+
+    setFileName("");
+    setProjectName("");
+    setTimeout(() => {
+      setUploaded(0);
+      setMsg({
+        active: false,
+        text: response.data.message,
+        type: "success",
+        icon: FaCheck,
+      });
+      setImages([]);
+    }, 2000);
+  } catch (err) {
+    setUploaded(0);
+    setUploading(false);
+    setMsg({
+      active: true,
+      text: "Failed to upload files.",
+      type: "failed",
+      icon: MdOutlineError,
+    });
   }
 };
 

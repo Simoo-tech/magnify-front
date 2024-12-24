@@ -3,7 +3,7 @@ import { Input } from "../../../components/Input";
 import { useLang } from "../../../context/LangContext";
 
 export default function UserInfo({ data, setData, setMsg }) {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
   // Optimized handle change

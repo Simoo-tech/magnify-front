@@ -7,56 +7,55 @@ import { useLang } from "../../context/LangContext";
 import { HandleSendReset, HandleSendVerify } from "../../lib/Verify&ResetReq";
 /////// components
 import { Loading } from "../../components/Loading";
-import { NotFound } from "../../components/NotFound";
+import { NotFound } from "../../pages/NotFound";
 import { SecondaryBtn } from "../../components/Btns";
 import { Line } from "../../components/Line";
 /////// layout
-import Layout2 from "../../layout2";
+import MainLayout from "../../Layout/MainLayout";
 /////// icons
 import icon1 from "/assets/icon1.svg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function CheckEmail() {
   const { id } = useParams();
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [sending, setSending] = useState(false);
 
-  const { isLoading, error, data } = useQuery(
+  const {
+    isLoading,
+    error,
+    data: user,
+  } = useQuery(
     "fetchCheckEmail",
-    () => {
-      return axios.get(`${serverPath}user/verify/${id}`);
-    },
+    () => axios.get(`${serverPath}user/verify/${id}`).then((res) => res.data),
     {
-      refetchOnmount: false,
-      refetchOnReconnect: false,
       retry: false,
       refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 60 * 24,
     }
   );
 
   if (isLoading) {
     return <Loading />;
   }
+
   if (error) {
     return <NotFound />;
   }
-  const { email, verified } = data.data;
+  const { email, verified } = user;
 
   return (
-    <Layout2 type={"check-email"}>
+    <MainLayout type={"check-email"}>
       <section
         id="check-email"
-        className="flex flex-col items-center justify-center h-full
+        className="flex flex-col items-center justify-center h-full container max-w-full
         lg:w-6/12
         md:w-4/6 md:gap-14
         sm:w-11/12 sm:gap-8 "
       >
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-10">
-          <LazyLoadImage
+          <img
             src={icon1}
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"
@@ -125,6 +124,6 @@ export default function CheckEmail() {
           />
         </div>
       </section>
-    </Layout2>
+    </MainLayout>
   );
 }

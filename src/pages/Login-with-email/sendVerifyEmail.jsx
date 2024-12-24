@@ -4,42 +4,45 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
 /////// layout
-import Layout2 from "../../layout2";
+import MainLayout from "../../Layout/MainLayout";
 /////// icons
 import icon4 from "/assets/icon4.svg";
 /////// functions
 import { HandleSendVerify } from "../../lib/Verify&ResetReq";
 /////// components
 import { Loading } from "../../components/Loading";
-import { NotFound } from "../../components/NotFound";
+import { NotFound } from "../../pages/NotFound";
 import { SecondaryBtn } from "../../components/Btns";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function SendVerifyEmail() {
   const { id } = useParams();
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [sending, setSending] = useState(false);
 
-  const { isLoading, error, data } = useQuery("fetchVerifyEmail", () => {
-    return axios.get(`${serverPath}user/fetchUser/${id}`);
-  });
+  const {
+    isLoading,
+    error,
+    data: user,
+  } = useQuery("fetchVerifyEmail", () =>
+    axios.get(`${serverPath}user/fetchUser/${id}`).then((res) => res.data)
+  );
 
   if (isLoading) {
     return <Loading />;
   }
 
-  const { email, verified } = data.data;
-
-  if (error || verified) {
+  if (error) {
     return <NotFound />;
   }
+  const { email } = user;
 
   return (
-    <Layout2 type={"verify-email"}>
+    <MainLayout type={"verify-email"}>
       <section
         id="check-email"
-        className=" flex flex-col items-center justify-center h-full
+        className=" flex flex-col items-center justify-center h-full container max-w-full
         lg:w-3/6 
         md:w-4/6 md:gap-14 
         sm:w-full sm:gap-8 "
@@ -111,6 +114,6 @@ export default function SendVerifyEmail() {
           />
         </div>
       </section>
-    </Layout2>
+    </MainLayout>
   );
 }

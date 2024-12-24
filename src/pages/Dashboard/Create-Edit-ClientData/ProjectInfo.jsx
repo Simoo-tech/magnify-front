@@ -7,7 +7,6 @@ import placeHolderImg from "/assets/logo/mainLogo.png";
 import {
   HandleAddAccess,
   HandleRemoveAccess,
-  HandleUploadImg,
   ProjectRem,
 } from "../../../lib/DashboardReq";
 import { Input } from "../../../components/Input";
@@ -24,7 +23,7 @@ export default function ProjectInfo({
   setMsg,
   data,
 }) {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
   // handle change project
@@ -378,7 +377,7 @@ export default function ProjectInfo({
                     key={i}
                     forLabel={input.name + index}
                     name={input.name}
-                    iconSize={50}
+                    iconSize={150}
                     deleteImg={(e) => {
                       HandleDeleteProjectImg(input.index);
                     }}
@@ -386,6 +385,7 @@ export default function ProjectInfo({
                     projectInfo={projectInfo}
                     setMsg={setMsg}
                     setProjectInfo={setProjectInfo}
+                    iconColor="#497B62"
                   />
                 );
               } else {
@@ -525,7 +525,7 @@ const ProjectEmailAccess = ({
   data,
   setMsg,
 }) => {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [EmailAccErr, setEmailAccErr] = useState();
 
   return (

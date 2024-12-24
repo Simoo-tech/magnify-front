@@ -1,22 +1,17 @@
 import React from "react";
 import logo from "/assets/logo/mainLogo2.svg";
-import LogoutReq from "../lib/LogoutReq";
-import Layout1 from "../Layout1";
 import { Line } from "../components/Line";
-import { Navigate } from "react-router-dom";
 import { useLang } from "../context/LangContext";
-import cookie from "react-cookies";
+import MainLayout from "../Layout/MainLayout";
+import LogoutReq from "../lib/LogoutReq";
 
 export default function Logout() {
-  const [lang] = useLang();
+  const { lang } = useLang();
 
-  const user_cookies = cookie.load("user_token");
   LogoutReq();
 
-  return !user_cookies ? (
-    <Navigate to="/" replace />
-  ) : (
-    <Layout1 logoStyle="hidden">
+  return (
+    <MainLayout type="logout" logoStyle="hidden">
       <section
         id="logout"
         className="flex flex-col justify-center h-full items-center gap-20 container max-w-full"
@@ -48,6 +43,6 @@ export default function Logout() {
           </h2>
         </div>
       </section>
-    </Layout1>
+    </MainLayout>
   );
 }

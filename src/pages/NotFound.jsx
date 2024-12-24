@@ -1,37 +1,17 @@
 import React from "react";
-import Layout1 from "../Layout1";
 import image from "/assets/not-found.svg";
-import { Link } from "react-router-dom";
-import { useQuery } from "react-query";
-import axios from "axios";
-import cookie from "react-cookies";
-import { Loading } from "./Loading";
 import { useLang } from "../context/LangContext";
-
-const user_cookies = cookie.load("user_token");
-const serverPath = import.meta.env.VITE_APP_API_BASE;
+import MainLayout from "../Layout/MainLayout";
+import { useNavigate } from "react-router-dom";
 
 export function NotFound() {
-  const [lang] = useLang();
-
-  const { isLoading } = useQuery(
-    "fetchHome",
-    () => {
-      return axios.get(`${serverPath}user/${user_cookies}`);
-    },
-    {
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { lang } = useLang();
+  const navigate = useNavigate();
   return (
-    <Layout1 footer={true}>
+    <MainLayout type="not-found">
       <section
         id="page-not-found"
-        className="h-full w-full flex justify-center items-center flex-col gap-5 "
+        className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full"
       >
         {/* image */}
         <img
@@ -65,17 +45,17 @@ export function NotFound() {
                 : "It looks like nothing was found at this location"}
             </span>
           </div>
-          <Link
+          <button
             className="underline text-primary-color1 capitalize font-medium
               sm:text-sm
             md:text-base
             lg:text-lg "
-            to="/"
+            onClick={() => navigate("/")}
           >
             {lang === "ar" ? "الرجوع إلى الصفحة الرئيسية" : "Go to home page"}
-          </Link>
+          </button>
         </div>
       </section>
-    </Layout1>
+    </MainLayout>
   );
 }

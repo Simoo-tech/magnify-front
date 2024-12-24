@@ -59,6 +59,7 @@ a:focus-visible,
 }
 
 .react-tel-input .form-control {
+  position: relative;
   background-color: #d2ecdf !important;
   color: #878787 !important;
   border-radius: 48px !important;
@@ -79,7 +80,7 @@ a:focus-visible,
 
 /* english phone input style  */
 .react-tel-input .form-control.en {
-  padding: 11px 65px !important;
+  padding: 10px 65px !important;
 }
 
 /* arabic phone input style */
@@ -97,4 +98,11 @@ a:focus-visible,
 
 .react-tel-input .form-control.ar {
   padding: 11px 80px !important;
+}
+
+.react-tel-input .country-list {
+  bottom: 40px;
+  color: black;
+  max-width: 250px;
+  max-height: 200px !important;
 }

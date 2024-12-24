@@ -4,16 +4,16 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useLang } from "../context/LangContext";
 import { HandleSubmit } from "../lib/CreatePassReq";
-import Layout2 from "../layout2";
 import { SecondaryBtn } from "../components/Btns";
 import { Input } from "../components/Input";
-import { NotFound } from "../components/NotFound";
+import { NotFound } from "../pages/NotFound";
 import { Loading } from "../components/Loading";
 import { PopUp } from "../components/PopUp";
 import icon2 from "/assets/icon2.svg";
 import { MdErrorOutline } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import cookie from "react-cookies";
+import MainLayout from "../Layout/MainLayout";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
@@ -21,7 +21,7 @@ export default function CreatePass() {
   const { id } = useParams();
   const { isLoading, isError, data } = useQuery(
     "userVerify",
-    () => axios.get(`${serverPath}user/verify/${id}`).then((res) => res.data),
+    () => axios.get(`${serverPath}user/verify/${id}`),
     {
       refetchOnMount: false,
       refetchOnReconnect: false,
@@ -31,7 +31,7 @@ export default function CreatePass() {
     }
   );
 
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [formState, setFormState] = useState({
     userPass: { password: "", passwordcon: "" },
     error: "",
@@ -90,10 +90,10 @@ export default function CreatePass() {
   const { userPass, error, popUp, loading } = formState;
 
   return (
-    <Layout2 type="create-password">
+    <MainLayout type="create-password">
       <section
         dir={langDir}
-        className="flex items-center flex-col justify-center h-full sm:w-full sm:gap-14 md:gap-14 lg:gap-26"
+        className="flex items-center flex-col justify-center container max-w-full sm:w-full h-full sm:gap-16 lg:gap-16"
         id="create-new-password"
       >
         {popUp && (
@@ -127,7 +127,7 @@ export default function CreatePass() {
           loading={loading}
         />
       </section>
-    </Layout2>
+    </MainLayout>
   );
 }
 
@@ -145,12 +145,14 @@ const Form = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex justify-around flex-col items-center relative gap-20 sm:w-11/12 md:w-10/12 lg:w-9/12"
+      className="flex justify-around flex-col items-center relative  
+      sm:gap-10 md:gap-20 
+      sm:w-full md:w-11/12 lg:w-9/12"
     >
       {error && (
         <span
           dir="ltr"
-          className="text-center text-white absolute -top-12 flex items-center gap-2 justify-center bg-red-500 py-2 px-6 rounded-xl font-normal md:text-sm sm:text-xs"
+          className="text-center text-white absolute -top-14 flex items-center gap-2 justify-center bg-red-500 py-2 px-6 rounded-xl font-normal md:text-sm sm:text-xs"
         >
           <MdErrorOutline size={20} />
           {error}
@@ -158,7 +160,7 @@ const Form = ({
       )}
       <div
         dir="ltr"
-        className="flex w-full h-fit items-center justify-center sm:flex-col gap-8 md:flex-row"
+        className="flex w-full h-full items-center justify-center sm:flex-col gap-8 md:flex-row"
       >
         <div
           id="inputs-container"
@@ -191,6 +193,7 @@ const Form = ({
             style="sm:min-w-full sm:!py-2 md:hidden"
             text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
             loading={loading}
+            id="focus-btn-2"
             disabled={!userPass.password || !userPass.passwordcon}
           />
         </div>
@@ -208,7 +211,7 @@ const Form = ({
         <div
           dir={langDir}
           id="instruction"
-          className="justify-center flex py-4 px-3 flex-col sm:w-full sm:items-center md:h-5/6 md:w-5/12 md:max-w-full lg:pl-20 items-start"
+          className="justify-center flex  flex-col sm:w-full sm:items-center md:h-5/6 md:w-5/12 md:max-w-full lg:pl-20 items-start"
         >
           <h3 className="mb-3 font-semibold text-primary-color1 md:text-lg sm:text-base">
             {lang === "ar" ? " كلمة المرور يجب ان تكون:" : "Password must be:"}
@@ -217,7 +220,7 @@ const Form = ({
             {listInstructions.map((list, index) => (
               <li
                 key={index}
-                className="list-disc text-primary-color1 sm:text-xs md:text-xs lg:text-base"
+                className="list-disc text-primary-color1 sm:text-sm md:text-md lg:text-base"
               >
                 {list.text}
               </li>
@@ -226,6 +229,7 @@ const Form = ({
         </div>
       </div>
       <SecondaryBtn
+        id="focus-btn-1"
         disabled={!userPass.password || !userPass.passwordcon}
         type="submit"
         style="md:flex sm:hidden !min-w-[280px]"

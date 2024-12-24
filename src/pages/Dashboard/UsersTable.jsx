@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
-
 // icons
 import {
   MdOutlineDeleteOutline,
@@ -68,38 +67,34 @@ const UsersTable = ({
         return 0;
       })
       .map((user) => (
-        <tr
-          key={user._id}
-          className="bg-white hover:bg-lightGreen border-primary-color2 border-2 "
-        >
-          <td className="p-2 capitalize truncate border-primary-color2 border-2">
+        <tr key={user._id} className="bg-white hover:bg-lightGreen ">
+          <td className="p-2 capitalize truncate border-y border-primary-color1">
             {user.fname + " " + user.lname}
           </td>
-          <td className="p-2 truncate border-primary-color2 border-2">
+          <td className="p-2 truncate border border-primary-color1">
             {user.email}
           </td>
           <td
             dir={langDir}
-            className="p-2 truncate border-primary-color2 border-2"
+            className="p-2 truncate border-y border-primary-color1"
           >
-            {user.phone ? `+${user.phone}` : ""}
+            {user.phone ? `+${user.phone}` : "none"}
           </td>
-
-          <td className="p-3 text-center border-primary-color2 border-2">
+          <td className="p-3 text-center border border-primary-color1">
             {
               user.projectInfo.filter(
                 (proj) => proj.projectOwner === user.userName
               ).length
             }
           </td>
-          <td className="p-3 text-center border-primary-color2 border-2">
+          <td className="p-3 text-center border-y border-primary-color1">
             {
               user.projectInfo.filter(
                 (proj) => proj.projectOwner !== user.userName
               ).length
             }
           </td>
-          <td className="border-primary-color2 py-2 flex justify-center gap-5 sm:px-3 lg:px-0">
+          <td className="py-2 flex justify-center gap-5 sm:px-3 lg:px-0 border border-primary-color1">
             <button
               title="edit"
               className="py-2 px-3 bg-primary-color3 text-white flex justify-center items-center hover:bg-white hover:text-primary-color3 duration-200 rounded-lg"
@@ -154,8 +149,6 @@ const UsersTable = ({
     },
     {
       text: lang === "ar" ? "مشاريع اخري" : "Access projects",
-      sort: () => handleSort("number"),
-      icon: <BiSortAlt2 color="black" />,
     },
     {
       text: "",
@@ -165,15 +158,15 @@ const UsersTable = ({
   return (
     <div
       id="users-table"
-      className="w-full flex items-start flex-col justify-start overflow-y-auto min-h-[440px] max-h-[440px] overflow-x-auto"
+      className="w-full h-full flex items-start flex-col justify-start overflow-y-auto overflow-x-auto"
     >
-      <table className="table border-2 sm:table-sm md:table-md lg:table-md border-primary-color2">
+      <table className="table sm:table-sm md:table-md lg:table-md border border-primary-color1">
         <thead>
           <tr className="bg-primary-color1 w-full text-lightGreen sticky top-0">
             {tableHead.map((list, i) => (
               <th
                 key={i}
-                className="font-normal border-2 border-primary-color2 lg:text-[14px]"
+                className="font-normal lg:text-[14px] border-primary-color2 border"
               >
                 <div className="flex items-center justify-center gap-3">
                   <span className="w-full truncate">{list.text}</span>

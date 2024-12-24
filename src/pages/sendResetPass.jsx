@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLang } from "../context/LangContext";
 // layout
-import Layout2 from "../layout2";
+import MainLayout from "../Layout/MainLayout";
 // components
 import { Input } from "../components/Input";
 import { SecondaryBtn } from "../components/Btns";
@@ -17,16 +17,16 @@ export default function SendReset() {
   const navigate = useNavigate();
   const [err, setErr] = useState(null);
   const [email, setEmail] = useState("");
-  const [lang] = useLang();
+  const { lang } = useLang();
 
   return (
-    <Layout2 type={"reset-password"}>
+    <MainLayout type={"forgot-password"}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           HandleSendReset({ setSending, email, setErr });
         }}
-        className="flex h-full flex-col items-center justify-center 
+        className="flex h-full flex-col items-center justify-center container max-w-full
         lg:w-6/12
         md:w-4/6 md:gap-14 
         sm:w-11/12 sm:gap-10"
@@ -102,7 +102,7 @@ export default function SendReset() {
             />
             <button
               type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/")}
               className="text-darkGreen rounded-lg capitalize font-semibold 
               md:text-sm
               sm:text-xs"
@@ -112,6 +112,6 @@ export default function SendReset() {
           </div>
         </div>
       </form>
-    </Layout2>
+    </MainLayout>
   );
 }

@@ -10,7 +10,6 @@ export default function UploadImg({
   inputContainerStyle,
   value,
   deleteImg,
-  iconSize,
   iconColor,
   name,
   type,
@@ -21,7 +20,7 @@ export default function UploadImg({
   setMsg,
   setProjectInfo,
 }) {
-  const [lang] = useLang();
+  const { lang } = useLang();
   const [uploading, setUploading] = useState(false);
 
   const langDir = lang === "ar" ? "rtl" : "ltr";
@@ -71,10 +70,16 @@ export default function UploadImg({
       {!value?.path && !uploading && (
         <label
           htmlFor={name + "-upload"}
-          className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full h-[350px] "
+          className="flex flex-col gap-1 py-6 px-4 justify-center items-center w-full max-h-[350px] h-fit "
         >
-          <FiUploadCloud size={iconSize} color={iconColor} />
-          <p className="capitalize text-base text-primary-color1 font-bold mt-2">
+          <FiUploadCloud
+            color={iconColor}
+            className="sm:w-[90px] md:w-[120px] lg:w-[150px] h-full"
+          />
+          <p
+            className="capitalize text-primary-color1 font-bold 
+          sm:text-md md:text-base lg:text-lg"
+          >
             Click to upload
           </p>
           <input
@@ -96,9 +101,6 @@ export default function UploadImg({
             className={`${inputStyle} hidden w-full h-full text-textColor outline-none text-sm py-3 px-4 rounded-3xl bg-darkGreen `}
           />
           <div id="text" className="flex flex-col gap-5 items-center">
-            <span className="text-primary-color1 sm:text-base md:text-[20px] font-bold ">
-              {value?.name}
-            </span>
             <span className="text-darkGreen sm:text-xs md:text-sm ">
               .JPG, JPEG, PNG, WEBP (MAX. 5MB)
             </span>

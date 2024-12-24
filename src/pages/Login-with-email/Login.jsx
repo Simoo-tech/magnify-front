@@ -1,65 +1,51 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { HandleSubmit } from "../../lib/LoginReq";
 import { useLang } from "../../context/LangContext";
 import { Loading } from "../../components/Loading";
 import { PrimaryBtn } from "../../components/Btns";
-import Layout1 from "../../Layout1";
 import logo from "/assets/logo/mainLogo.svg";
 import { Input } from "../../components/Input";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { NotFound } from "../../components/NotFound";
-import cookie from "react-cookies";
+import { NotFound } from "../../pages/NotFound";
+import MainLayout from "../../Layout/MainLayout";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 const Login = () => {
-  const [lang] = useLang();
-  const [QREmail, setQREmail] = useState(null);
-  const userCookies = cookie.load("user_token");
-  const userEmail = window.location.href.split("/")[4];
-
-  // Check if the user is already logged in
-  if (userCookies) {
-    const { isLoading, data } = useQuery(
-      "checkUserLogged",
-      () => axios.get(`${serverPath}user/fetchUser/${userCookies}`),
-      {
-        refetchOnMount: false,
-        retry: false,
-        staleTime: 1000 * 60 * 60 * 24, // Cache for 24 hours
-      }
-    );
-
-    if (isLoading) return <Loading />;
-
-    if (data?.data?.isAdmin) {
-      return <Navigate to={`/${userCookies}/dashboard`} replace />;
-    } else {
-      return <Navigate to={`/${userCookies}/tour-projects`} replace />;
-    }
-  }
+  const { lang } = useLang();
+  const { email } = useParams();
 
   // Fetch QR login email if available
-  if (userEmail) {
-    const { isLoading, error } = useQuery(
-      "emailLogin",
-      () => axios.get(`${serverPath}user/fetchUser/${userEmail}`),
-      {
-        onSuccess: (res) => setQREmail(res?.data?.email),
-      }
-    );
 
-    if (isLoading) return <Loading />;
-    if (error) return <NotFound />;
-  }
+  const {
+    isLoading,
+    error,
+    data: QREmail,
+  } = useQuery(
+    "emailLogin",
+    () => {
+      if (email) {
+        return axios
+          .get(`${serverPath}user/fetchUser/${email}`)
+          .then((res) => res.data.email);
+      }
+    },
+    {
+      refetchOnWindowFocus: false,
+      retry: false,
+    }
+  );
+
+  if (email && isLoading) return <Loading />;
+  if (email && error) return <NotFound />;
 
   return (
-    <Layout1 logoStyle="hidden">
+    <MainLayout type="login" logoStyle="hidden">
       <Form lang={lang} QREmail={QREmail} />
-      <FooterLinks lang={lang} />
-    </Layout1>
+    </MainLayout>
   );
 };
 
@@ -91,7 +77,13 @@ const Form = ({ lang, QREmail }) => {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      HandleSubmit({ setLoading, authData, setError, navigate });
+      HandleSubmit({
+        setLoading,
+        authData,
+        setError,
+        navigate,
+        path: "email-login",
+      });
     },
     [authData, navigate]
   );
@@ -100,10 +92,10 @@ const Form = ({ lang, QREmail }) => {
     <form
       onSubmit={handleSubmit}
       id="login-form"
-      className="w-full row-span-11 flex flex-col items-center justify-center"
+      className="w-full h-full flex flex-col items-center justify-center container max-w-full"
     >
       <div
-        className="gap-8 bg-darkGreen flex flex-col rounded-3xl items-center justify-between 
+        className="gap-6 bg-darkGreen flex flex-col rounded-3xl items-center justify-between 
         md:w-[400px] md:py-10 md:px-8 
         sm:w-full sm:max-w-[85%] sm:py-10 sm:px-4"
       >
@@ -120,18 +112,18 @@ const Form = ({ lang, QREmail }) => {
           >
             {getText("Log in", "تسجيل الدخول")}
           </h2>
-          <span
-            className={`${
-              error ? "visible" : "invisible"
-            } text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 p-2 rounded-lg
+          {error && (
+            <span
+              className={`text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 p-2 rounded-lg
             sm:text-xs
             md:text-sm`}
-          >
-            {error}
-          </span>
+            >
+              {error}
+            </span>
+          )}
         </div>
         {/* Input fields */}
-        <div className="w-full flex flex-col gap-3 ">
+        <div className="w-full flex flex-col gap-5 ">
           <Input
             name="email"
             text={getText("E-mail", "البريد الالكتروني")}
@@ -201,7 +193,7 @@ const Form = ({ lang, QREmail }) => {
             loading={loading}
             type="submit"
           />
-          {/* <span
+          <span
             className="text-lightGreen capitalize
           sm:text-xs md:text-md lg:text-base"
           >
@@ -214,57 +206,14 @@ const Form = ({ lang, QREmail }) => {
             {getText("Sign Up With", "التسجيل عبر")}
             <Link
               to="/phone-login"
-              className="underline hover:text-primary-color1 duration-200 mx-1"
+              className="underline font-semibold hover:text-primary-color1 duration-200 mx-1"
             >
               {getText("Phone Number", "رقم الهاتف")}
             </Link>
-          </p> */}
+          </p>
         </div>
       </div>
     </form>
-  );
-};
-
-const FooterLinks = ({ lang }) => {
-  const getText = (enText, arText) =>
-    lang === "en" || !lang ? enText : arText;
-
-  const links = [
-    {
-      id: "about-us",
-      url: "https://magnify-vt.com/",
-      text: getText("About Magnify", "عن Magnify"),
-    },
-    {
-      id: "privacy-terms",
-      url: "https://magnify-vt.com/privacy-policy/",
-      text: getText("Privacy Terms", "شروط الخصوصية"),
-    },
-    {
-      id: "contact-us",
-      url: "https://magnify-vt.com/contact/",
-      text: getText("Contact Us", "تواصل معنا"),
-    },
-  ];
-
-  return (
-    <footer
-      id="bottom-links"
-      className="footer flex flex-row justify-between w-full bg-transparent gap-2 "
-      dir={lang === "ar" ? "rtl" : "ltr"}
-    >
-      {links.map((link) => (
-        <Link
-          key={link.id}
-          id={link.id}
-          to={link.url}
-          className="text-center text-primary-color2 font-semibold w-fit lg:text-base md:text-sm sm:text-[12px]
-    hover:text-primary-color1 "
-        >
-          {link.text}
-        </Link>
-      ))}
-    </footer>
   );
 };
 

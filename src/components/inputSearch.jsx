@@ -9,13 +9,13 @@ export const InputSearch = ({
   setSearch,
   onChangeHandle,
 }) => {
-  const [lang] = useLang();
-  const langDir = lang === "ar" && "rtl";
+  const { lang } = useLang();
+  const langDir = lang === "ar" ? "rtl" : "ltr";
 
   return (
     <label
       dir={langDir ? langDir : undefined}
-      className=" relative focus-within:border-black flex w-full justify-between border-2 border-[#656565]
+      className=" relative focus-within:border-black flex w-full justify-between border border-[#656565]
   px-5 py-2 rounded-3xl items-center bg-white
   md:w-3/6 md:order-3 md:max-w-ful
   lg:w-3/6 lg:order-2"

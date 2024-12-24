@@ -9,15 +9,17 @@ import { SecondaryBtn } from "../../components/Btns";
 import { IoIosClose } from "react-icons/io";
 // libraryies
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
 import UserInfo from "./Create-Edit-ClientData/UserInfo";
 import ProjectInfo from "./Create-Edit-ClientData/ProjectInfo";
-import { NotFound } from "../../components/NotFound";
+import { NotFound } from "../../pages/NotFound";
 import { Loading } from "../../components/Loading";
 import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
+import MainLayout from "../../Layout/MainLayout";
+import { CopyRight } from "../../components/CopyRight";
 
 const user_cookies = cookie.load("user_token");
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -37,7 +39,7 @@ export function CreateUser({ cleintData }) {
   // handle message from api
   const [msg, setMsg] = useState({});
   // context
-  const [lang] = useLang();
+  const { lang } = useLang();
 
   // fetch data
   const { isLoading, data: checkAdmin } = useQuery("checkIfAdmin", () =>
@@ -56,10 +58,7 @@ export function CreateUser({ cleintData }) {
   }
 
   return (
-    <section
-      id="create-user"
-      className="container max-w-full bg-center w-full h-dvh z-30 bg-white"
-    >
+    <MainLayout>
       {/* alert message */}
       {msg.active && (
         <span
@@ -88,7 +87,8 @@ export function CreateUser({ cleintData }) {
         cleintData={cleintData}
         lang={lang}
       />
-    </section>
+      <CopyRight />
+    </MainLayout>
   );
 }
 
@@ -107,7 +107,7 @@ const Form = ({
 
   return (
     <form
-      className="flex flex-col w-full h-full overflow-hidden gap-5"
+      className="flex flex-col w-full h-[92%] justify-between container max-w-full py-4"
       onSubmit={
         cleintData
           ? (e) => {
@@ -134,7 +134,7 @@ const Form = ({
       }
       autoComplete="off"
     >
-      <div className="w-full h-full overflow-y-auto max-h-full gap-16 flex items-center flex-col pt-10 p-5">
+      <div className="w-full overflow-y-auto  gap-16 flex items-center flex-col pb-3 px-5">
         <h2 className="text-2xl text-center text-primary-color2 capitalize font-semibold">
           {cleintData
             ? lang === "ar"
@@ -158,7 +158,7 @@ const Form = ({
       {/* add project btn */}
       <div
         id="buttons"
-        className=" w-full flex justify-center items-center gap-8 border-t-2 py-5 flex-wrap
+        className=" w-full flex justify-center items-center gap-10 border-t-2 pt-3 flex-wrap
         md:flex-row
         sm:flex-col"
       >
@@ -189,10 +189,10 @@ const Form = ({
           style="sm:order-2 md:order-2 lg:order-3"
           text={
             cleintData
-              ? lang === "en" || lang === null
+              ? lang === "en"
                 ? "save edit"
                 : "حفظ التعديلات"
-              : lang === "en" || lang === null
+              : lang === "en"
               ? "create user"
               : "انشاء مستخدم"
           }

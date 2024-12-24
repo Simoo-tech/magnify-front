@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import video1 from "/assets/logo animation.mp4";
 import { useLang } from "../context/LangContext";
 import { useParams } from "react-router-dom";
-import { NotFound } from "../components/NotFound";
+import { NotFound } from "../pages/NotFound";
 
 const ServerUrl = import.meta.env.VITE_APP_PROJECTS_FOLDER;
 const user_cookies = cookie.load("user_token");
 
 export default function Projects() {
   const [loading, setLoading] = useState(true);
-  const [lang] = useLang();
+  const { lang } = useLang();
   const { id } = useParams();
 
   useEffect(() => {
