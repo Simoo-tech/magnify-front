@@ -16,7 +16,7 @@ export const HandleSubmit = async ({
     setLoading(false);
   } else {
     axios
-      .put(`${serverPath}user/update-password/${data._id}`, {
+      .put(`${serverPath}user/update-password/${data.data._id}`, {
         password: userPass.password,
       })
       .then(() => {

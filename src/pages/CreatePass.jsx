@@ -30,7 +30,7 @@ export default function CreatePass() {
       staleTime: 1000 * 60 * 60 * 24,
     }
   );
-
+  console.log(data);
   const { lang } = useLang();
   const [formState, setFormState] = useState({
     userPass: { password: "", passwordcon: "" },
