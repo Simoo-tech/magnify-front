@@ -1,52 +1,34 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useLang } from "../../context/LangContext";
-import phoneIcon from "/assets/icon11.svg";
 import { Input } from "../../components/Input";
 import { SecondaryBtn } from "../../components/Btns";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MainLayout from "../../Layout/MainLayout";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { HandleSubmit } from "../../lib/LoginReq";
+import { HandlePhoneLogin } from "../../lib/LoginReq";
+import { preload } from "react-dom";
+import { MdOutlineErrorOutline } from "react-icons/md";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
 
 export const PhoneLogin = () => {
-  const navigate = useNavigate();
+  preload("/assets/icon11.svg", {
+    as: "image",
+  });
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [authData, setAuthData] = useState({
-    phone: "",
-  });
+
   const { lang } = useLang();
   // Handle text based on language
   const getText = useMemo(
     () => (enText, arText) => lang === "en" || !lang ? enText : arText,
     [lang]
   );
-
-  const handleChange = useCallback(
-    (e) => {
-      setError(null);
-      const onChange = { ...authData };
-      onChange.phone = e;
-      setAuthData(onChange);
-    },
-    [authData]
-  );
-
-  // Form submission handler
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      HandleSubmit({
-        setLoading,
-        authData,
-        setError,
-        navigate,
-        path: "phone-login",
-      });
-    },
-    [authData, navigate]
-  );
-
+  const LoginSchema = Yup.object().shape({
+    phone: Yup.number().required(
+      getText("phone no is requied", "رقم الهاتف مطلوب")
+    ),
+  });
   return (
     <MainLayout type="phone-login">
       <section
@@ -57,7 +39,7 @@ export const PhoneLogin = () => {
         sm:w-full "
       >
         <img
-          src={phoneIcon}
+          src="/assets/icon11.svg"
           alt="phone-icon"
           className="sm:w-[140px] md:w-[170px] lg:w-[170px] max-w-[170px]"
         />
@@ -70,58 +52,66 @@ export const PhoneLogin = () => {
             "الرجاء إدخال رقم هاتفك لإرسال رسالة التحقق إليك"
           )}
         </p>
-        <form
-          className="w-full flex flex-col items-center gap-4"
-          onSubmit={handleSubmit}
+        <Formik
+          initialValues={{ phone: "" }}
+          validationSchema={LoginSchema}
+          onSubmit={(values) =>
+            HandlePhoneLogin({
+              getText,
+              setLoading,
+              values,
+              setError,
+            })
+          }
         >
-          {error && (
-            <span
-              className={`text-center text-white flex items-center gap-3 justify-center w-fit bg-red-500 py-2 px-6  rounded-lg 
-            sm:text-sm
-            md:text-md
-            lg:text-base`}
-            >
-              {error}
-            </span>
+          {({ values, setFieldValue }) => (
+            <Form className="w-full flex flex-col items-center gap-4">
+              <div className="flex w-full items-center gap-1 flex-col justify-center">
+                {error && (
+                  <div className="flex items-center rounded-xl gap-3 text-error ">
+                    <MdOutlineErrorOutline size={20} />
+                    <span>{error}</span>
+                  </div>
+                )}
+                <Input
+                  setFieldValue={setFieldValue}
+                  value={values.phone}
+                  name="phone"
+                  containerStyle={`sm:!w-5/6 lg:!w-3/6 ${
+                    error && "!outline-red-300 !outline"
+                  } `}
+                  type="phone"
+                />
+              </div>
+              <SecondaryBtn
+                text={getText("Send Code", "ارسل رمز تحقق")}
+                type="submit"
+                loading={loading}
+                disabled={loading}
+              />
+              <div className="flex flex-col items-center justify-center gap-4 ">
+                <span
+                  className="text-primary-color1 font-medium capitalize
+          sm:text-xs md:text-md lg:text-base"
+                >
+                  {getText("or", "او")}
+                </span>
+                <p
+                  className="text-primary-color1 capitalize
+          sm:text-xs md:text-md lg:text-base"
+                >
+                  {getText("Sign Up With", "التسجيل عبر")}
+                  <Link
+                    to="/"
+                    className="underline font-semibold hover:text-primary-color1 duration-200 mx-1"
+                  >
+                    {getText("Email", "الايميل")}
+                  </Link>
+                </p>
+              </div>
+            </Form>
           )}
-          <Input
-            onChangeHandle={(e) => {
-              handleChange(e);
-            }}
-            value={authData.phone}
-            name="phone"
-            containerStyle={`sm:!w-5/6 lg:!w-3/6 ${
-              error && "!outline-red-300 !outline"
-            } `}
-            type="phone"
-          />
-          <SecondaryBtn
-            text={getText("Send Code", "ارسل رمز تحقق")}
-            type="submit"
-            loading={loading}
-            disabled={loading}
-          />
-          <div className="flex flex-col items-center justify-center ">
-            <span
-              className="text-primary-color1 font-medium capitalize
-          sm:text-xs md:text-md lg:text-base"
-            >
-              {getText("or", "او")}
-            </span>
-            <p
-              className="text-primary-color1 capitalize
-          sm:text-xs md:text-md lg:text-base"
-            >
-              {getText("Sign Up With", "التسجيل عبر")}
-              <Link
-                to="/"
-                className="underline font-semibold hover:text-primary-color1 duration-200 mx-1"
-              >
-                {getText("Email", "الايميل")}
-              </Link>
-            </p>
-          </div>
-        </form>
+        </Formik>
       </section>
     </MainLayout>
   );

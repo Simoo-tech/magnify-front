@@ -10,15 +10,21 @@ import MainLayout from "../../Layout/MainLayout";
 import { SecondaryBtn } from "../../components/Btns";
 // icons
 import { FaCheckCircle } from "react-icons/fa";
-import icon6 from "/assets/icon6.svg";
-import icon9 from "/assets/icon9.svg";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineError } from "react-icons/md";
 import { Input } from "../../components/Input";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useLocation } from "react-router-dom";
+import { preload } from "react-dom";
 
 export default function UploadPage() {
+  preload("/assets/icon6.svg", {
+    as: "image",
+  });
+  preload("/assets/icon9.svg", {
+    as: "image",
+  });
+
   const location = useLocation().pathname;
   const [images, setImages] = useState([]);
   const [msg, setMsg] = useState({});
@@ -162,7 +168,11 @@ export default function UploadPage() {
                 HandleDeleteFile({ i, images, setImages, setUploaded })
               }
             >
-              <LazyLoadImage src={icon6} alt="delete-photo-icon" width={25} />
+              <LazyLoadImage
+                src="/assets/icon6.svg"
+                alt="delete-photo-icon"
+                width={25}
+              />
             </button>
           )}
         </div>
@@ -222,7 +232,7 @@ export default function UploadPage() {
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
           >
             <img
-              src={icon9}
+              src="/assets/icon9.svg"
               className="sm:w-[100px] md:w-[150px] h-[110px] object-fill"
             />
             <input

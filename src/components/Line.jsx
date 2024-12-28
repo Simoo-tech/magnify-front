@@ -11,7 +11,7 @@ export const Line = ({ w, h, color }) => {
       <GoDotFill
         size={25}
         color={color ? color : "#2B5540"}
-        className="absolute border-[4px] rounded-full bg-white border-white
+        className="absolute border-[4px] rounded-full bg-white border-white z-30
               top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] "
       />
     </div>

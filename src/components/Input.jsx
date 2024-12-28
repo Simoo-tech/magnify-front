@@ -1,15 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useLang } from "../context/LangContext";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 /////// icons
 import { LuSearch } from "react-icons/lu";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { FiUploadCloud } from "react-icons/fi";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { Oval } from "react-loader-spinner";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { RiInformationFill } from "react-icons/ri";
 import "react-lazy-load-image-component/src/effects/opacity.css";
+import { Field } from "formik";
 
 export const Input = ({
   name,
@@ -17,30 +15,30 @@ export const Input = ({
   placeholder,
   type,
   value,
-  minLen,
-  maxLen,
   text,
   labelStlye,
   containerStyle,
   inputContainerStyle,
   inputStyle,
   chooses,
-  require,
-  forLabel,
+  errors,
+  touched,
+  setErr,
+  handleChange,
+  setFieldValue,
+  disabled,
 }) => {
   const { lang } = useLang();
   const [showPass, setShowPass] = useState(false);
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
   return (
-    <label
-      htmlFor={forLabel}
-      dir={langDir}
-      className={`${containerStyle} text-lightGreen w-full font-medium flex items-center flex-col gap-1 sm:text-xs md:text-sm lg:text-base rounded-[48px]`}
+    <div
+      className={`${containerStyle} max-w-[400px] text-lightGreen w-full font-medium flex items-center flex-col sm:text-xs md:text-sm lg:text-base rounded-[30px] gap-1 `}
     >
       {text && (
         <span
-          className={`px-4 ${labelStlye} flex self-start
+          className={`px-3 ${labelStlye} flex self-start justify-between w-full items-center
       sm:text-xs md:text-sm lg:text-base`}
         >
           {text}
@@ -49,18 +47,15 @@ export const Input = ({
       {type !== "phone" && type !== "select" && (
         <div
           dir={langDir}
-          className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-[10px] px-4 rounded-[48px]`}
+          className={`${inputContainerStyle} ${
+            errors && touched && "border-red-400"
+          } border-2 bg-lightGreen w-full flex items-center py-[10px] px-4 rounded-[30px] `}
         >
-          <input
-            autoComplete="email"
-            id={forLabel}
-            required={require}
-            minLength={minLen}
-            maxLength={maxLen}
+          <Field
+            disabled={disabled}
             onChange={onChangeHandle}
-            name={name}
             value={value}
-            dir={langDir}
+            name={name}
             type={type === "password" ? (showPass ? "text" : "password") : type}
             className={`${inputStyle} w-full text-textColor bg-transparent outline-none `}
             placeholder={placeholder}
@@ -72,10 +67,11 @@ export const Input = ({
                 <FaRegEyeSlash
                   className="text-icon"
                   color="#878787"
-                  size={17}
+                  size={20}
+                  height="100%"
                 />
               ) : (
-                <FaRegEye className="text-icon" color="#878787" size={17} />
+                <FaRegEye className="text-icon" color="#878787" size={20} />
               )}
             </button>
           )}
@@ -87,12 +83,17 @@ export const Input = ({
           )}
         </div>
       )}
+
       {type === "phone" && (
         <PhoneInput
           buttonStyle={{ outline: "none", border: "none" }}
           countryCodeEditable={false}
           country={"jo"}
-          onChange={onChangeHandle}
+          onChange={
+            (e) => setFieldValue("phone", e)
+            // Updates Formik's handleChange
+          }
+          enableSearch
           value={value}
           inputClass={lang}
           buttonClass={lang}
@@ -109,7 +110,13 @@ export const Input = ({
           chooses={chooses}
         />
       )}
-    </label>
+      {errors && touched && (
+        <div className="w-full flex items-center justify-start text-red-400  rounded-xl text-sm gap-1 px-1">
+          <RiInformationFill size={18} />
+          {errors}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -123,7 +130,7 @@ const SelectInput = ({
 }) => (
   <div
     dir={langDir}
-    className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[48px]`}
+    className={`${inputContainerStyle} bg-lightGreen w-full flex items-center py-3 px-4 rounded-[30px]`}
   >
     <select
       className="w-full h-full bg-transparent outline-none border-none sm:text-xs md:text-sm lg:text-base"

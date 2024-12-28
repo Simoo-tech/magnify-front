@@ -2,34 +2,60 @@ import axios from "axios";
 import { FaCheck, FaCheckCircle } from "react-icons/fa";
 import { MdOutlineError } from "react-icons/md";
 import cookie from "react-cookies";
+import { replace } from "react-router-dom";
 
 const userCookies = cookie.load("user_token");
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 // handle add new project
-export const AddProject = ({ setProjectInfo, projectInfo, ownerUser }) => {
-  setProjectInfo([
-    ...projectInfo,
-    {
-      folderName: ``,
-      projectNo: "",
-      projectName: "",
-      projectLoc: "",
-      projectArea: "",
-      projectHei: "",
-      consultant: "",
-      projectDura: "",
-      projectType: "",
-      projectImg: { name: "", path: "" },
-      projectOwner: ownerUser,
-      projectStatus: "done",
-      accessUser: [],
-    },
-  ]);
+const AddProject = async ({
+  values,
+  setProjectInfo,
+  projectInfo,
+  ownerUser,
+  setAddLoading,
+  setMsg,
+}) => {
+  setAddLoading(true);
+  await axios
+    .put(`${serverPath}client/${values.userName}`, values, {
+      headers: { token: `${userCookies}` },
+    })
+    .then((res) => {
+      setProjectInfo([
+        ...projectInfo,
+        {
+          folderName: ``,
+          projectNo: "",
+          projectName: "",
+          projectLoc: "",
+          projectArea: "",
+          projectHei: "",
+          consultant: "",
+          projectDura: "",
+          projectType: "",
+          projectImg: { name: "", path: "" },
+          projectOwner: ownerUser,
+          projectStatus: "done",
+          accessUser: [],
+        },
+      ]);
+    })
+    .catch((err) =>
+      setMsg({
+        active: true,
+        text: err.response.data.message,
+        type: "failed",
+        icon: MdOutlineError,
+      })
+    )
+    .finally(() => {
+      setAddLoading(false);
+    });
 };
 
 // handle remove project
-export const ProjectRem = ({ index, projectInfo, setProjectInfo }) => {
+const ProjectRem = ({ index, projectInfo, setProjectInfo }) => {
   const onRemove = [...projectInfo];
   onRemove.splice(index, 1);
   setProjectInfo(onRemove);
@@ -38,7 +64,7 @@ export const ProjectRem = ({ index, projectInfo, setProjectInfo }) => {
 ////////// API functions ////////////////
 
 // handle upload image
-export const HandleUploadImg = async ({
+const HandleUploadImg = async ({
   e,
   i,
   projectInfo,
@@ -105,17 +131,18 @@ export const HandleUploadImg = async ({
   }
 };
 // handle submit create new user
-export const HandleSubmitCreate = async ({
+const HandleSubmitCreate = async ({
   setLoading,
-  data,
-  projectInfo,
+  values,
   setMsg,
+  projectData,
+  navigate,
 }) => {
   setLoading(true);
   await axios
     .post(
       `${serverPath}auth/createuser`,
-      { ...data, projectInfo: projectInfo },
+      { ...values, projectData },
       {
         headers: { token: `${userCookies}` },
       }
@@ -128,9 +155,10 @@ export const HandleSubmitCreate = async ({
         icon: FaCheckCircle,
       });
       setTimeout(() => {
-        setMsg({});
-        window.location.assign(`/${userCookies}/dashboard`);
-      }, 1000);
+        navigate(`/${userCookies}/dashboard/${res.data.userName}/edit-user`, {
+          replace: true,
+        });
+      }, 500);
     })
     .catch((err) =>
       setMsg({
@@ -146,25 +174,25 @@ export const HandleSubmitCreate = async ({
 };
 
 // handle submit edit user
-export const HandleSubmitEdit = async ({
+const HandleSubmitEdit = async ({
   setLoading,
-  data,
-  projectInfo,
-  cleintData,
+  values,
   setMsg,
+  projectData,
+  setProjectInfo,
 }) => {
   setLoading(true);
-  const userNewData = { ...data, projectInfo: projectInfo };
 
   await axios
     .put(
-      `${serverPath}client/${cleintData.userName}`,
-      { ...userNewData },
+      `${serverPath}client/${values.userName}`,
+      { ...values, projectData },
       {
         headers: { token: `${userCookies}` },
       }
     )
     .then((res) => {
+      setProjectInfo(res.data.client.projectData);
       setMsg({
         active: true,
         text: res.data.message,
@@ -173,7 +201,6 @@ export const HandleSubmitEdit = async ({
       });
       setTimeout(() => {
         setMsg({});
-        window.location.assign(`/${userCookies}/dashboard`);
       }, 1000);
     })
     .catch((err) =>
@@ -190,12 +217,14 @@ export const HandleSubmitEdit = async ({
 };
 
 // handle add project acces
-export const HandleAddAccess = async ({
-  projectOwner,
+const HandleAddAccess = async ({
   projectID,
   accessEmail,
+  projectOwner,
   setMsg,
   setProjectInfo,
+  projectInfo,
+  index,
 }) => {
   await axios
     .post(
@@ -210,7 +239,10 @@ export const HandleAddAccess = async ({
       }
     )
     .then((res) => {
-      setProjectInfo(res.data.userOwner.projectInfo);
+      const updated = [...projectInfo];
+      updated[index].accessUser = res.data.accessUser;
+      setProjectInfo(updated);
+
       setMsg({
         active: true,
         text: res.data.message,
@@ -235,13 +267,12 @@ export const HandleAddAccess = async ({
 };
 
 // handle remove access email
-export const HandleRemoveAccess = async ({
+const HandleRemoveAccess = async ({
   projectID,
   accessEmail,
   index,
   projectInfo,
   setProjectInfo,
-  a,
   setMsg,
 }) => {
   await axios
@@ -256,9 +287,11 @@ export const HandleRemoveAccess = async ({
       }
     )
     .then((res) => {
-      const onRemove = [...projectInfo];
-      onRemove[index]["accessUser"].splice(a, 1);
-      setProjectInfo(onRemove);
+      const updated = [...projectInfo];
+      updated[index].accessUser = res.data.accessUser;
+      setProjectInfo(updated);
+      console.log(res.data);
+
       setMsg({
         active: true,
         text: res.data.message,
@@ -273,7 +306,7 @@ export const HandleRemoveAccess = async ({
 };
 
 // delete user
-export const HandleDelete = async ({ deleteUser, setPopUp }) => {
+const HandleDelete = async ({ deleteUser, setPopUp }) => {
   const header = { headers: { token: `${userCookies}` } };
   await axios
     .delete(`${serverPath}client/${deleteUser._id}`, header)
@@ -282,4 +315,15 @@ export const HandleDelete = async ({ deleteUser, setPopUp }) => {
       setPopUp(false);
     })
     .catch((err) => console.log(err));
+};
+
+export {
+  AddProject,
+  ProjectRem,
+  HandleUploadImg,
+  HandleSubmitCreate,
+  HandleSubmitEdit,
+  HandleAddAccess,
+  HandleRemoveAccess,
+  HandleDelete,
 };

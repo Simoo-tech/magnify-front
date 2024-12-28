@@ -1,11 +1,15 @@
 import React from "react";
-import logo from "/assets/logo/mainLogo2.svg";
 import { Line } from "../components/Line";
 import { useLang } from "../context/LangContext";
 import MainLayout from "../Layout/MainLayout";
 import LogoutReq from "../lib/LogoutReq";
+import { preload } from "react-dom";
 
 export default function Logout() {
+  preload("/assets/logo/mainLogo2.svg", {
+    as: "image",
+  });
+
   const { lang } = useLang();
 
   LogoutReq();
@@ -17,7 +21,7 @@ export default function Logout() {
         className="flex flex-col justify-center h-full items-center gap-20 container max-w-full"
       >
         <img
-          src={logo}
+          src="/assets/logo/mainLogo2.svg"
           className="sm:w-[100%] sm:max-w-[300px] md:max-w-full md:w-[350px] lg:w-[450px] xl:w-[550px]"
           alt="logo-logout"
         />

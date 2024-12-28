@@ -16,7 +16,7 @@ export function EditUser() {
   const {
     error,
     isLoading,
-    data: cleintData,
+    data: clientData,
   } = useQuery(
     ["fetchClientEdit", { cleintUserName }],
     () =>
@@ -42,5 +42,5 @@ export function EditUser() {
     return <NotFound />;
   }
 
-  return <CreateUser cleintData={cleintData} />;
+  return <CreateUser clientData={clientData} />;
 }

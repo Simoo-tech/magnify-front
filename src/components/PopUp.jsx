@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SecondaryBtn } from "./Btns";
-import logo from "/assets/logo/mainLogo2.svg";
 import { useLang } from "../context/LangContext";
+import { preload } from "react-dom";
 
 export const PopUp = ({
   iconImage,
@@ -15,6 +15,10 @@ export const PopUp = ({
   btnText,
   hidden,
 }) => {
+  preload("/assets/logo/mainLogo2.svg", {
+    as: "image",
+  });
+
   const [show, setShow] = useState(false);
   const { lang } = useLang();
 
@@ -38,7 +42,7 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img src={logo} alt="logo" />
+        <img src="/assets/logo/mainLogo2.svg" alt="logo" />
         {iconImage && (
           <img
             src={iconImage}

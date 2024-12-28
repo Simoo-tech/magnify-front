@@ -28,7 +28,7 @@ export const FooterLinks = () => {
   return (
     <footer
       id="bottom-links"
-      className="footer flex flex-row justify-between w-full bg-transparent gap-2 mb-3 container max-w-full"
+      className="footer flex flex-row justify-between w-full bg-transparent gap-2 mb-2 container max-w-full h-fit"
       dir={lang === "ar" ? "rtl" : "ltr"}
     >
       {links.map((link) => (

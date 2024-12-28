@@ -15,17 +15,22 @@ import { InputSearch } from "../components/inputSearch";
 import { Line } from "../components/Line";
 /////// layout
 import MainLayout from "../Layout/MainLayout";
-/////// assets
-import BackgroundImg from "/assets/background6.svg";
-import icon10 from "/assets/icon10.svg";
 /////// icons
 import { SecondaryBtn, SecondaryLink } from "../components/Btns";
 import { PopUp } from "../components/PopUp";
 import { CopyRight } from "../components/CopyRight";
+import { preload } from "react-dom";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function UserProjects() {
+  preload("/assets/icon10.svg", {
+    as: "image",
+  });
+  preload("/assets/background6.svg", {
+    as: "image",
+  });
+
   // user cookies
 
   const { lang } = useLang();
@@ -63,7 +68,7 @@ export default function UserProjects() {
   }
 
   // user project filter and map
-  const UserProjects = filter?.projectInfo
+  const UserProjects = filter?.projectData
     ?.filter((project) => {
       if (search) {
         return project?.projectName?.toLowerCase().includes(search);
@@ -116,7 +121,7 @@ export default function UserProjects() {
         <div
           key={i}
           id="project-info"
-          className={`grid w-full max-w-[350px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 lg:mb-36 grid-flow-row gap-6 group`}
+          className={`grid w-full max-w-[300px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 lg:mb-36 mt-10 grid-flow-row group`}
         >
           {/* project owner shape  */}
           {projectOwner !== filter.userName && (
@@ -135,7 +140,7 @@ export default function UserProjects() {
           {/* image holder */}
           <div
             id="project-image-holder "
-            className={`w-full h-full min-h-[200px] max-h-[350px] max-w-[350px] flex relative justify-between text-white capitalize rounded-3xl 
+            className={`w-full h-full min-h-[200px] max-h-[300px] max-w-[300px] flex relative justify-between text-white capitalize rounded-3xl 
               before:top-0 before:invisible before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent before:ease-in-out
               before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-10 before:duration-300 before:opacity-0
               group-hover:before:visible group-hover:before:opacity-100
@@ -143,7 +148,7 @@ export default function UserProjects() {
           >
             {projectImg?.path ? (
               <LazyLoadImage
-                placeholderSrc={BackgroundImg}
+                placeholderSrc="/assets/background6.svg"
                 effect="opacity"
                 className="rounded-3xl h-full w-full object-cover"
                 src={projectImg?.path}
@@ -168,9 +173,9 @@ export default function UserProjects() {
               {projectName}
             </span>
           </div>
-          <Line h="1px" w="80%" />
+          <Line h="0.5px" w="70%" />
           {/* project info */}
-          <div className="flex flex-col w-full gap-4 justify-center items-center px-5 pb-6">
+          <div className="flex flex-col w-full gap-4 justify-center items-center px-5 py-5">
             <div className="w-full grid grid-cols-2 place-items-center place-content-center gap-3">
               {projectsInfoText.map((project, li) => (
                 <p
@@ -260,12 +265,8 @@ export default function UserProjects() {
     });
 
   return (
-    <MainLayout overFlow="scroll" type="user-projects">
-      <section
-        id="projects-page"
-        className="flex flex-col w-full  py-4 container max-w-full
-      items-center justify-start relative gap-8 "
-      >
+    <MainLayout type="user-projects">
+      <section className="h-fit  relative w-full flex flex-col items-center container max-w-full gap-8 ">
         <h3
           id="user-welcome"
           className=" w-full  text-primary-color1 pb-5 border-solid md:border-b-[1px] border-lineColor-color2 
@@ -277,7 +278,7 @@ export default function UserProjects() {
         >
           {lang === "ar" ? "المشاريع" : "Your Projects "}
         </h3>
-        <div id="content" className="grid place-items-start gap-16 w-full ">
+        <div className="grid place-items-start gap-8 w-full max-w-[2000px] ">
           {/* search by name */}
           <div className=" flex w-full items-center justify-start">
             {/* list  */}
@@ -362,7 +363,6 @@ export default function UserProjects() {
           />
         )}
       </section>
-      <CopyRight />
     </MainLayout>
   );
 }
@@ -377,7 +377,7 @@ const ShowPorjectDates = ({
 }) => (
   <PopUp
     type="yes-no"
-    icon={<LazyLoadImage src={icon10} width={100} />}
+    icon={<LazyLoadImage src="/assets/icon10.svg" width={100} />}
     btnText={lang === "ar" ? "مشاهدة المشروع" : "view project"}
     hidden={!date}
     yesAction={() => {

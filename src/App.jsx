@@ -19,11 +19,13 @@ import { PhoneLogin } from "./pages/login-with-phone/PhoneLogin";
 import { VerifyOtp } from "./pages/login-with-phone/VerifyOtp";
 import ProdectedRouter from "./components/ProdectedRouter";
 import UploadPage from "./pages/Upload files/UploadPage";
+import { preload } from "react-dom";
 
 function App() {
+  preload("./fonts/PNU-Regular.ttf", { as: "font" });
+  preload("./fonts/Montserrat.ttf", { as: "font" });
   // set language
-  const { lang, setLang } = useLang();
-
+  const { lang } = useLang();
   return (
     <main
       id={lang === "ar" ? "arabic" : "english"}

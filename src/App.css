@@ -106,3 +106,12 @@ a:focus-visible,
   max-width: 250px;
   max-height: 200px !important;
 }
+
+#section-h {
+  min-height: calc(100dvh - 55px);
+}
+
+#content {
+  height: calc(100dvh - 130px);
+
+}

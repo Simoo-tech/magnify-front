@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
-import verifyOtpIcon from "/assets/icon12.svg";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useLang } from "../../context/LangContext";
 import { SecondaryBtn } from "../../components/Btns";
@@ -10,15 +9,19 @@ import { Loading } from "../../components/Loading";
 import axios from "axios";
 import { HandleResendOtp, HandleSubmitOtp } from "../../lib/LoginReq";
 import { MdErrorOutline } from "react-icons/md";
+import { preload } from "react-dom";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export const VerifyOtp = () => {
+  preload("/assets/icon12.svg", {
+    as: "image",
+  });
+
   const { lang } = useLang();
   const { id } = useParams();
   const [correctOtp, setCorrectOtp] = useState(null);
   const [errorOtp, setErrorOtp] = useState(null);
-  const [msg, setMsg] = useState();
   const [loading, setLoading] = useState(false);
   const [resloading, setResLoading] = useState(false);
   const [otpCheck, setOtpCheck] = useState(Array(6).fill(""));
@@ -91,18 +94,18 @@ export const VerifyOtp = () => {
         id="verify-otp"
         className="h-full flex flex-col items-center text-center justify-center container max-w-full
         lg:w-3/6 
-        md:w-4/6 md:gap-8
+        md:w-4/6 md:gap-7
         sm:w-full sm:gap-4 text-primary-color1 "
       >
         <img
-          src={verifyOtpIcon}
+          src="/assets/icon12.svg"
           alt="phone-icon"
           className="sm:w-[110px] md:w-[170px] lg:w-[180] max-w-[180px]"
         />
 
         {errorOtp && (
           <span
-            className={`4 text-center duration-300 text-red-400 flex items-center gap-3 justify-center w-fit border-2 border-red-400 py-2 px-6 rounded-lg font-medium
+            className={`text-center duration-300 text-red-400 flex items-center gap-3 justify-center w-fit border-2 border-red-400 py-1 px-6 rounded-lg font-medium
             sm:text-sm
             md:text-md
             lg:text-base`}
@@ -121,7 +124,7 @@ export const VerifyOtp = () => {
             "الرجاء إدخال رمز OTP المرسل إلى رقم هاتفك"
           )}
         </p>
-        <div id="inputs" className="flex space-x-2" onPaste={handlePaste}>
+        <div id="inputs" className="flex gap-2" onPaste={handlePaste}>
           {otpCheck.map((value, index) => (
             <input
               autoFocus={index === 0}
@@ -158,6 +161,7 @@ export const VerifyOtp = () => {
                 setCorrectOtp,
                 setErrorOtp,
                 setLoading,
+                getText,
               })
             }
             name={correctOtp && "verified"}

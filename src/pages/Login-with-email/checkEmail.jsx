@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -12,15 +12,24 @@ import { SecondaryBtn } from "../../components/Btns";
 import { Line } from "../../components/Line";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
+import { preload } from "react-dom";
 /////// icons
-import icon1 from "/assets/icon1.svg";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function CheckEmail() {
+  preload("/assets/icon1.svg", {
+    as: "image",
+  });
+
   const { id } = useParams();
   const { lang } = useLang();
   const [sending, setSending] = useState(false);
+  // Handle text based on language
+  const getText = useMemo(
+    () => (enText, arText) => lang === "en" || !lang ? enText : arText,
+    [lang]
+  );
 
   const {
     isLoading,
@@ -48,7 +57,7 @@ export default function CheckEmail() {
     <MainLayout type={"check-email"}>
       <section
         id="check-email"
-        className="flex flex-col items-center justify-center h-full container max-w-full
+        className="flex flex-col items-center justify-center h-full container max-w-[1000px]
         lg:w-6/12
         md:w-4/6 md:gap-14
         sm:w-11/12 sm:gap-8 "
@@ -56,7 +65,7 @@ export default function CheckEmail() {
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-10">
           <img
-            src={icon1}
+            src="/assets/icon1.svg"
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"
           />
@@ -67,18 +76,19 @@ export default function CheckEmail() {
               md:text-xl
               sm:text-lg"
           >
-            {lang === "ar" ? "تحقق من بريدك الإلكتروني" : "Check your email"}
+            {getText("Check your email", "تحقق من بريدك الإلكتروني")}
           </h1>
         </div>
         <p
           className="text-primary-color1 font-normal text-center
-          lg:text-base
-          md:text-sm
-          sm:text-xs"
+          lg:text-lg
+          md:text-md
+          sm:text-sm"
         >
-          {lang === "ar"
-            ? "لقد أرسلنا لك رسالة تأكيد بالبريد الإلكتروني تفيد بأنك أنت، وسيتم تسليم الرسالة خلال 10 دقائق"
-            : "We sent you a confirmation email that it is you, The message will be delivered within 10 minutes"}
+          {getText(
+            "We sent you a confirmation email that it is you, The message will be delivered within 10 minutes",
+            "لقد أرسلنا لك رسالة تأكيد بالبريد الإلكتروني تفيد بأنك أنت، وسيتم تسليم الرسالة خلال 10 دقائق"
+          )}
         </p>
         {/* line */}
         <Line w="100%" h="2px" />
@@ -93,15 +103,16 @@ export default function CheckEmail() {
         >
           <span
             className="text-base text-primary-color1 truncate
-            sm:text-xs 
-            md:text-base"
+            sm:text-sm 
+            md:text-md
+            lg:text-lg"
           >
-            {lang === "ar"
-              ? "إذا لم تتلق رسالة"
-              : "If you do not receive a message"}
+            {getText("If you do not receive a message", "إذا لم تتلق رسالة")}
           </span>
           <SecondaryBtn
             type={"button"}
+            style="md:min-w-[310px] md:w-fit
+              sm:min-w-[250px] sm:w-full"
             action={
               !verified
                 ? (e) => {
@@ -109,6 +120,7 @@ export default function CheckEmail() {
                     HandleSendVerify({
                       setSending,
                       email,
+                      getText,
                     });
                   }
                 : (e) => {
@@ -116,11 +128,12 @@ export default function CheckEmail() {
                     HandleSendReset({
                       setSending,
                       email,
+                      getText,
                     });
                   }
             }
             loading={sending}
-            text={lang === "ar" ? "اعداة الارسال" : "Resend Verifictaion Link"}
+            text={getText("Resend Verifictaion Link", "اعداة الارسال")}
           />
         </div>
       </section>

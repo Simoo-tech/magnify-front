@@ -2,66 +2,65 @@ import React, { useMemo, useCallback } from "react";
 import { Input } from "../../../components/Input";
 import { useLang } from "../../../context/LangContext";
 
-export default function UserInfo({ data, setData, setMsg }) {
+export default function UserInfo({
+  setMsg,
+  userValues,
+  touched,
+  errors,
+  handleChange,
+  setFieldValue,
+}) {
   const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
-  // Optimized handle change
-  const HandleChangeUser = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setData((prev) => ({ ...prev, [name]: value }));
-      setMsg({});
-    },
-    [setData, setMsg]
-  );
-  const { email, phone, userName, fname, lname } = data;
+  const { email, phone, userName, fname, lname, userID } = userValues;
   const InputFieldsUserInfo = useMemo(
     () => [
       {
         type: "text",
         name: "userName",
-        style: "col-span-full",
+        style: "col-span-full !max-w-full",
         text: lang === "ar" ? "اسم المستخدم" : "User Name",
-        value: userName || "",
-        onChange: HandleChangeUser,
+        value: userName,
+        errors: errors.userName,
+        touched: touched.userName,
       },
       {
         type: "text",
         name: "fname",
         text: lang === "ar" ? "الاسم الاول" : "First Name",
-        value: fname || "",
-        onChange: HandleChangeUser,
+        value: fname,
+        style: "!max-w-full",
+        errors: errors.fname,
+        touched: touched.fname,
       },
       {
         type: "text",
         name: "lname",
         text: lang === "ar" ? "الاسم الاخير" : "Last Name",
-        value: lname || "",
-        onChange: HandleChangeUser,
+        value: lname,
+        style: "!max-w-full",
+        errors: errors.lname,
+        touched: touched.lname,
       },
       {
         type: "email",
         name: "email",
         text: lang === "ar" ? "البريد الالكتروني" : "E-mail",
-        value: email || "",
-        onChange: (e) => {
-          const emailCap = e.target.value.toLowerCase();
-          setData((prev) => ({ ...prev, email: emailCap }));
-          setMsg({});
-        },
+        value: email,
+        style: "!max-w-full",
+        errors: errors.email,
+        touched: touched.email,
       },
       {
         type: "phone",
         text: lang === "ar" ? "رقم الهاتف" : "Phone Number",
-        value: `${phone || ""}`,
-        onChange: (e) => {
-          setData((prev) => ({ ...prev, phone: e }));
-          setMsg({});
-        },
+        value: `${phone}`,
+        style: "!max-w-full",
+        errors: errors.phone,
       },
     ],
-    [lang, data, HandleChangeUser, setData, setMsg]
+    [lang, handleChange, userValues]
   );
 
   return (
@@ -77,13 +76,20 @@ export default function UserInfo({ data, setData, setMsg }) {
       <div id="user-data" className="grid md:grid-cols-2 gap-5">
         {InputFieldsUserInfo.map((input, i) => (
           <Input
+            disabled={userID && input.name === "userName"}
+            errors={input.errors}
+            touched={input.touched}
+            setFieldValue={setFieldValue}
             require={true}
             key={i}
             type={input.type}
             name={input.name}
             value={input.value}
             text={input.text}
-            onChangeHandle={input.onChange}
+            onChangeHandle={(e) => {
+              handleChange(e);
+              setMsg({});
+            }}
             containerStyle={`text-primary-color2 ${input.style}`}
             inputContainerStyle="!px-6"
             labelStlye="sm:text-sm md:!font-[18px]"

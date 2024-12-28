@@ -1,10 +1,14 @@
 import React from "react";
-import image from "/assets/not-found.svg";
 import { useLang } from "../context/LangContext";
 import MainLayout from "../Layout/MainLayout";
 import { useNavigate } from "react-router-dom";
+import { preload } from "react-dom";
 
 export function NotFound() {
+  preload("/assets/not-found.svg", {
+    as: "image",
+  });
+
   const { lang } = useLang();
   const navigate = useNavigate();
   return (
@@ -15,18 +19,17 @@ export function NotFound() {
       >
         {/* image */}
         <img
-          src={image}
-          className="sm:w-[180px] md:w-[200px] lg:w-[250px]"
+          src="/assets/not-found.svg"
+          className="sm:w-[180px] md:w-[200px] lg:w-[230px]"
           alt="not-found-image"
         />
         {/* text */}
-        <div className="flex flex-col justify-center items-center gap-8">
+        <div className="flex flex-col justify-center items-center gap-4">
           <h5
             id="page-not-found-title"
             className="text-primary-color1 capitalizefont-semibold text-center
               sm:text-[65px]
-              md:text-[85px]
-              lg:text-[100px] "
+              md:text-[85px]"
           >
             404
           </h5>

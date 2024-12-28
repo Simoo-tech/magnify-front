@@ -74,22 +74,19 @@ const UsersTable = ({
           <td className="p-2 truncate border border-primary-color1">
             {user.email}
           </td>
-          <td
-            dir={langDir}
-            className="p-2 truncate border-y border-primary-color1"
-          >
+          <td dir="ltr" className="p-2 truncate border-y border-primary-color1">
             {user.phone ? `+${user.phone}` : "none"}
           </td>
           <td className="p-3 text-center border border-primary-color1">
             {
-              user.projectInfo.filter(
+              user.projectData.filter(
                 (proj) => proj.projectOwner === user.userName
               ).length
             }
           </td>
           <td className="p-3 text-center border-y border-primary-color1">
             {
-              user.projectInfo.filter(
+              user.projectData.filter(
                 (proj) => proj.projectOwner !== user.userName
               ).length
             }

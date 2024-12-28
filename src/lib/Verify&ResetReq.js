@@ -2,15 +2,21 @@ import axios from "axios";
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 // handle send reset password submit
-export const HandleSendReset = async ({ email, setSending, setErr }) => {
+export const HandleSendReset = async ({
+  values,
+  setSending,
+  setErr,
+  getText,
+  email,
+}) => {
   setSending(true);
   await axios
-    .post(`${serverPath}user/send-reset-password`, { email })
+    .post(`${serverPath}user/send-reset-password`, values ? values : { email })
     .then((res) => {
       return window.location.replace(`/check-email/${res.data.verifyLink}`);
     })
-    .catch((err) => {
-      setErr(err.response.data.message);
+    .catch(() => {
+      setErr(getText("Email not found", "بريد الالكتروني غير موجود"));
     })
     .finally(() => setSending(false));
 };

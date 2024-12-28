@@ -6,17 +6,21 @@ import { useLang } from "../../context/LangContext";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
 /////// icons
-import icon4 from "/assets/icon4.svg";
 /////// functions
 import { HandleSendVerify } from "../../lib/Verify&ResetReq";
 /////// components
 import { Loading } from "../../components/Loading";
 import { NotFound } from "../../pages/NotFound";
 import { SecondaryBtn } from "../../components/Btns";
+import { preload } from "react-dom";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function SendVerifyEmail() {
+  preload("/assets/icon4.svg", {
+    as: "image",
+  });
+
   const { id } = useParams();
   const { lang } = useLang();
   const [sending, setSending] = useState(false);
@@ -42,7 +46,7 @@ export default function SendVerifyEmail() {
     <MainLayout type={"verify-email"}>
       <section
         id="check-email"
-        className=" flex flex-col items-center justify-center h-full container max-w-full
+        className=" flex flex-col items-center justify-center h-full container max-w-[1000px]
         lg:w-3/6 
         md:w-4/6 md:gap-14 
         sm:w-full sm:gap-8 "
@@ -50,7 +54,7 @@ export default function SendVerifyEmail() {
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-5 w-full">
           <img
-            src={icon4}
+            src="/assets/icon4.svg"
             alt="check-email-icon"
             className="sm:w-[100px] md:w-[120px] lg:w-[120px] xl:w-[140px]"
           />
@@ -58,7 +62,7 @@ export default function SendVerifyEmail() {
             className="font-semibold text-primary-color1 truncate
               xl:text-2xl
               lg:text-xl
-              sm:text-[24px]"
+              sm:text-base"
           >
             {lang === "ar"
               ? "تحقق من بريدك الإلكتروني"
@@ -66,9 +70,10 @@ export default function SendVerifyEmail() {
           </h1>
         </div>
         <div
+          dir="ltr"
           className="text-primary-color1 font-normal text-center w-full
-          xl:text-[20px]
-          lg:text-[18px]
+          xl:text-lg
+          lg:text-base
           md:text-sm
           sm:text-xs "
         >
@@ -77,7 +82,7 @@ export default function SendVerifyEmail() {
               ? ` :بريدك الإلكتروني Magnify يرجى التأكيد على أنك تريد استخدام هذا كعنوان بريد إلكتروني لحسابك في `
               : `Please confirm that you want to use this as your magnify account email address. your email:`}
           </span>
-          <b className="mx-1">{email}</b>
+          <span className="mx-1 font-semibold">{email}</span>
         </div>
         {/* button */}
         <div
@@ -90,7 +95,8 @@ export default function SendVerifyEmail() {
         >
           <span
             className="text-primary-color1 truncate
-            md:text-sm
+            lg:text-base
+            md:text-md
             sm:text-xs "
           >
             {lang === "ar"
@@ -99,9 +105,8 @@ export default function SendVerifyEmail() {
           </span>
           <SecondaryBtn
             type={"button"}
-            style="lg:text-sm !py-2 truncate
-              md:min-w-[310px] md:w-fit
-              sm:text-xs sm:min-w-[250px] sm:w-full"
+            style="md:min-w-[310px] md:w-fit
+              sm:min-w-[250px] sm:w-full"
             action={(e) => {
               e.preventDefault();
               HandleSendVerify({

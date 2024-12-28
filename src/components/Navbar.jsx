@@ -1,14 +1,18 @@
 import React, { useCallback } from "react";
 import { useLang } from "../context/LangContext";
 import cookie from "react-cookies";
-/////// assets
-import mainlogo from "/assets/logo/mainLogo2.svg";
-import logo from "/assets/logo/mainLogo.svg";
 /////// icons
 import { GrLanguage } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
+import { preload } from "react-dom";
 
 const Navbar = ({ setPopUp, logoStyle, type }) => {
+  preload("/assets/logo/mainLogo.svg", {
+    as: "image",
+  });
+  preload("/assets/logo/mainLogo2.svg", {
+    as: "image",
+  });
   const { lang, setLang } = useLang();
 
   // user cookies
@@ -29,13 +33,13 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
   return !user || type === "not-found" ? (
     <nav
       dir={langDir}
-      className={`flex container max-w-full ${
+      className={`flex container max-w-full static top-0 h-fit mt-3 ${
         logoStyle ? "justify-between" : "justify-end"
       } items-center w-full `}
     >
       {logoStyle && (
         <img
-          src={mainlogo}
+          src="/assets/logo/mainLogo2.svg"
           alt="magnify-logo"
           className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
         />
@@ -53,8 +57,12 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
       </button>
     </nav>
   ) : (
-    <nav className=" items-center flex justify-between bg-primary-color1 container max-w-full py-3 row-span-1 static top-0 h-fit">
-      <img src={logo} alt="magnify-logo" className="sm:w-[90px] md:w-[110px]" />
+    <nav className=" items-center flex justify-between bg-primary-color1 container max-w-full py-3 static top-0 h-fit">
+      <img
+        src="/assets/logo/mainLogo.svg"
+        alt="magnify-logo"
+        className="sm:w-[90px] md:w-[110px]"
+      />
       <div
         className="flex justify-center items-center   
       md:gap-5

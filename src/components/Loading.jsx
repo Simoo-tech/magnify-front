@@ -1,5 +1,4 @@
 import React from "react";
-import video1 from "/assets/logo animation.mp4";
 
 export const Loading = () => {
   return (
@@ -11,7 +10,7 @@ export const Loading = () => {
         muted
         loop
       >
-        <source src={video1} type="video/mp4" />
+        <source src="/assets/logo animation.mp4" type="video/mp4" />
       </video>
     </div>
   );

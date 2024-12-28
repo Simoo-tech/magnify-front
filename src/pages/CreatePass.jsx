@@ -9,64 +9,19 @@ import { Input } from "../components/Input";
 import { NotFound } from "../pages/NotFound";
 import { Loading } from "../components/Loading";
 import { PopUp } from "../components/PopUp";
-import icon2 from "/assets/icon2.svg";
 import { MdErrorOutline } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import cookie from "react-cookies";
 import MainLayout from "../Layout/MainLayout";
+import { preload } from "react-dom";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function CreatePass() {
   const { id } = useParams();
-  const { isLoading, isError, data } = useQuery(
-    "userVerify",
-    () => axios.get(`${serverPath}user/verify/${id}`),
-    {
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      retry: false,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 60 * 24,
-    }
-  );
-  console.log(data);
   const { lang } = useLang();
-  const [formState, setFormState] = useState({
-    userPass: { password: "", passwordcon: "" },
-    error: "",
-    popUp: false,
-    loading: false,
-  });
-
-  const langDir = lang === "ar" ? "rtl" : "ltr";
-
-  const handleChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setFormState((prev) => ({
-        ...prev,
-        userPass: { ...prev.userPass, [name]: value },
-        error: "",
-      }));
-    },
-    [setFormState]
-  );
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      HandleSubmit({
-        setError: (error) => setFormState((prev) => ({ ...prev, error })),
-        data,
-        setLoading: (loading) => setFormState((prev) => ({ ...prev, loading })),
-        userPass: formState.userPass,
-        setPopUp: () => setFormState((prev) => ({ ...prev, popUp: true })),
-      });
-    },
-    [data, formState.userPass]
-  );
-
   const listInstructions = useMemo(
     () => [
       {
@@ -83,17 +38,40 @@ export default function CreatePass() {
     ],
     [lang]
   );
+  preload("/assets/icon2.svg", {
+    as: "image",
+  });
+  // Handle text based on language
+  const getText = useMemo(
+    () => (enText, arText) => lang === "en" || !lang ? enText : arText,
+    [lang]
+  );
+  const {
+    isLoading,
+    isError,
+    data: user,
+  } = useQuery(
+    "userVerify",
+    () => axios.get(`${serverPath}user/verify/${id}`).then((res) => res.data),
+    {
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 24,
+    }
+  );
+
+  const [popUp, setPopUp] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (isError) return <NotFound />;
   if (isLoading) return <Loading />;
 
-  const { userPass, error, popUp, loading } = formState;
-
   return (
     <MainLayout type="create-password">
       <section
-        dir={langDir}
-        className="flex items-center flex-col justify-center container max-w-full sm:w-full h-full sm:gap-16 lg:gap-16"
+        className="flex items-center flex-col justify-around container max-w-full sm:w-full h-full max-h-[600px] sm:gap-16 lg:gap-16"
         id="create-new-password"
       >
         {popUp && (
@@ -103,7 +81,7 @@ export default function CreatePass() {
                 ? "لقد تم تغيير كلمة المرور الخاصة بك بنجاح"
                 : "Your password has been changed successfully"
             }
-            iconImage={icon2}
+            iconImage="/assets/icon2.svg"
             action={() => {
               window.location.replace("/");
               cookie.remove("user_token", {
@@ -114,128 +92,157 @@ export default function CreatePass() {
           />
         )}
         <h2 className="text-center text-primary-color1 capitalize font-bold flex flex-col items-center gap-2 truncate sm:text-lg md:text-xl lg:text-2xl">
-          {lang === "ar" ? "انشاء كلمة مرور جديدة" : "create new password"}
+          {getText("create new password", "انشاء كلمة مرور جديدة")}
         </h2>
-        <Form
-          userPass={userPass}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
+        <FormContainer
           lang={lang}
-          error={error}
-          setError={(error) => setFormState((prev) => ({ ...prev, error }))}
           listInstructions={listInstructions}
           loading={loading}
+          setLoading={setLoading}
+          setPopUp={setPopUp}
+          user={user}
         />
       </section>
     </MainLayout>
   );
 }
 
-const Form = ({
-  userPass,
-  handleChange,
-  handleSubmit,
+const FormContainer = ({
   lang,
-  error,
   listInstructions,
   loading,
+  setLoading,
+  setPopUp,
+  user,
 }) => {
-  const langDir = lang === "ar" ? "rtl" : "ltr";
+  // Handle text based on language
+  const getText = useMemo(
+    () => (enText, arText) => lang === "en" || !lang ? enText : arText,
+    [lang]
+  );
+
+  const CreatePassSchema = Yup.object().shape({
+    password: Yup.string()
+      .required(getText("Password is required", "كلمة المرور مطلوبة"))
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d[\]{};:=<>_+^#$@!%*?&]/,
+        getText("Weak password", "كلمة المرور ضعيفة")
+      )
+      .min(
+        8,
+        getText(
+          "Password must be at least 8 characters",
+          "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل"
+        )
+      )
+      .max(
+        16,
+        getText(
+          "Password must be 16 characters only",
+          "يجب أن تتكون كلمة المرور من 16 حرفًا فقط"
+        )
+      ),
+    passwordcon: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      getText("Password must match", "يجب أن تتطابق كلمات المرور")
+    ),
+  });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex justify-around flex-col items-center relative  
-      sm:gap-10 md:gap-20 
-      sm:w-full md:w-11/12 lg:w-9/12"
+    <Formik
+      initialValues={{ password: "", passwordcon: "" }}
+      validationSchema={CreatePassSchema}
+      onSubmit={(values) =>
+        HandleSubmit({
+          user,
+          setLoading,
+          values,
+          setPopUp,
+        })
+      }
     >
-      {error && (
-        <span
-          dir="ltr"
-          className="text-center text-white absolute -top-14 flex items-center gap-2 justify-center bg-red-500 py-2 px-6 rounded-xl font-normal md:text-sm sm:text-xs"
+      {({ values, errors, touched, handleChange }) => (
+        <Form
+          className="flex justify-around flex-col items-center relative h-full
+        sm:gap-10 md:gap-20 
+        sm:w-full md:w-11/12 lg:w-9/12"
         >
-          <MdErrorOutline size={20} />
-          {error}
-        </span>
-      )}
-      <div
-        dir="ltr"
-        className="flex w-full h-full items-center justify-center sm:flex-col gap-8 md:flex-row"
-      >
-        <div
-          id="inputs-container"
-          className="flex flex-col items-center gap-5 sm:w-full md:w-5/12 xl:pr-20"
-        >
-          <Input
-            labelStlye="text-primary-color1"
-            maxLen={16}
-            minLen={8}
-            name="password"
-            onChangeHandle={handleChange}
-            required
-            type="password"
-            value={userPass.password}
-            text={lang === "ar" ? "كلمة مرور" : "Password"}
-          />
-          <Input
-            labelStlye=" text-primary-color1"
-            maxLen={16}
-            minLen={8}
-            name="passwordcon"
-            onChangeHandle={handleChange}
-            required
-            type="password"
-            value={userPass.passwordcon}
-            text={lang === "ar" ? "أعد إدخال كلمة السر" : "Retype Password"}
-          />
+          <div className="flex w-full h-full items-center justify-center sm:flex-col gap-8 md:flex-row">
+            <div
+              id="inputs-container"
+              className="flex flex-col items-center gap-5 sm:w-full md:w-5/12 xl:pr-20"
+            >
+              <Input
+                onChangeHandle={(e) => handleChange(e)}
+                errors={errors.password}
+                touched={touched.password}
+                labelStlye="text-primary-color1"
+                name="password"
+                type="password"
+                value={values.password}
+                text={getText("Password", "كلمة مرور")}
+              />
+              <Input
+                onChangeHandle={(e) => handleChange(e)}
+                errors={errors.passwordcon}
+                touched={touched.passwordcon}
+                labelStlye=" text-primary-color1"
+                name="passwordcon"
+                type="password"
+                value={values.passwordcon}
+                text={getText("Retype Password", "أعد إدخال كلمة السر")}
+              />
+              <SecondaryBtn
+                type="submit"
+                style="sm:min-w-full sm:!py-2 md:hidden"
+                text={getText("Set new password", "انشاء كلمة مرور جديدة")}
+                loading={loading}
+                id="focus-btn-2"
+                disabled={!values.password || !values.passwordcon || loading}
+              />
+            </div>
+            <div
+              id="line"
+              className="relative sm:w-full sm:h-[1px] md:w-[1px] md:h-full"
+            >
+              <hr className="rounded-xl bg-primary-color2 relative sm:w-full sm:h-[1px] md:w-[1px] md:h-full" />
+              <GoDotFill
+                size={25}
+                color="#2B5540"
+                className="absolute border-[4px] rounded-full bg-white border-white top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
+              />
+            </div>
+            <div
+              id="instruction"
+              className="justify-center flex  flex-col sm:w-full sm:items-center md:h-5/6 md:w-5/12 md:max-w-full lg:pl-20 items-start"
+            >
+              <h3 className="mb-3 font-semibold text-primary-color1 md:text-lg sm:text-base">
+                {lang === "ar"
+                  ? " كلمة المرور يجب ان تكون:"
+                  : "Password must be:"}
+              </h3>
+              <ol className="list-inside list-item flex-col capitalize space-y-1 text-base">
+                {listInstructions.map((list, index) => (
+                  <li
+                    key={index}
+                    className="list-disc text-primary-color1 sm:text-sm md:text-md lg:text-base"
+                  >
+                    {list.text}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
           <SecondaryBtn
+            id="focus-btn-1"
+            disabled={!values.password || !values.passwordcon || loading}
             type="submit"
-            style="sm:min-w-full sm:!py-2 md:hidden"
+            style="md:flex sm:hidden !min-w-[280px]"
             text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
             loading={loading}
-            id="focus-btn-2"
-            disabled={!userPass.password || !userPass.passwordcon}
           />
-        </div>
-        <div
-          id="line"
-          className="relative sm:w-full sm:h-[1px] md:w-[1px] md:h-full"
-        >
-          <hr className="rounded-xl bg-primary-color2 relative sm:w-full sm:h-[1px] md:w-[1px] md:h-full" />
-          <GoDotFill
-            size={25}
-            color="#2B5540"
-            className="absolute border-[4px] rounded-full bg-white border-white top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
-          />
-        </div>
-        <div
-          dir={langDir}
-          id="instruction"
-          className="justify-center flex  flex-col sm:w-full sm:items-center md:h-5/6 md:w-5/12 md:max-w-full lg:pl-20 items-start"
-        >
-          <h3 className="mb-3 font-semibold text-primary-color1 md:text-lg sm:text-base">
-            {lang === "ar" ? " كلمة المرور يجب ان تكون:" : "Password must be:"}
-          </h3>
-          <ol className="list-inside list-item flex-col capitalize space-y-1 text-base">
-            {listInstructions.map((list, index) => (
-              <li
-                key={index}
-                className="list-disc text-primary-color1 sm:text-sm md:text-md lg:text-base"
-              >
-                {list.text}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-      <SecondaryBtn
-        id="focus-btn-1"
-        disabled={!userPass.password || !userPass.passwordcon}
-        type="submit"
-        style="md:flex sm:hidden !min-w-[280px]"
-        text={lang === "ar" ? "انشاء كلمة مرور جديدة" : "Set new password"}
-        loading={loading}
-      />
-    </form>
+        </Form>
+      )}
+    </Formik>
   );
 };

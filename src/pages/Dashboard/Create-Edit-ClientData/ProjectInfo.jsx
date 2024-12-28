@@ -21,7 +21,7 @@ export default function ProjectInfo({
   projectInfo,
   setProjectInfo,
   setMsg,
-  data,
+  values,
 }) {
   const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
@@ -85,7 +85,7 @@ export default function ProjectInfo({
 
   // projects info inputs
   const renderProject = useMemo(() => {
-    return projectInfo.map((project, index) => {
+    return projectInfo?.map((project, index) => {
       // inputs fields
       const InputFields = [
         {
@@ -210,7 +210,7 @@ export default function ProjectInfo({
           desc: lang === "ar" ? "رفع صورة" : "Click to upload",
         },
       ];
-      if (project.projectOwner !== data.userName) {
+      if (project.projectOwner !== values.userName) {
         return (
           <div
             key={index}
@@ -280,12 +280,12 @@ export default function ProjectInfo({
           id="project-info"
           dir={langDir}
           className={`${
-            project.projectOwner !== data.userName &&
+            project.projectOwner !== values.userName &&
             "before:absolute before:w-full before:h-full before:bg-white/50 before:z-40 "
           } gap-7 flex flex-col border-t-2 pt-4 border-lineColor-color1 relative
           first-of-type:border-none first-of-type:p-0`}
         >
-          {project.projectOwner !== data.userName && (
+          {project.projectOwner !== values.userName && (
             <span className="absolute top-[50%] left-[50%] z-40 text-xl capitalize font-bold">
               {project.projectOwner}
             </span>
@@ -316,7 +316,7 @@ export default function ProjectInfo({
           </div>
           {/* Project Info Inputs */}
           <div
-            id="project-data"
+            id="project-values"
             className="grid place-items-center justify-items-center md:grid-cols-2 pl gap-8"
           >
             {InputFields.map((input, i) => {
@@ -329,7 +329,7 @@ export default function ProjectInfo({
                     project={project}
                     projectInfo={projectInfo}
                     setProjectInfo={setProjectInfo}
-                    data={data}
+                    values={values}
                     setMsg={setMsg}
                   />
                 );
@@ -338,7 +338,7 @@ export default function ProjectInfo({
                 return project.projectStatus === "done" ? (
                   <Input
                     key={i}
-                    containerStyle="text-primary-color2 col-span-full"
+                    containerStyle="text-primary-color2 !max-w-full"
                     text={lang === "ar" ? "تاريخ المشروع" : "Project Date"}
                     name="projectDate"
                     type="date"
@@ -346,9 +346,7 @@ export default function ProjectInfo({
                       lang === "ar" ? "تاريخ المشروع" : "project date"
                     }
                     onChangeHandle={(e) => {
-                      {
-                        HandleChangeProject(e, index);
-                      }
+                      HandleChangeProject(e, index);
                     }}
                     value={
                       project.projectDate
@@ -396,11 +394,9 @@ export default function ProjectInfo({
                     forLabel={input.name + index}
                     name={input.name}
                     onChangeHandle={(e) => {
-                      {
-                        HandleChangeProject(e, input.index);
-                      }
+                      HandleChangeProject(e, input.index);
                     }}
-                    containerStyle={`text-primary-color2 ${
+                    containerStyle={`text-primary-color2 !max-w-full ${
                       input.name === "projectDate" && "col-span-full"
                     } ${input.style}`}
                   />
@@ -414,7 +410,7 @@ export default function ProjectInfo({
   }, [projectInfo, setProjectInfo]);
 
   return (
-    renderProject.length > 0 && (
+    renderProject?.length > 0 && (
       <div
         id="projects-info"
         className="pt-16 w-full flex flex-col gap-10 border-t-2 border-lineColor-color1
@@ -474,6 +470,7 @@ const ProjectSubDates = ({
                 type="date"
                 placeholder={lang === "ar" ? "تاريخ المشروع" : "project date"}
                 value={date ? new Date(date).toISOString().split("T")[0] : date}
+                containerStyle="!max-w-full "
               />
               {/* delete date from sub dates */}
               <button
@@ -522,126 +519,129 @@ const ProjectEmailAccess = ({
   index,
   projectInfo,
   setProjectInfo,
-  data,
+  values,
   setMsg,
 }) => {
   const { lang } = useLang();
   const [EmailAccErr, setEmailAccErr] = useState();
 
   return (
-    <div className="flex col-span-full flex-col w-full items-center py-4 ">
-      <span className="border-t-2 pt-4 border-lineColor-color1 mb-4 w-[95%]" />
-      <h4
-        className="font-semibold text-start w-full text-primary-color1 rounded-lg capitalize mb-3
+    project._id && (
+      <div className="flex col-span-full flex-col w-full items-center py-4 ">
+        <span className="border-t-2 pt-4 border-lineColor-color1 mb-4 w-[95%]" />
+        <h4
+          className="font-semibold text-start w-full text-primary-color1 rounded-lg capitalize mb-3
         md:text-lg
         sm:text-base"
-      >
-        {lang === "ar"
-          ? "اعطاء صلاحية لمشاهدة المشروع"
-          : "Add Access To New Users"}
-      </h4>
-      <div
-        id="emails"
-        className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4 items-center center"
-      >
-        {project?.accessUser?.map((projectAccess, a) => {
-          return (
-            <div className="relative" key={a}>
-              <Input
-                name="access-user"
-                type="email"
-                inkey={a}
-                value={projectAccess.email}
-                placeholder={
-                  lang === "ar" ? "ادخل بريد الكتروني" : "Enter email address"
-                }
-                onChangeHandle={(e) => {
-                  const onChange = [...projectInfo];
-                  onChange[index]["accessUser"][a].email = e.target.value;
-                  setProjectInfo(onChange);
-                  setMsg({});
-                }}
-                containerStyle={`w-full col-span-full `}
-              />
-              {/* add & remove email buttons */}
-              <div
-                className={`absolute h-full items-center flex gap-2 ${
-                  lang === "ar" ? "left-4" : "right-4"
-                } top-[50%] translate-y-[-50%]`}
-              >
-                {!projectAccess._id && (
+        >
+          {lang === "ar"
+            ? "اعطاء صلاحية لمشاهدة المشروع"
+            : "Add Access To New Users"}
+        </h4>
+        <div
+          id="emails"
+          className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-4 items-center center"
+        >
+          {project?.accessUser?.map((projectAccess, a) => {
+            return (
+              <div className="relative" key={a}>
+                <Input
+                  name="access-user"
+                  type="email"
+                  inkey={a}
+                  value={projectAccess.email}
+                  placeholder={
+                    lang === "ar" ? "ادخل بريد الكتروني" : "Enter email address"
+                  }
+                  onChangeHandle={(e) => {
+                    const onChange = [...projectInfo];
+                    onChange[index]["accessUser"][a].email = e.target.value;
+                    setProjectInfo(onChange);
+                    setMsg({});
+                  }}
+                  containerStyle="w-full !max-w-full col-span-full"
+                />
+                {/* add & remove email buttons */}
+                <div
+                  className={`absolute h-full items-center flex gap-2 ${
+                    lang === "ar" ? "left-4" : "right-4"
+                  } top-[50%] translate-y-[-50%]`}
+                >
+                  {!projectAccess._id && (
+                    <button
+                      disabled={!projectAccess.email}
+                      type="button"
+                      title="add user"
+                      onClick={() => {
+                        HandleAddAccess({
+                          projectID: project._id,
+                          accessEmail: projectAccess.email,
+                          projectOwner: values.userName,
+                          setMsg,
+                          setProjectInfo,
+                          projectInfo,
+                          index,
+                        });
+                      }}
+                    >
+                      <MdFileDownloadDone
+                        size={28}
+                        color="#65957f"
+                        className="group-disabled:opacity-50 duration-300"
+                      />
+                    </button>
+                  )}
+                  <span className="h-[60%] rounded-xl w-[2px] bg-white" />
                   <button
-                    disabled={!projectAccess.email}
                     type="button"
-                    title="add user"
-                    onClick={() => {
-                      setEmailAccErr(a);
-                      HandleAddAccess({
-                        projectID: project._id,
-                        accessEmail: projectAccess.email,
-                        projectOwner: data.userName,
-                        setMsg,
-                        setProjectInfo,
-                        setEmailAccErr,
-                      });
-                    }}
+                    title="delete project"
+                    onClick={
+                      !projectAccess._id
+                        ? () => {
+                            const onRemove = [...projectInfo];
+                            onRemove[index]["accessUser"].splice(a, 1);
+                            setProjectInfo(onRemove);
+                          }
+                        : () => {
+                            HandleRemoveAccess({
+                              projectID: project._id,
+                              accessEmail: projectAccess.email,
+                              index,
+                              projectInfo,
+                              setProjectInfo,
+                              setMsg,
+                            });
+                          }
+                    }
                   >
-                    <MdFileDownloadDone
-                      size={28}
-                      color="#65957f"
-                      className="group-disabled:opacity-50 duration-300"
+                    <LazyLoadImage
+                      src={deleteIcon}
+                      alt="delete-icon"
+                      className="sm:w-[18px] md:w-[25px]"
                     />
                   </button>
-                )}
-                <span className="h-[60%] rounded-xl w-[2px] bg-white" />
-                <button
-                  type="button"
-                  title="delete project"
-                  onClick={
-                    !projectAccess._id
-                      ? () => {
-                          const onRemove = [...projectInfo];
-                          onRemove[index]["accessUser"].splice(a, 1);
-                          setProjectInfo(onRemove);
-                        }
-                      : () => {
-                          HandleRemoveAccess({
-                            projectID: project._id,
-                            accessEmail: projectAccess.email,
-                            index,
-                            projectInfo,
-                            setProjectInfo,
-                            a,
-                            setMsg,
-                          });
-                        }
-                  }
-                >
-                  <LazyLoadImage
-                    src={deleteIcon}
-                    alt="delete-icon"
-                    className="sm:w-[18px] md:w-[25px]"
-                  />
-                </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
-        <SecondaryBtn
-          name="add-email"
-          action={() => {
-            const onChange = [...projectInfo];
-            onChange[index]["accessUser"] = [
-              ...onChange[index]["accessUser"],
-              { email: "" },
-            ];
-            setProjectInfo(onChange);
-          }}
-          type="button"
-          text={lang === "ar" ? "ادخل بريد الكتروني اخر " : "Add Email Address"}
-          style={`${project.accessUser?.length >= 5 && "!hidden"} w-full`}
-        />
+            );
+          })}
+          <SecondaryBtn
+            name="add-email"
+            action={() => {
+              const onChange = [...projectInfo];
+              onChange[index]["accessUser"] = [
+                ...onChange[index]["accessUser"],
+                { email: "" },
+              ];
+              setProjectInfo(onChange);
+            }}
+            type="button"
+            text={
+              lang === "ar" ? "ادخل بريد الكتروني اخر " : "Add Email Address"
+            }
+            style={`${project.accessUser?.length >= 5 && "!hidden"} w-full`}
+          />
+        </div>
       </div>
-    </div>
+    )
   );
 };

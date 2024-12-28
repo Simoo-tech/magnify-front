@@ -8,8 +8,6 @@ import {
 import { useQuery } from "react-query";
 import cookie from "react-cookies";
 import axios from "axios";
-/////// icons
-import icon5 from "/assets/icon5.svg";
 /////// components
 import { Loading } from "../../components/Loading";
 import { QR } from "../../components/Qr";
@@ -22,14 +20,16 @@ import { NotFound } from "../../pages/NotFound";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
 import UsersTable from "./UsersTable";
-import { CopyRight } from "../../components/CopyRight";
+import { preload } from "react-dom";
 
 const user_cookies = cookie.load("user_token");
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
-// if user token expired
-
 export function Dashboard() {
+  preload("/assets/icon5.svg", {
+    as: "image",
+  });
+
   const [deleteUser, setDeleteUser] = useState({});
   const [page, setPage] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,8 +74,6 @@ export function Dashboard() {
         .get(`${serverPath}user/fetchUser/${user_cookies}`)
         .then((res) => res.data),
     {
-      refetchOnmount: false,
-      refetchOnReconnect: false,
       retry: false,
       refetchOnWindowFocus: false,
     }
@@ -90,10 +88,10 @@ export function Dashboard() {
   }
 
   return (
-    <MainLayout overFlow="hidden">
+    <MainLayout overFlow="hidden" type="dashboard">
       {popUp && (
         <PopUp
-          iconImage={icon5}
+          iconImage="/assets/icon5.svg"
           type="yes-no"
           noAction={() => setPopUp(!popUp)}
           yesAction={() => HandleDelete({ deleteUser, setPopUp })}
@@ -115,8 +113,8 @@ export function Dashboard() {
         </PopUp>
       )}
       <section
-        className="h-[92%] relative w-full justify-start flex flex-col items-center container max-w-full  py-4
-      gap-5"
+        id="content"
+        className="relative w-full flex flex-col items-center container max-w-full gap-5"
       >
         <AdminTools
           fname={userData?.fname}
@@ -149,7 +147,6 @@ export function Dashboard() {
         />
         {userData && <QR />}
       </section>
-      <CopyRight />
     </MainLayout>
   );
 }

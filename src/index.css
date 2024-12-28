@@ -3,26 +3,21 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "bold";
-  /*Can be any text*/
-  src: local("pnu"), url("./fonts/PNU-Regular.ttf") format("truetype");
+  font-family: "PNU";
+  src: local("PNU"), url("./fonts/PNU-Regular.ttf") format("ttf");
 }
 
 @font-face {
-  font-family: "en";
-  /*Can be any text*/
-  src: local("pnu"),
-    url("./fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("./fonts/Montserrat.ttf") format("ttf");
 }
 
 #english {
-  font-family: "en", sans-serif !important;
-  font-size: larger;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 #arabic {
-  font-family: "bold", sans-serif !important;
-  font-size: larger;
+  font-family: "PNU", sans-serif !important;
 }
 
 * {
@@ -44,11 +39,10 @@ h6 {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  box-sizing: border-box;
 }
 
 body {
-  -webkit-overflow-scrolling: touch;
   margin: 0;
   scroll-behavior: smooth;
-  box-sizing: border-box;
 }
