@@ -15,15 +15,15 @@ export const ContactUsLink = ({ type }) => {
     <footer
       dir={langDir}
       className={`footer flex justify-center items-start text-primary-color1 gap-1 
-sm:mb-${
-        (type === "upload-files" && "20") ||
-        (type === "verify-email" && "20") ||
-        (type === "forgot-password" && "24") ||
-        (type === "phone-login" && "16") ||
-        (type === "verify-otp" && "24") ||
-        (type === "check-email" && "20") ||
-        (type === "create-password" && "20")
-      } sm:text-sm
+${
+  (type === "upload-files" && "sm:mb-20") ||
+  (type === "verify-email" && "sm:mb-20") ||
+  (type === "forgot-password" && "sm:mb-24") ||
+  (type === "phone-login" && "sm:mb-16") ||
+  (type === "verify-otp" && "sm:mb-24") ||
+  (type === "check-email" && "sm:mb-20") ||
+  (type === "create-password" && "sm:mb-20")
+} sm:text-sm
 md:text-base md:mb-3`}
     >
       <span id="need-help">
