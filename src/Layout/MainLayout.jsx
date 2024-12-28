@@ -124,7 +124,7 @@ function MainLayout({ children, overFlow, type }) {
       <section
         id="layout"
         dir={lang === "ar" ? "rtl" : "ltr"}
-        className={`w-full relative bg-white grid max-w-full gap-4 content-between items-center grid-rows-subgrid
+        className={`w-full relative bg-white grid max-w-full gap-4 content-between items-center grid-rows
     h-dvh overflow-hidden bg-no-repeat bg-origin-border
     ${
       type === "not-found" &&
@@ -183,8 +183,7 @@ function MainLayout({ children, overFlow, type }) {
         )}
         <div
           style={{ overflowY: overFlow }}
-          className=" w-full flex flex-col justify-center items-center"
-          id="content"
+          className=" w-full h-full flex flex-col justify-center items-center "
           dir={langDir}
         >
           {children}

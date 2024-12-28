@@ -14,7 +14,7 @@ export const ContactUsLink = ({ Margin }) => {
   return (
     <footer
       dir={langDir}
-      className={`footer flex justify-center items-start text-primary-color1 gap-1 row-span-1 h-full
+      className={`footer flex justify-center items-start text-primary-color1 gap-1 
 sm:mb-${Margin} sm:text-sm
 md:text-base md:mb-3`}
     >

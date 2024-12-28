@@ -92,7 +92,7 @@ const FormContainer = ({ lang, QREmail }) => {
   return (
     <section
       id="login"
-      className=" bg-darkGreen flex flex-col h-fit max-h-[700px] rounded-3xl items-center justify-center gap-5
+      className=" bg-darkGreen flex flex-col h-fit  rounded-3xl items-center justify-center gap-5
       md:w-[400px] md:px-8
       sm:w-full sm:max-w-[85%] sm:py-7 sm:px-4"
     >

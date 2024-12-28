@@ -112,6 +112,6 @@ a:focus-visible,
 }
 
 #content {
-  height: calc(100dvh - 130px);
+  height: calc(100dvh - 150px);
 
 }
