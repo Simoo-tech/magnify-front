@@ -188,17 +188,7 @@ function MainLayout({ children, overFlow, type }) {
         >
           {children}
         </div>
-        <ContactUsLink
-          Margin={
-            (type === "upload-files" && "20") ||
-            (type === "verify-email" && "20") ||
-            (type === "forgot-password" && "24") ||
-            (type === "phone-login" && "16") ||
-            (type === "verify-otp" && "24") ||
-            (type === "check-email" && "20") ||
-            (type === "create-password" && "20")
-          }
-        />
+        <ContactUsLink type={type} />
       </section>
     );
   }

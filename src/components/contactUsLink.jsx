@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useLang } from "../context/LangContext";
 import { Link } from "react-router-dom";
 
-export const ContactUsLink = ({ Margin }) => {
+export const ContactUsLink = ({ type }) => {
   const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
@@ -15,7 +15,15 @@ export const ContactUsLink = ({ Margin }) => {
     <footer
       dir={langDir}
       className={`footer flex justify-center items-start text-primary-color1 gap-1 
-sm:mb-${Margin} sm:text-sm
+sm:mb-${
+        (type === "upload-files" && "20") ||
+        (type === "verify-email" && "20") ||
+        (type === "forgot-password" && "24") ||
+        (type === "phone-login" && "16") ||
+        (type === "verify-otp" && "24") ||
+        (type === "check-email" && "20") ||
+        (type === "create-password" && "20")
+      } sm:text-sm
 md:text-base md:mb-3`}
     >
       <span id="need-help">
